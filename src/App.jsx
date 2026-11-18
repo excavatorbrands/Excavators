@@ -1,10 +1,11 @@
 import HomePage from './Home.jsx';
 import BrandsPage from './BrandsPage.jsx';
+import ExcavatorsPage from './ExcavatorsPage.jsx';
 
-// The site keeps separate page components and uses clean paths without adding
-// a router dependency. Vercel is configured to serve index.html at /brands.
-const isBrandsRoute = () => /^\/brands\/?$/.test(window.location.pathname);
+const path = window.location.pathname.replace(/\\/+$/, '') || '/';
 
 export default function App() {
-  return isBrandsRoute() ? <BrandsPage /> : <HomePage />;
+  if (path === '/brands') return <BrandsPage />;
+  if (path === '/excavators') return <ExcavatorsPage />;
+  return <HomePage />;
 }

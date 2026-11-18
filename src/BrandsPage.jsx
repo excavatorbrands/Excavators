@@ -6,45 +6,9 @@ import {
 } from 'lucide-react';
 import { brands, models } from './data.js';
 import './brands.css';
+import { Header, Footer } from './Chrome.jsx';
 
 const sizeFilters = ['All', 'Mini', 'Medium', 'Large', 'Mining'];
-
-function IronCrestLogo() {
-  return (
-    <a className="directory-logo" href="/" aria-label="Iron Crest home">
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M32 3 40 8 49 7 53 16 61 23 57 32 61 41 53 48 49 57 40 56 32 61 24 56 15 57 11 48 3 41 7 32 3 23 11 16 15 7 24 8Z" fill="currentColor" />
-        <path d="m12 39 11-14 7 8 8-12 14 18Z" fill="#0c1218" />
-        <path d="M13 44h38" stroke="#0c1218" strokeWidth="3" strokeLinecap="round" />
-      </svg>
-      <span><strong>IRON <b>CREST</b></strong><small>EXCAVATOR SOLUTIONS</small></span>
-    </a>
-  );
-}
-
-function DirectoryHeader() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  return (
-    <header className="directory-header">
-      <div className="directory-nav-wrap">
-        <IronCrestLogo />
-        <button className="directory-mobile-toggle" onClick={() => setMenuOpen((value) => !value)} aria-label="Toggle navigation">
-          {menuOpen ? <X size={21} /> : <Menu size={21} />}
-        </button>
-        <nav className={`directory-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
-          <a href="/">Home</a>
-          <a className="is-active" href="/brands" aria-current="page">Brands <ChevronDown size={12} /></a>
-          <a href="/#models">Excavators <ChevronDown size={12} /></a>
-          <a href="/#support">Parts &amp; Service</a>
-          <a href="/#solutions">Solutions</a>
-          <a href="/#why-us">About Us</a>
-          <a href="/#contact">Contact</a>
-        </nav>
-        <a className="directory-quote" href="/#contact">Get a Quote <ArrowRight size={15} /></a>
-      </div>
-    </header>
-  );
-}
 
 function BrandWordmark({ brand }) {
   return (
@@ -246,20 +210,6 @@ function DirectoryCTA() {
   );
 }
 
-function DirectoryFooter() {
-  return (
-    <footer className="directory-footer">
-      <div className="directory-footer-main directory-container">
-        <div><IronCrestLogo /><p>Excavator manufacturer directory, model browsing and equipment guidance from Iron Crest.</p></div>
-        <div><b>Explore</b><a href="/">Home</a><a href="/brands">Brands</a><a href="/#models">Excavators</a></div>
-        <div><b>Support</b><a href="/#support">Parts &amp; Service</a><a href="/#resources">Product information</a><a href="/#contact">Contact the team</a></div>
-        <div><b>Contact</b><a href="tel:+923001234567"><Phone size={13} /> +92 300 1234567</a><a href="mailto:sales@ironcrest.com"><Mail size={13} /> sales@ironcrest.com</a><span><MapPin size={13} /> Lahore, Pakistan</span></div>
-      </div>
-      <div className="directory-footer-bottom directory-container"><span>© {new Date().getFullYear()} Iron Crest Excavator Solutions. All rights reserved.</span><a href="#top">Back to top ↑</a></div>
-    </footer>
-  );
-}
-
 export default function BrandsPage() {
   const [search, setSearch] = useState('');
   const [selectedSize, setSelectedSize] = useState('All');
@@ -314,7 +264,7 @@ export default function BrandsPage() {
 
   return (
     <div className="brands-page" id="top">
-      <DirectoryHeader />
+      <Header active="brands" />
       <main>
         <DirectoryHero search={search} setSearch={setSearch} size={selectedSize} setSize={setSelectedSize} compareCount={compareIds.length} goToCompare={goToCompare} />
         <BrandIndex filteredBrands={filteredBrands} selectedBrand={activeBrand.id} onSelect={setSelectedBrand} />
@@ -324,7 +274,7 @@ export default function BrandsPage() {
         <DirectoryResources />
         <DirectoryCTA />
       </main>
-      <DirectoryFooter />
+      <Footer />
     </div>
   );
 }
