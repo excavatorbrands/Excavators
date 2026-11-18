@@ -2,7 +2,7 @@ import HomePage from './Home.jsx';
 import BrandsPage from './BrandsPage.jsx';
 import ExcavatorsPage from './ExcavatorsPage.jsx';
 
-const path = window.location.pathname.replace(/\\/+$/, '') || '/';
+const path = window.location.pathname;
 
 export default function App() {
   if (path === '/brands') return <BrandsPage />;
