@@ -115,3 +115,16 @@ iron-crest-site/
     ├── main.jsx
     └── styles.css
 ```
+
+## Iron Crest page routes
+
+- `/` — Home
+- `/brands` — Brands directory
+- `/excavators` — Excavator catalog with availability controls
+- `/parts-service` — Parts & Service
+- `/solutions` — Industry Solutions
+- `/resources` — Resources & guides
+- `/about` — About Us
+- `/contact` — Contact
+
+All internal pages use the shared Iron Crest header and footer while each page has its own visual layout and content system.
