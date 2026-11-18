@@ -276,7 +276,7 @@ tr:last-child td { border-bottom: 0; }
 
 /* Footer */
 .site-footer { background: #05090d; border-top: 1px solid rgba(255,255,255,.08); }
-.footer-main { display: grid; grid-template-columns: 1.5fr .8fr .9fr .9fr 1.15fr; gap: 30px; padding-top: 36px; padding-bottom: 30px; }
+.footer-main { display: grid; grid-template-columns: 1.4fr .75fr .85fr .85fr .95fr .75fr; gap: 24px; padding-top: 36px; padding-bottom: 30px; }
 .footer-brand-col > p { max-width: 230px; color: #89959e; font-size: 9px; line-height: 1.65; margin: 16px 0; }
 .social-links { display: flex; gap: 8px; }
 .social-links a { width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.17); border-radius: 50%; color: var(--yellow); font-size: 10px; font-weight: 900; }
