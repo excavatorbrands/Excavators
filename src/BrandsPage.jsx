@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, ClipboardList,
   FileText, Filter, Gauge, Headphones, Menu, Package, Search, Scale,
-  ShieldCheck, SlidersHorizontal, Wrench, X, Youtube, MapPin, Phone, Mail,
+  ShieldCheck, SlidersHorizontal, Wrench, X, MapPin, Phone, Mail,
 } from 'lucide-react';
 import { brands, models } from './data.js';
 import './brands.css';
@@ -98,7 +98,7 @@ function FeaturedBrand({ brand, model, onExplore }) {
         </div>
         <div className="featured-actions">
           <button className="directory-primary-button" onClick={onExplore}>View {brand.name} models <ArrowRight size={16} /></button>
-          <a className="directory-text-link" href="/#contact">Request brand information <ArrowUpRight size={15} /></a>
+          <a className="directory-text-link" href={`/contact?type=equipment&brand=${brand.id}`}>Request brand information <ArrowUpRight size={15} /></a>
         </div>
       </div>
       <aside className="featured-aside">
@@ -134,7 +134,7 @@ function ModelExplorer({ filteredModels, search, selectedSize, onAddCompare, com
                     <span><Scale size={14} /> Bucket capacity <b>{model.bucket}</b></span>
                   </div>
                   <div className="directory-model-actions">
-                    <a href="/#contact">Request details <ArrowRight size={14} /></a>
+                    <a href={`/contact?type=equipment&model=${encodeURIComponent(`${model.brandName} ${model.model}`)}`}>Request details <ArrowRight size={14} /></a>
                     <button className={inCompare ? 'is-added' : ''} onClick={() => onAddCompare(model.id)} aria-pressed={inCompare}>{inCompare ? <Check size={14} /> : <span>+</span>} {inCompare ? 'Added' : 'Compare'}</button>
                   </div>
                 </div>
@@ -182,10 +182,10 @@ function ComparisonBuilder({ selectedModels, onRemove, onClear, notice }) {
 
 function DirectoryResources() {
   const features = [
-    { icon: <Wrench />, title: 'Parts & support', text: 'Ask about parts identification and service assistance.', href: '/#support' },
-    { icon: <FileText />, title: 'Technical documents', text: 'Request current brochures and manufacturer specification sheets.', href: '/#resources' },
-    { icon: <Youtube />, title: 'Machine guidance', text: 'Get help understanding machine classes and applications.', href: '/#contact' },
-    { icon: <MapPin />, title: 'Dealer assistance', text: 'Contact the Iron Crest team about local support.', href: '/#contact' },
+    { icon: <Wrench />, title: 'Parts & support', text: 'Ask about parts identification and service assistance.', href: '/parts-service' },
+    { icon: <FileText />, title: 'Technical documents', text: 'Browse resources or request verified documents.', href: '/resources' },
+    { icon: <Gauge />, title: 'Machine guidance', text: 'Get help understanding machine classes and applications.', href: '/solutions' },
+    { icon: <MapPin />, title: 'Contact the team', text: 'Send an equipment enquiry with your project details.', href: '/contact' },
   ];
   return (
     <section className="directory-resources directory-container">
@@ -203,7 +203,7 @@ function DirectoryCTA() {
       <div className="directory-cta-inner directory-container">
         <div className="directory-cta-icon"><Headphones size={34} /></div>
         <div><span>NEED HELP WITH YOUR SHORTLIST?</span><h2>Choose your next excavator <em>with confidence.</em></h2><p>Share your project requirements and ask the Iron Crest team for guidance.</p></div>
-        <a href="/#contact" className="directory-cta-button">Talk to our team <ArrowRight size={16} /></a>
+        <a href="/contact" className="directory-cta-button">Talk to our team <ArrowRight size={16} /></a>
         <img src="/images/brands/brand-featured-excavator.webp" alt="Excavator at a quarry" loading="lazy" />
       </div>
     </section>
@@ -211,17 +211,17 @@ function DirectoryCTA() {
 }
 
 export default function BrandsPage() {
-  const [search, setSearch] = useState('');
-  const [selectedSize, setSelectedSize] = useState('All');
-  const [selectedBrand, setSelectedBrand] = useState('hyundai');
+  const [search, setSearch] = useState(() => new URLSearchParams(window.location.search).get('search') || '');
+  const [selectedSize, setSelectedSize] = useState(() => {
+    const requested = new URLSearchParams(window.location.search).get('size');
+    return sizeFilters.find(item => item.toLowerCase() === requested?.toLowerCase()) || 'All';
+  });
+  const [selectedBrand, setSelectedBrand] = useState(() => {
+    const requested = new URLSearchParams(window.location.search).get('brand');
+    return brands.some(item => item.id === requested) ? requested : 'hyundai';
+  });
   const [compareIds, setCompareIds] = useState([]);
   const [compareNotice, setCompareNotice] = useState('');
-
-  useEffect(() => {
-    const previousTitle = document.title;
-    document.title = 'Excavator Brands Directory | Iron Crest';
-    return () => { document.title = previousTitle; };
-  }, []);
 
   const searchTerm = search.trim().toLowerCase();
   const filteredBrands = useMemo(() => brands.filter((brand) => {

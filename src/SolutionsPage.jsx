@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import {
   ArrowRight, ArrowUpRight, Building2, Check, ChevronRight, Factory,
   Layers3, Mountain, Route, Sparkles, Truck, X,
@@ -17,7 +17,10 @@ const solutionData = {
 };
 
 export default function SolutionsPage() {
-  const [active, setActive] = useState('Construction');
+  const [active, setActive] = useState(() => {
+    const requested = new URLSearchParams(window.location.search).get('industry');
+    return solutionData[requested] ? requested : 'Construction';
+  });
   const current = solutionData[active];
 
   return (
@@ -43,7 +46,7 @@ export default function SolutionsPage() {
             <div className="sol-selector-layout">
               <div className="sol-tabs">
                 {industries.map(item => (
-                  <button key={item.title} className={active === item.title ? 'active' : ''} onClick={() => setActive(item.title)}>
+                  <button type="button" key={item.title} className={active === item.title ? 'active' : ''} aria-pressed={active === item.title} onClick={() => setActive(item.title)}>
                     <span>{solutionData[item.title].icon}</span><strong>{item.title}</strong><ArrowRight size={15} />
                   </button>
                 ))}

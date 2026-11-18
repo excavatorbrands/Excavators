@@ -46,16 +46,17 @@ export default function ResourcesPage() {
           <div className="container">
             <div className="res-library-top">
               <div><span className="page-kicker">LIBRARY</span><h2>Explore the <em>collection.</em></h2></div>
-              <label className="res-search"><Search size={17} /><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search resources..." /></label>
+              <label className="res-search"><Search size={17} /><input aria-label="Search resources" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search resources..." /></label>
             </div>
-            <div className="res-filters">{filters.map(item => <button key={item} className={filter === item ? 'active' : ''} onClick={() => setFilter(item)}>{item}</button>)}</div>
+            <div className="res-filters" role="group" aria-label="Filter resources by category">{filters.map(item => <button type="button" key={item} className={filter === item ? 'active' : ''} aria-pressed={filter === item} onClick={() => setFilter(item)}>{item}</button>)}</div>
             <div className="res-grid">
               {filtered.map(item => (
                 <article className="res-card" key={item.title}>
                   <div className="res-card-image"><img src={item.image} alt="" loading="lazy" /><span>{item.category}</span></div>
-                  <div className="res-card-body"><div className="res-card-icon">{item.icon}</div><h3>{item.title}</h3><p>{item.text}</p><a href="/contact">Request resource <ArrowRight size={14} /></a></div>
+                  <div className="res-card-body"><div className="res-card-icon">{item.icon}</div><h3>{item.title}</h3><p>{item.text}</p><a href={`/contact?type=resource&resource=${encodeURIComponent(item.title)}`}>Ask about this resource <ArrowRight size={14} /></a></div>
                 </article>
               ))}
+              {!filtered.length && <p className="res-empty" role="status">No resources match your search. Try another term or choose a different category.</p>}
             </div>
           </div>
         </section>
@@ -72,7 +73,7 @@ export default function ResourcesPage() {
           <div className="container res-faq-layout">
             <div><span className="page-kicker">QUICK ANSWERS</span><h2>Before you <em>enquire.</em></h2><p>Common questions to help you prepare the right information for an equipment conversation.</p><a href="/contact" className="btn btn-outline">Ask another question <ArrowRight size={15} /></a></div>
             <div className="faq-list">
-              {faqs.map(([q, a], i) => <div className={`faq-item ${openFaq === i ? 'open' : ''}`} key={q}><button onClick={() => setOpenFaq(openFaq === i ? null : i)}><span><HelpCircle size={17} />{q}</span><span>{openFaq === i ? '−' : '+'}</span></button>{openFaq === i && <p>{a}</p>}</div>)}
+              {faqs.map(([q, a], i) => <div className={`faq-item ${openFaq === i ? 'open' : ''}`} key={q}><button type="button" aria-expanded={openFaq === i} aria-controls={`faq-answer-${i}`} onClick={() => setOpenFaq(openFaq === i ? null : i)}><span><HelpCircle size={17} />{q}</span><span aria-hidden="true">{openFaq === i ? '−' : '+'}</span></button><p id={`faq-answer-${i}`} hidden={openFaq !== i}>{a}</p></div>)}
             </div>
           </div>
         </section>

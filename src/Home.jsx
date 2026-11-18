@@ -1,12 +1,13 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
-  ArrowRight, ArrowUpRight, BadgeCheck, CheckCircle2, ChevronDown,
+  AlertCircle, ArrowRight, ArrowUpRight, BadgeCheck,
   CircleDollarSign, Download, Factory, FileText, Gauge, Globe2, Headphones,
-  Mail, MapPin, MapPinned, Menu, Package, Phone, Quote, Search, Settings2,
-  ShieldCheck, SlidersHorizontal, Star, Truck, UserRound, Users, Wrench, X,
+  Mail, MapPin, MapPinned, Package, Search, Settings2,
+  ShieldCheck, SlidersHorizontal, Truck, Users, Wrench, X,
 } from 'lucide-react';
 import { brands, categories, industries, models } from './data.js';
 import { Header, Footer } from './Chrome.jsx';
+import { submitEnquiry } from './submitEnquiry.js';
 
 function SectionEyebrow({ children }) {
   return <div className="eyebrow"><span />{children}</div>;
@@ -26,7 +27,17 @@ function SectionTitle({ eyebrow, title, accent, description, action }) {
 }
 
 function QuoteModal({ modal, onClose }) {
-  const [sent, setSent] = useState(false);
+  const [requestNotice, setRequestNotice] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  useEffect(() => setRequestNotice(''), [modal?.type, modal?.model?.id]);
+  useEffect(() => {
+    if (!modal) return undefined;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [modal, onClose]);
   if (!modal) return null;
   const isModel = modal.type === 'model';
   const isCatalog = modal.type === 'catalog';
@@ -36,17 +47,42 @@ function QuoteModal({ modal, onClose }) {
     : isCatalog
       ? 'Tell us where to send the latest excavator range and product information.'
       : 'Share a few details and our equipment team will help you shortlist the right machine.';
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const interest = formData.get('interest');
+    const interestLabel = form.elements.namedItem('interest').selectedOptions[0]?.textContent?.trim() || '';
+    setIsSubmitting(true);
+    setRequestNotice('');
+    try {
+      await submitEnquiry({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        type: interest === 'parts' ? 'parts' : interest === 'consultation' ? 'project' : 'equipment',
+        interest: interestLabel,
+        message: formData.get('message'),
+        website: formData.get('website'),
+      });
+      form.reset();
+      setRequestNotice('Thank you. Your enquiry has been sent to the Iron Crest team.');
+    } catch {
+      setRequestNotice('We could not send your enquiry. Your details remain in this form. Please email us or call +92 300 1234567.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={onClose}>
       <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title" onMouseDown={(event) => event.stopPropagation()}>
-        <button className="modal-close" onClick={onClose} aria-label="Close dialog"><X size={20} /></button>
-        {!sent ? (
-          <>
+        <button autoFocus type="button" className="modal-close" onClick={onClose} aria-label="Close dialog"><X size={20} /></button>
             <div className="modal-kicker"><span className="mini-mark">IC</span> IRON CREST ENQUIRY</div>
             <h2 id="modal-title">{heading}</h2>
             <p className="modal-intro">{subheading}</p>
-            <form className="quote-form" onSubmit={(event) => { event.preventDefault(); setSent(true); }}>
+            <form className="quote-form" onSubmit={handleSubmit}>
+              <label className="form-honeypot" aria-hidden="true">Leave this field empty<input name="website" tabIndex="-1" autoComplete="off" /></label>
               <label>Full name<input required name="name" placeholder="Your name" /></label>
               <div className="form-row">
                 <label>Email address<input required type="email" name="email" placeholder="you@company.com" /></label>
@@ -61,18 +97,10 @@ function QuoteModal({ modal, onClose }) {
                 </select>
               </label>
               <label>Project details<textarea name="message" rows="3" placeholder="Tell us about your project, location and expected timeline." /></label>
-              <button className="btn btn-primary btn-wide" type="submit">Send enquiry <ArrowRight size={17} /></button>
-              <small className="form-note">Demo form only — connect your CRM or email service before publishing.</small>
+              <button className="btn btn-primary btn-wide" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Sending...' : 'Send enquiry'} <ArrowRight size={17} /></button>
+              <small className="form-note">Your enquiry will be sent to Iron Crest by email. Please do not include sensitive personal information.</small>
+              {requestNotice && <p className={`form-note ${requestNotice.startsWith('Thank you') ? 'form-success' : 'form-unavailable'}`} role={requestNotice.startsWith('Thank you') ? 'status' : 'alert'}>{requestNotice} {!requestNotice.startsWith('Thank you') && <>Contact us at <a href="mailto:sales@ironcrest.com">sales@ironcrest.com</a> or <a href="tel:+923001234567">+92 300 1234567</a>.</>}</p>}
             </form>
-          </>
-        ) : (
-          <div className="success-state">
-            <CheckCircle2 size={48} />
-            <h2>Thanks for contacting Iron Crest.</h2>
-            <p>This is a front-end demo confirmation. Connect a form backend to receive and store real submissions.</p>
-            <button className="btn btn-primary" onClick={onClose}>Back to homepage <ArrowRight size={16} /></button>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -80,10 +108,10 @@ function QuoteModal({ modal, onClose }) {
 
 function BrandStrip() {
   return (
-    <section className="brand-strip" id="brands" aria-label="Available excavator brands">
+    <section className="brand-strip" id="brands" aria-label="Excavator brands">
       <div className="container brand-strip-inner">
         {brands.map((brand) => (
-          <a href="#models" className={`brand-wordmark ${brand.className}`} key={brand.id} title={`${brand.name} excavators`}>
+          <a href={`/brands?brand=${brand.id}`} className={`brand-wordmark ${brand.className}`} key={brand.id} title={`${brand.name} excavators`}>
             <strong>{brand.name}</strong>
             {brand.id === 'hyundai' && <small>CONSTRUCTION EQUIPMENT</small>}
           </a>
@@ -132,7 +160,7 @@ export default function HomePage() {
 
   return (
     <div className="app-shell">
-      <Header onQuote={openQuote} onSearch={setSearchQuery} />
+      <Header active="home" onQuote={openQuote} onSearch={setSearchQuery} />
 
       <main>
         <section className="hero-section" id="home">
@@ -141,13 +169,13 @@ export default function HomePage() {
             <div className="hero-copy">
               <SectionEyebrow>The all-brand excavator destination</SectionEyebrow>
               <h1>EXCAVATORS<br /><em>FOR EVERY PROJECT</em></h1>
-              <p>Premium excavators from the world’s leading brands. Compare models, get expert advice, and find the right machine for your business.</p>
+              <p>Browse manufacturer and model examples, then ask for verified specifications, configuration and availability details for your project.</p>
               <div className="hero-actions"><button className="btn btn-primary btn-large" onClick={showModels}>Explore Excavators <ArrowRight size={17} /></button><button className="btn btn-outline btn-large" onClick={openQuote}><FileText size={16} /> Get a Quote</button></div>
             </div>
-            <div className="hero-machine-caption"><span>FEATURED MACHINE</span><strong>HYUNDAI HX380LC</strong><small>Heavy-duty performance for demanding sites</small></div>
+            <div className="hero-machine-caption"><span>MODEL EXAMPLE</span><strong>HYUNDAI HX380L</strong><small>Confirm model configuration and availability</small></div>
           </div>
           <div className="container hero-benefits">
-            <div><Users /><span>Multiple<br />Brands</span></div><div><Wrench /><span>Genuine<br />Parts & Service</span></div><div><Headphones /><span>Expert<br />Consultation</span></div><div><ShieldCheck /><span>Reliable<br />Availability</span></div><div><Globe2 /><span>Nationwide<br />Support</span></div><div><CircleDollarSign /><span>Best Value &<br />Financing</span></div>
+            <div><Users /><span>Multiple<br />Brands</span></div><div><Wrench /><span>Parts & Service<br />Enquiries</span></div><div><Headphones /><span>Equipment<br />Guidance</span></div><div><ShieldCheck /><span>Stock Status<br />Confirmation</span></div><div><Globe2 /><span>Project<br />Enquiries</span></div><div><CircleDollarSign /><span>Request<br />Pricing</span></div>
           </div>
         </section>
 
@@ -156,12 +184,12 @@ export default function HomePage() {
         <section className="category-section section-dark" id="categories">
           <div className="container category-grid">
             {categories.map((category, index) => (
-              <button className="category-card" key={category.id} onClick={showModels}>
+              <a className="category-card" key={category.id} href={category.id === 'special' ? '/solutions?industry=Demolition' : `/excavators?size=${category.id}`}>
                 <img src={category.image} alt="" loading="lazy" />
                 <span className="category-shade" />
                 <span className="category-copy"><strong>{category.title}</strong><small>{category.range}</small></span>
                 <span className="category-arrow"><ArrowRight size={16} /></span>
-              </button>
+              </a>
             ))}
           </div>
         </section>
@@ -198,8 +226,8 @@ export default function HomePage() {
 
         <section className="solutions-section" id="solutions">
           <div className="container solutions-layout">
-            <div className="solutions-intro"><SectionEyebrow>Industry solutions</SectionEyebrow><h2>Built for <em>Every Industry</em></h2><p>Powering projects across construction, mining, infrastructure and more.</p><a href="#support" className="btn btn-primary">Explore Solutions <ArrowRight size={16} /></a></div>
-            <div className="industry-grid">{industries.map((industry, index) => <a href="#support" className="industry-card" key={industry.title}><img src={industry.image} alt="" loading="lazy" /><span className="industry-shade" /><span className="industry-name">{industry.title}</span><ArrowUpRight className="industry-arrow" size={17} /></a>)}</div>
+            <div className="solutions-intro"><SectionEyebrow>Industry solutions</SectionEyebrow><h2>Built for <em>Every Industry</em></h2><p>Explore application profiles and equipment planning topics across a range of project types.</p><a href="/solutions" className="btn btn-primary">Explore Solutions <ArrowRight size={16} /></a></div>
+            <div className="industry-grid">{industries.map((industry) => <a href={`/solutions?industry=${encodeURIComponent(industry.title)}`} className="industry-card" key={industry.title}><img src={industry.image} alt="" loading="lazy" /><span className="industry-shade" /><span className="industry-name">{industry.title}</span><ArrowUpRight className="industry-arrow" size={17} /></a>)}</div>
           </div>
         </section>
 
@@ -208,8 +236,9 @@ export default function HomePage() {
             <div className="why-image"><img src="/images/parts-service.webp" alt="Heavy equipment component detail" loading="lazy" /></div>
             <div className="why-content"><SectionEyebrow>The Iron Crest advantage</SectionEyebrow><h2>Why Choose <em>Iron Crest?</em></h2><p>One trusted point of contact for multi-brand excavator selection, support and ownership guidance.</p>
               <div className="why-features">
-                <div><BadgeCheck /><strong>Multi-brand<br />Selection</strong></div><div><Package /><strong>Genuine<br />Spare Parts</strong></div><div><Headphones /><strong>Expert Technical<br />Support</strong></div><div><CircleDollarSign /><strong>Flexible Finance<br />Options</strong></div><div><MapPinned /><strong>Nationwide Service<br />Network</strong></div><div><Users /><strong>After-sales Care<br />& Training</strong></div>
+                <div><BadgeCheck /><strong>Multi-brand<br />Directory</strong></div><div><Package /><strong>Parts<br />Enquiries</strong></div><div><Headphones /><strong>Technical Support<br />Enquiries</strong></div><div><CircleDollarSign /><strong>Request<br />Pricing</strong></div><div><MapPinned /><strong>Confirm Local<br />Support</strong></div><div><Users /><strong>Project<br />Consultation</strong></div>
               </div>
+              <a href="/about" className="why-about-link">About the Iron Crest approach <ArrowRight size={14} /></a>
             </div>
           </div>
         </section>
@@ -230,14 +259,14 @@ export default function HomePage() {
         <section className="proof-news-section section-dark">
           <div className="container proof-news-grid">
             <div className="testimonial-panel">
-              <SectionEyebrow>Customer testimonials</SectionEyebrow><h2>Trusted on <em>Real Jobsites</em></h2>
-              <div className="testimonial-content"><Quote size={27} /><p>“Iron Crest helped us compare options and shortlist the right excavator for our quarry work. The team made the process clear from the start.”</p></div>
-              <div className="testimonial-author"><div className="avatar">AR</div><div><strong>Ali Raza</strong><small>Project Manager · Quarry Operations</small></div><div className="stars"><Star /><Star /><Star /><Star /><Star /></div></div>
+              <SectionEyebrow>Before you shortlist</SectionEyebrow><h2>Start with the <em>application.</em></h2>
+              <div className="testimonial-content"><BadgeCheck size={27} /><p>Consider the site, material, access, duty cycle and attachments before comparing machine examples.</p></div>
+              <div className="testimonial-author"><div className="avatar">IC</div><div><strong>Equipment selection</strong><small>Application · Configuration · Availability confirmation</small></div></div>
             </div>
-            <div className="news-panel"><div className="news-heading"><div><SectionEyebrow>From the field</SectionEyebrow><h2>Latest Updates <em>& News</em></h2></div><a href="#contact">View all <ArrowRight size={14} /></a></div>
+            <div className="news-panel"><div className="news-heading"><div><SectionEyebrow>Practical resources</SectionEyebrow><h2>Guides &amp; <em>Next steps</em></h2></div><a href="/resources">View resources <ArrowRight size={14} /></a></div>
               <div className="news-list">
-                <article className="news-item"><img src="/images/category-large.webp" alt="Excavator at a jobsite" loading="lazy" /><div><span>PRODUCT SPOTLIGHT · NOV 10, 2026</span><h3>Choosing the Right Excavator Class for Your Project</h3><a href="#models">Explore the lineup <ArrowUpRight size={13} /></a></div></article>
-                <article className="news-item"><img src="/images/parts-service.webp" alt="Equipment parts and components" loading="lazy" /><div><span>MAINTENANCE · NOV 05, 2026</span><h3>Simple Maintenance Habits That Help Protect Uptime</h3><a href="#support">Speak to service <ArrowUpRight size={13} /></a></div></article>
+                <article className="news-item"><img src="/images/category-large.webp" alt="Large excavator category example" loading="lazy" /><div><span>SELECTION GUIDE</span><h3>Choosing an Excavator Class for Your Project</h3><a href="/resources">Explore resources <ArrowUpRight size={13} /></a></div></article>
+                <article className="news-item"><img src="/images/parts-service.webp" alt="Excavator parts and service detail" loading="lazy" /><div><span>PARTS &amp; SERVICE</span><h3>Prepare for a Parts or Service Enquiry</h3><a href="/parts-service">See support pathways <ArrowUpRight size={13} /></a></div></article>
               </div>
             </div>
           </div>
@@ -246,21 +275,20 @@ export default function HomePage() {
         <section className="service-network section-dark">
           <div className="container service-network-inner">
             <div className="service-copy"><SectionEyebrow>Support that moves with you</SectionEyebrow><h2>Our Service <em>Network</em></h2><p>Connect with the Iron Crest team for equipment guidance, parts enquiries and after-sales support.</p><button className="btn btn-primary" onClick={openQuote}>Find Support <ArrowRight size={15} /></button></div>
-            <div className="service-map"><div className="map-dots" /><span><MapPin /> Regional support</span></div>
-            <div className="stat-grid"><div><Factory /><strong>08+</strong><small>Global Brands</small></div><div><Truck /><strong>500+</strong><small>Excavator Models*</small></div><div><Wrench /><strong>50+</strong><small>Service Partners*</small></div><div><Users /><strong>10,000+</strong><small>Customers Reached*</small></div></div>
+            <div className="service-map"><div className="map-dots" /><span><MapPin /> Contact Iron Crest</span></div>
+            <div className="stat-grid"><div><Factory /><strong>Brand directory</strong><small>Explore manufacturer listings</small></div><div><Truck /><strong>Model examples</strong><small>Confirm current configurations</small></div><div><Wrench /><strong>Parts &amp; service</strong><small>Review support pathways</small></div><div><Users /><strong>Project enquiries</strong><small>Share your requirements</small></div></div>
           </div>
-          <div className="container stat-note">* Illustrative design figures — replace with verified Iron Crest company data before launch.</div>
         </section>
 
         <section className="newsletter-section">
           <div className="container newsletter-inner">
             <div className="newsletter-icon"><Mail size={23} /></div><div className="newsletter-copy"><h3>Stay Updated with Iron Crest</h3><p>Get new model updates, special offers and industry insights in your inbox.</p></div>
-            <form className="newsletter-form" onSubmit={(event) => { event.preventDefault(); setNewsletterStatus('Demo confirmation only. Connect an email platform before launch to collect subscriptions.'); setNewsletterEmail(''); }}>
+            <form className="newsletter-form" onSubmit={(event) => { event.preventDefault(); setNewsletterStatus('Your address has not been subscribed because this website is not connected to a mailing-list service.'); }}>
               <input type="email" required value={newsletterEmail} onChange={(event) => setNewsletterEmail(event.target.value)} placeholder="Enter your email address" aria-label="Email address" />
               <button type="submit">Subscribe <ArrowRight size={15} /></button>
             </form>
           </div>
-          {newsletterStatus && <div className="container newsletter-status"><CheckCircle2 size={14} /> {newsletterStatus}</div>}
+          {newsletterStatus && <div className="container newsletter-status" role="alert"><AlertCircle size={14} /> {newsletterStatus} Contact <a href="mailto:sales@ironcrest.com">sales@ironcrest.com</a> for enquiries.</div>}
         </section>
       </main>
 

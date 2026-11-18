@@ -10,7 +10,7 @@
   --dir-muted: #9ba8b2;
   --dir-yellow: #ffc400;
   min-height: 100vh;
-  overflow: hidden;
+  overflow: clip;
   background: var(--dir-ink);
   color: #f5f7f9;
   font-family: var(--font, Inter, Arial, sans-serif);

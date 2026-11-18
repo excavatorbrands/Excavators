@@ -105,13 +105,13 @@ const sections = [
   {
     title: 'Governing Law',
     paragraphs: [
-      'The governing law and courts for these website Terms must be confirmed by Iron Crest’s legal advisers before publication: [Insert the verified governing law and jurisdiction]. No registered address, legal entity details or jurisdiction are specified here because they have not been verified for this website.',
+      'The governing law and courts for these website Terms have not yet been confirmed by Iron Crest. These Terms should not be treated as final or published as complete until the applicable law and jurisdiction have been confirmed with legal advisers and stated here. No jurisdiction is assumed based on the website’s location or contact details.',
     ],
   },
   {
     title: 'Contact Information',
     paragraphs: [
-      'Questions about these Terms may be sent to Iron Crest Excavator Solutions at sales@ironcrest.com or +92 300 1234567. Verified registered entity and postal details, if required, should be inserted here: [Insert verified legal entity name and contact address].',
+      'Questions about these Terms may be sent to Iron Crest Excavator Solutions at sales@ironcrest.com or +92 300 1234567. A verified registered entity name and postal address have not yet been provided; add them here if required by applicable law before publication.',
     ],
   },
 ];

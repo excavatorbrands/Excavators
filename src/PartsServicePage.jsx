@@ -22,7 +22,6 @@ const process = [
 
 export default function PartsServicePage() {
   const [query, setQuery] = useState('');
-  const [sent, setSent] = useState(false);
   const visibleLines = useMemo(() => serviceLines.filter(item => !query || `${item.title} ${item.text}`.toLowerCase().includes(query.toLowerCase())), [query]);
 
   return (
@@ -59,9 +58,10 @@ export default function PartsServicePage() {
                   <div className="ps-card-icon">{item.icon}</div>
                   <h3>{item.title}</h3>
                   <p>{item.text}</p>
-                  <a href="/contact">Start a request <ArrowRight size={14} /></a>
+                  <a href={`/contact?type=${item.title === 'Parts identification' ? 'parts' : 'service'}`}>Start a request <ArrowRight size={14} /></a>
                 </article>
               ))}
+              {!visibleLines.length && <p className="ps-no-results" role="status">No support topics match “{query}”. <button type="button" onClick={() => setQuery('')}>Clear search</button></p>}
             </div>
           </div>
         </section>
@@ -69,11 +69,11 @@ export default function PartsServicePage() {
         <section className="ps-finder" id="parts-finder">
           <div className="container ps-finder-inner">
             <div className="ps-finder-copy">
-              <span className="page-kicker">PARTS FINDER</span>
-              <h2>Start with the <em>machine.</em></h2>
-              <p>Search by model, component or part reference. This front-end finder is designed to become your future catalog/API entry point.</p>
-              <label className="ps-search"><Search size={18} /><input value={query} onChange={e => setQuery(e.target.value)} placeholder="e.g. HX220L, hydraulic filter, track..." /><span>FIND</span></label>
-              <div className="ps-search-hints"><span>Try:</span><button onClick={() => setQuery('hydraulic')}>Hydraulic</button><button onClick={() => setQuery('maintenance')}>Maintenance</button><button onClick={() => setQuery('identification')}>Identification</button></div>
+              <span className="page-kicker">SUPPORT TOPIC SEARCH</span>
+              <h2>Find a support <em>pathway.</em></h2>
+              <p>This search filters the support topics shown above; it does not check parts inventory. A live parts lookup requires a connected catalog.</p>
+              <label className="ps-search"><Search size={18} /><input value={query} onChange={e => setQuery(e.target.value)} placeholder="e.g. maintenance, technical support..." aria-label="Search support topics" /><span>FIND</span></label>
+              <div className="ps-search-hints"><span>Try:</span><button type="button" onClick={() => setQuery('planned maintenance')}>Maintenance</button><button type="button" onClick={() => setQuery('technical support')}>Technical support</button><button type="button" onClick={() => setQuery('identification')}>Identification</button></div>
             </div>
             <div className="ps-finder-panel">
               <div className="ps-panel-top"><span>REQUEST CHECKLIST</span><ClipboardCheck size={20} /></div>
@@ -83,7 +83,7 @@ export default function PartsServicePage() {
                 <li><CheckCircle2 /> Required quantity</li>
                 <li><CheckCircle2 /> Delivery location</li>
               </ul>
-              <a href="/contact" className="btn btn-primary">Send parts request <ArrowRight size={15} /></a>
+              <a href="/contact?type=parts" className="btn btn-primary">Prepare parts enquiry <ArrowRight size={15} /></a>
             </div>
           </div>
         </section>
@@ -105,7 +105,7 @@ export default function PartsServicePage() {
               <h2>Protect the machine before the <em>problem.</em></h2>
               <p>Good maintenance starts with clear machine information, consistent inspections and a service plan that fits the job. Iron Crest can help you structure the next step.</p>
               <div className="ps-checklist"><div><ShieldCheck /> Inspection-led</div><div><Clock3 /> Hours-aware</div><div><FileSearch /> Record-ready</div></div>
-              <a href="/contact" className="btn btn-primary">Plan a service conversation <ArrowRight size={16} /></a>
+              <a href="/contact?type=service" className="btn btn-primary">Plan a service conversation <ArrowRight size={16} /></a>
             </div>
           </div>
         </section>
@@ -113,7 +113,7 @@ export default function PartsServicePage() {
         <section className="ps-callout">
           <div className="container ps-callout-inner">
             <div><Phone size={25} /><div><span>NEED IMMEDIATE GUIDANCE?</span><strong>Tell us what machine you are working with.</strong></div></div>
-            <a href="/contact" className="btn btn-primary">Contact Iron Crest <ArrowRight size={15} /></a>
+            <a href="/contact?type=service" className="btn btn-primary">Contact Iron Crest <ArrowRight size={15} /></a>
           </div>
         </section>
       </main>

@@ -46,12 +46,14 @@ const sections = [
   {
     title: 'Website Analytics',
     paragraphs: [
-      'The website may be configured to use analytics tools to understand aggregate site use. No specific analytics provider or service is represented as being in use by this policy. If analytics tools are enabled, the applicable provider, information processed, controls and consent requirements should be identified here: [Add details of any analytics tools actually in use, or state that none are used].',
+      'No specific analytics provider or service is established as being in use by this website. If analytics tools are enabled in the future, this policy and any required consent controls should be updated to identify the provider and information processed.',
     ],
   },
   {
     title: 'Sharing of Information',
     paragraphs: [
+      'This website currently requests font styles and files from Google Fonts (fonts.googleapis.com and fonts.gstatic.com). When your browser loads these resources, Google receives the request and may process standard connection information, such as your IP address and browser details, under its own privacy terms.',
+      'When the contact or quote form service is enabled, form details are processed by the website hosting provider, Vercel, and transmitted through Resend to the configured Iron Crest email recipient. Those providers may process information under their own privacy terms and in locations outside your country. Do not include sensitive personal information in an enquiry.',
       'We do not sell personal information. Information may be made available to service providers involved in hosting, maintaining or securing the website, where such access is necessary for their work and permitted by applicable law. We may also disclose information when required by law, to protect rights and safety, or in connection with a business transfer, subject to applicable requirements.',
       'The providers, locations and arrangements depend on the services actually engaged by Iron Crest. This policy does not assert that any particular third-party service or data-sharing partner is used.',
     ],
@@ -65,7 +67,7 @@ const sections = [
   {
     title: 'Data Retention',
     paragraphs: [
-      'We retain information only for as long as reasonably necessary for the purposes described in this policy, including responding to enquiries, maintaining business records, resolving disputes and meeting legal requirements. Retention periods depend on the type of information and the reason it was collected.',
+      'We retain information only for as long as reasonably necessary for the purposes described in this policy, including responding to enquiries, maintaining business records, resolving disputes and meeting legal requirements. Enquiry details may also remain in Iron Crest email systems or provider records according to the retention settings and policies that apply to those services. Specific retention periods have not been provided for this website.',
     ],
   },
   {
@@ -102,7 +104,7 @@ const sections = [
   {
     title: 'Contact Information',
     paragraphs: [
-      'For privacy questions or requests, contact Iron Crest Excavator Solutions at sales@ironcrest.com or +92 300 1234567. A postal address and any formal privacy contact details should be added here if required: [Insert verified company contact or privacy-office details].',
+      'For privacy questions or requests, contact Iron Crest Excavator Solutions at sales@ironcrest.com or +92 300 1234567. A verified postal address and any formal privacy contact details have not yet been provided; add them here if required by applicable law before publication.',
     ],
   },
 ];

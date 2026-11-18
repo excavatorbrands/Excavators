@@ -79,15 +79,21 @@ Replace `YOUR-USERNAME` with your GitHub username and use your repository URL.
 3. Vercel should detect Vite automatically. The included `vercel.json` uses:
    - Build command: `npm run build`
    - Output directory: `dist`
-4. Click **Deploy**. Future pushes to `main` will trigger a new deployment.
+4. In the Vercel project settings, add the enquiry-service environment variables:
+   - `RESEND_API_KEY` — the Resend API key; keep it private and configure it only in Vercel.
+   - `RESEND_FROM_EMAIL` — a sender address on a domain verified with Resend.
+   - `ENQUIRY_TO_EMAIL` — optional; defaults to `sales@ironcrest.com`.
+5. Click **Deploy**. Future pushes to `main` will trigger a new deployment.
 
-No environment variables are required for this static homepage prototype.
+The contact and quote forms use the Vercel function at `/api/enquiries`. They cannot send enquiries until the required Resend settings are configured in Vercel. Do not commit credentials or add them to a client-side Vite variable.
+The endpoint validates submitted fields and includes a basic honeypot. Configure Vercel Firewall rate limits or an equivalent anti-spam control before promoting the form widely.
 
 ## Before publishing commercially
 
 - Replace the sample phone number, email address and Lahore location with Iron Crest's approved contact details.
 - The model specifications and service-network figures are illustrative placeholders. Verify every model, configuration and specification with the manufacturer and replace all sample business statistics with confirmed Iron Crest data.
-- The quote and catalog forms currently demonstrate front-end interactions only. Connect them to your preferred CRM, email service or API to receive real enquiries.
+- Confirm the registered legal entity, postal address and governing law/jurisdiction in the legal pages before treating them as final.
+- Configure and verify the Resend environment variables in Vercel before accepting online enquiries. The homepage newsletter signup is not connected to a mailing-list service.
 - Replace the sample testimonial and news entries with approved, genuine content.
 - Confirm permission and brand-guideline requirements before using manufacturer trademarks or logos commercially. The brand strip in this prototype uses text wordmarks.
 
@@ -128,3 +134,7 @@ iron-crest-site/
 - `/contact` — Contact
 
 All internal pages use the shared Iron Crest header and footer while each page has its own visual layout and content system.
+
+## API tests
+
+Run `npm run test:api` to test enquiry validation and email-provider delivery behavior.
