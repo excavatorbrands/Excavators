@@ -1,25 +1,25 @@
 export const brands = [
-  { id: 'hyundai', name: 'Hyundai', sub: 'Construction Equipment', className: 'brand-hyundai' },
-  { id: 'doosan', name: 'Doosan', sub: 'Excavators', className: 'brand-doosan' },
-  { id: 'volvo', name: 'Volvo', sub: 'Construction Equipment', className: 'brand-volvo' },
-  { id: 'hitachi', name: 'Hitachi', sub: 'Construction Machinery', className: 'brand-hitachi' },
-  { id: 'cat', name: 'CAT', sub: 'Caterpillar', className: 'brand-cat' },
-  { id: 'fiatallis', name: 'Fiatallis', sub: 'Excavators', className: 'brand-fiatallis' },
-  { id: 'komatsu', name: 'Komatsu', sub: 'Construction Equipment', className: 'brand-komatsu' },
-  { id: 'sany', name: 'SANY', sub: 'Heavy Equipment', className: 'brand-sany' },
+  { id: 'hyundai', name: 'Hyundai', sub: 'Construction Equipment', className: 'brand-hyundai', logo: '/images/logos/hyundai.png' },
+  { id: 'doosan', name: 'Doosan', sub: 'Excavators', className: 'brand-doosan', logo: '/images/logos/doosan.png' },
+  { id: 'volvo', name: 'Volvo', sub: 'Construction Equipment', className: 'brand-volvo', logo: '/images/logos/volvo.png' },
+  { id: 'hitachi', name: 'Hitachi', sub: 'Construction Machinery', className: 'brand-hitachi', logo: '/images/logos/hitachi.png' },
+  { id: 'cat', name: 'CAT', sub: 'Caterpillar', className: 'brand-cat', logo: '/images/logos/cat.png' },
+  { id: 'fiatallis', name: 'Fiatallis', sub: 'Excavators', className: 'brand-fiatallis', logo: '/images/logos/fiatallis.png' },
+  { id: 'komatsu', name: 'Komatsu', sub: 'Construction Equipment', className: 'brand-komatsu', logo: '/images/logos/komatsu.png' },
+  { id: 'sany', name: 'SANY', sub: 'Heavy Equipment', className: 'brand-sany', logo: '/images/logos/sany.png' },
 ];
 
 // Rotating homepage hero: one featured example from each represented manufacturer.
-// Images are locally hosted in public/images/brands and rotate every five seconds.
+// Images are locally hosted in public/images/heroimages and rotate every five seconds.
 export const heroSlides = [
-  { brand: 'Hyundai', model: 'HX380L', type: 'Large crawler excavator', image: '/images/brands/hero-hyundai.webp' },
-  { brand: 'Doosan', model: 'DX300LC', type: 'Large crawler excavator', image: '/images/brands/hero-doosan.webp' },
-  { brand: 'Volvo', model: 'EC300E', type: 'Large crawler excavator', image: '/images/brands/hero-volvo.webp' },
-  { brand: 'Hitachi', model: 'ZX350LC-7', type: 'Large crawler excavator', image: '/images/brands/hero-hitachi.webp' },
-  { brand: 'CAT', model: '336', type: 'Large crawler excavator', image: '/images/brands/hero-cat.webp' },
-  { brand: 'Fiatallis', model: 'EX285', type: 'Large crawler excavator', image: '/images/brands/hero-fiatallis.webp' },
-  { brand: 'Komatsu', model: 'PC360LC-11', type: 'Large crawler excavator', image: '/images/brands/hero-komatsu.webp' },
-  { brand: 'SANY', model: 'SY365C', type: 'Large crawler excavator', image: '/images/brands/hero-sany.webp' },
+  { brand: 'Hyundai', model: 'HX220L', type: 'Medium crawler excavator', image: '/images/heroimages/hyundai-hx220l.png' },
+  { brand: 'Doosan', model: 'DX225LC', type: 'Medium crawler excavator', image: '/images/heroimages/doosan-dx225lc.png' },
+  { brand: 'Volvo', model: 'EC220E', type: 'Medium crawler excavator', image: '/images/heroimages/volvo-ec220e.png' },
+  { brand: 'Hitachi', model: 'ZX210LC-6', type: 'Medium crawler excavator', image: '/images/heroimages/hitachi-zx210lc-6.png' },
+  { brand: 'CAT', model: '320', type: 'Medium crawler excavator', image: '/images/heroimages/cat-320.png' },
+  { brand: 'Fiatallis', model: 'FX215', type: 'Medium crawler excavator', image: '/images/heroimages/fiatallis-fx215.png' },
+  { brand: 'Komatsu', model: 'PC210LC', type: 'Medium crawler excavator', image: '/images/heroimages/komatsu-pc210lc.png' },
+  { brand: 'SANY', model: 'SY215C', type: 'Medium crawler excavator', image: '/images/heroimages/sany-sy215c.png' },
 ];
 
 // Model examples are not connected to an inventory feed; availability remains unverified.

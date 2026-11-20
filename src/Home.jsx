@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { brands, categories, heroSlides, industries, models } from './data.js';
 import { Header, Footer } from './Chrome.jsx';
+import BrandLogoRail from './BrandLogoRail.jsx';
 import { submitEnquiry } from './submitEnquiry.js';
 
 function SectionEyebrow({ children }) {
@@ -107,18 +108,7 @@ function QuoteModal({ modal, onClose }) {
 }
 
 function BrandStrip() {
-  return (
-    <section className="brand-strip" id="brands" aria-label="Excavator brands">
-      <div className="container brand-strip-inner">
-        {brands.map((brand) => (
-          <a href={`/brands?brand=${brand.id}`} className={`brand-wordmark ${brand.className}`} key={brand.id} title={`${brand.name} excavators`}>
-            <strong>{brand.name}</strong>
-            {brand.id === 'hyundai' && <small>CONSTRUCTION EQUIPMENT</small>}
-          </a>
-        ))}
-      </div>
-    </section>
-  );
+  return <BrandLogoRail className="brand-logo-strip-home" id="brands" />;
 }
 
 function ModelCard({ model, onDetails }) {
@@ -156,6 +146,13 @@ export default function HomePage() {
     return () => window.clearInterval(rotation);
   }, []);
 
+  useEffect(() => {
+    heroSlides.forEach((slide) => {
+      const image = new Image();
+      image.src = slide.image;
+    });
+  }, []);
+
   const activeHero = heroSlides[activeHeroIndex];
 
   const filteredModels = useMemo(() => models.filter((model) => {
@@ -174,7 +171,15 @@ export default function HomePage() {
 
       <main>
         <section className="hero-section" id="home">
-          <div key={activeHero.image} className="hero-bg hero-bg-slide" style={{ backgroundImage: `url("${activeHero.image}")` }} role="img" aria-label={`${activeHero.brand} ${activeHero.model} featured excavator`} />
+          <div className="hero-image-track" aria-hidden="true">
+            {heroSlides.map((slide, index) => (
+              <div
+                key={slide.image}
+                className={`hero-bg ${index === activeHeroIndex ? 'hero-bg-active' : ''}`}
+                style={{ backgroundImage: `url("${slide.image}")` }}
+              />
+            ))}
+          </div>
           <div className="container hero-content">
             <div className="hero-copy">
               <SectionEyebrow>The all-brand excavator destination</SectionEyebrow>

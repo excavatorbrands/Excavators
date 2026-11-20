@@ -38,7 +38,6 @@ export default function ResourcesPage({ embedded = false }) {
               <h1>THE IRON CREST<br /><em>RESOURCE ROOM.</em></h1>
               <p>Guides, catalog references and practical planning tools designed to help you move from equipment questions to confident next steps.</p>
             </div>
-            <div className="res-hero-index"><span>RESOURCE<br />INDEX</span><strong>04</strong><small>FOCUSED<br />TOOLS</small></div>
           </div>
         </section>
 

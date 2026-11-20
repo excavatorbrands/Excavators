@@ -142,11 +142,43 @@ td strong { color: #17212a !important; }
 
 /* Contact, resources, about and solutions interior pages */
 .inner-page { background:#f6f7f8 !important; color:#17212a !important; }
-.inner-page .page-breadcrumb { color:#c8d0d5 !important; }
-.inner-page .page-breadcrumb a { color:#fff !important; }
+.inner-page .page-breadcrumb { color:#69757e !important; }
+.inner-page .page-breadcrumb a { color:#27343c !important; }
+.inner-page .page-breadcrumb b { color:#17212a !important; }
 .page-section-head h2, .inner-page h2, .inner-page h3 { color:#17212a; }
-.contact-hero, .res-hero, .about-hero, .ps-hero, .sol-hero { color:#fff !important; }
-.contact-main, .contact-bottom, .about-commitment, .res-library, .res-faq, .res-download, .ps-finder, .ps-maintenance, .ps-process, .sol-selector, .sol-method { background:#f6f7f8 !important; color:#17212a !important; }
+.contact-hero, .res-hero, .about-hero, .ps-hero, .sol-hero { background:#edf1f3 !important; color:#17212a !important; }
+.contact-hero p, .res-hero p, .about-hero p, .ps-hero p, .sol-hero p { color:#65717a !important; }
+.contact-hero h1, .res-hero h1, .about-hero h1, .ps-hero h1, .sol-hero h1,
+.contact-hero h2, .res-hero h2, .about-hero h2, .ps-hero h2, .sol-hero h2 { color:#17212a !important; }
+.contact-main, .contact-bottom, .about-commitment, .res-library, .res-faq, .res-download, .res-download-band,
+.ps-finder, .ps-maintenance, .ps-process, .sol-selector, .sol-method { background:#f6f7f8 !important; color:#17212a !important; }
+.ps-finder-copy h2, .ps-finder-copy > p, .sol-method .page-section-head h2,
+.sol-method .page-section-head > p { color:#17212a !important; }
+.ps-finder-panel { background:#fff !important; color:#27343c !important; border-color:#dfe4e7 !important; box-shadow:0 18px 40px rgba(20,31,40,.06) !important; }
+.ps-panel-top { color:#9b7300 !important; border-bottom-color:#dfe4e7 !important; }
+.ps-finder-panel li { color:#27343c !important; }
+.ps-search { background:#fff !important; border-color:#dfe4e7 !important; }
+.ps-search input { color:#17212a !important; }
+.ps-search input::placeholder { color:#89939a !important; }
+.ps-search span, .ps-search-hints { color:#69757e !important; }
+.res-download-inner p, .res-download-note, .res-download-note b { color:#65717a !important; }
+.res-download-note { border-left-color:#dfe4e7 !important; }
+.res-download-inner h2, .res-download-inner .page-kicker,
+.res-news-inner, .res-news-inner a { color:#17212a !important; }
+.ps-hero-stamp { color:#17212a !important; background:#fff8e3 !important; border-color:#e0bd55 !important; }
+.ps-hero-stamp b { color:#17212a !important; }
+.ps-service-card h3, .ps-service-card a, .ps-maintenance-copy h2,
+.sol-feature-copy h3, .sol-feature-copy p, .sol-points span,
+.faq-item button, .faq-item p, .res-card h3, .res-card p, .res-card a { color:#27343c !important; }
+.ps-service-card p, .ps-maintenance-copy > p, .sol-feature-copy > p,
+.sol-points span { color:#65717a !important; }
+.ps-service-grid-section, .ps-callout, .res-news, .sol-project-band { background:#f6f7f8 !important; color:#17212a !important; }
+.ps-callout-inner strong, .ps-callout-inner span,
+.sol-project-inner h2, .sol-project-inner p { color:#17212a !important; }
+.sol-tabs button { background:#fff !important; color:#27343c !important; border-color:#dfe4e7 !important; }
+.sol-tabs button.active { background:#fff1bd !important; color:#17212a !important; border-color:#e4bd45 !important; }
+.sol-method-grid article { background:#fff !important; color:#27343c !important; }
+.sol-method-grid article > span, .sol-method-grid p { color:#65717a !important; }
 .contact-info > p, .contact-next p, .about-story-copy p, .about-commitment p, .res-library p, .res-faq p, .ps-finder p, .ps-maintenance p, .sol-selector p { color:#65717a !important; }
 .contact-methods > a, .contact-methods > div { border-bottom-color:#e0e5e8 !important; }
 .contact-methods > * > span { background:#fff4cf !important; color:#9b7300 !important; border:1px solid #efdfaa; }
@@ -167,6 +199,7 @@ td strong { color: #17212a !important; }
 
 /* Keep the designed photographic hero areas legible; they are image-led rather than charcoal UI surfaces. */
 .hero-section { background-color:#e7ecef !important; }
+.hero-image-track { z-index:-1; }
 .hero-bg::after { background:linear-gradient(90deg,rgba(8,15,21,.86) 0%,rgba(8,15,21,.72) 29%,rgba(8,15,21,.18) 60%,rgba(8,15,21,.05) 100%),linear-gradient(0deg,rgba(8,15,21,.35),transparent 42%) !important; }
 .parts-coming-soon-page { background:#fff !important; }
 .parts-coming-soon { background:#e8ecef !important; color:#fff !important; }

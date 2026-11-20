@@ -22,7 +22,6 @@ export default function AboutPage({ embedded = false }) {
             <div className="page-breadcrumb"><a href="/">Home</a><ChevronRight size={13} /><b>About Us</b></div>
             <div className="about-hero-copy"><span className="page-kicker">THE IRON CREST APPROACH</span><h1>EQUIPMENT<br /><em>WITHOUT THE NOISE.</em></h1><p>A focused, multi-brand approach to excavator selection, parts support and service conversations — built around the realities of the work.</p></div>
           </div>
-          <div className="about-hero-label"><span>IC / 01</span><b>CLARITY<br />OVER<br />COMPLEXITY</b></div>
         </section>
 
         <section className="about-intro">

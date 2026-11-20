@@ -5,6 +5,7 @@ import {
   ShieldCheck, SlidersHorizontal, Wrench, X, MapPin, Phone, Mail,
 } from 'lucide-react';
 import { brands, models } from './data.js';
+import BrandLogoRail from './BrandLogoRail.jsx';
 import './brands.css';
 import { Header, Footer } from './Chrome.jsx';
 
@@ -13,10 +14,7 @@ const sizeFilters = ['All', 'Mini', 'Medium', 'Large', 'Mining'];
 function BrandWordmark({ brand }) {
   return (
     <span className={`directory-wordmark wordmark-${brand.id}`}>
-      {brand.id === 'hyundai' && <i className="hyundai-mark" aria-hidden="true" />}
-      {brand.id === 'cat' && <i className="cat-mark" aria-hidden="true" />}
-      {brand.id === 'sany' && <i className="sany-mark" aria-hidden="true" />}
-      <strong>{brand.name}</strong>
+      <img src={brand.logo} alt={`${brand.name} logo`} />
     </span>
   );
 }
@@ -292,6 +290,7 @@ export default function BrandsPage() {
       <Header active="brands" />
       <main>
         <DirectoryHero search={search} setSearch={setSearch} size={selectedSize} setSize={setSelectedSize} compareCount={compareIds.length} goToCompare={goToCompare} />
+        <BrandLogoRail className="brand-logo-strip-directory" />
         <BrandIndex filteredBrands={filteredBrands} selectedBrand={activeBrand.id} onSelect={setSelectedBrand} />
         {filteredBrands.length > 0 && <FeaturedBrand brand={activeBrand} model={featuredModel} onExplore={exploreSelectedBrand} />}
         <ModelExplorer filteredModels={filteredModels} search={search} selectedSize={selectedSize} onAddCompare={addCompare} compareIds={compareIds} onClear={clearFilters} />
