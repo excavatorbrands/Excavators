@@ -80,7 +80,7 @@ export default function SolutionsPage() {
         <section className="sol-project-band">
           <div className="container sol-project-inner">
             <div><span className="page-kicker">PROJECT SUPPORT</span><h2>Have a project already scoped?</h2><p>Send the basic project parameters and let the Iron Crest team help you define the equipment shortlist.</p></div>
-            <a href="/contact" className="btn btn-primary">Discuss your project <ArrowRight size={16} /></a>
+            <a href="/contact-us" className="btn btn-primary">Discuss your project <ArrowRight size={16} /></a>
           </div>
         </section>
       </main>

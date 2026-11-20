@@ -19,7 +19,7 @@ const faqs = [
   ['Can I ask about parts and service?', 'Yes. The Parts & Service page is designed for parts identification, maintenance planning and technical support enquiries.'],
 ];
 
-export default function ResourcesPage() {
+export default function ResourcesPage({ embedded = false }) {
   const [filter, setFilter] = useState('All');
   const [query, setQuery] = useState('');
   const [openFaq, setOpenFaq] = useState(null);
@@ -27,8 +27,8 @@ export default function ResourcesPage() {
   const filtered = useMemo(() => resources.filter(item => (filter === 'All' || item.category === filter) && (!query || `${item.title} ${item.text}`.toLowerCase().includes(query.toLowerCase()))), [filter, query]);
 
   return (
-    <div className="inner-page resources-page">
-      <Header active="resources" />
+    <div className="inner-page resources-page" id={embedded ? "resources" : undefined}>
+      {!embedded && <Header active="contact us" />}
       <main>
         <section className="res-hero">
           <div className="container res-hero-inner">
@@ -71,7 +71,7 @@ export default function ResourcesPage() {
 
         <section className="res-faq">
           <div className="container res-faq-layout">
-            <div><span className="page-kicker">QUICK ANSWERS</span><h2>Before you <em>enquire.</em></h2><p>Common questions to help you prepare the right information for an equipment conversation.</p><a href="/contact" className="btn btn-outline">Ask another question <ArrowRight size={15} /></a></div>
+            <div><span className="page-kicker">QUICK ANSWERS</span><h2>Before you <em>enquire.</em></h2><p>Common questions to help you prepare the right information for an equipment conversation.</p><a href="/contact-us" className="btn btn-outline">Ask another question <ArrowRight size={15} /></a></div>
             <div className="faq-list">
               {faqs.map(([q, a], i) => <div className={`faq-item ${openFaq === i ? 'open' : ''}`} key={q}><button type="button" aria-expanded={openFaq === i} aria-controls={`faq-answer-${i}`} onClick={() => setOpenFaq(openFaq === i ? null : i)}><span><HelpCircle size={17} />{q}</span><span aria-hidden="true">{openFaq === i ? '−' : '+'}</span></button><p id={`faq-answer-${i}`} hidden={openFaq !== i}>{a}</p></div>)}
             </div>
@@ -82,11 +82,11 @@ export default function ResourcesPage() {
           <div className="container res-news-inner">
             <div><CalendarDays size={20} /><span>FIELD NOTE</span></div>
             <p>Model data, stock status and configurations should always be confirmed against current manufacturer and local Iron Crest information.</p>
-            <a href="/contact">Request verified information <ArrowRight size={14} /></a>
+            <a href="/contact-us">Request verified information <ArrowRight size={14} /></a>
           </div>
         </section>
       </main>
-      <Footer />
+      {!embedded && <Footer />}
     </div>
   );
 }

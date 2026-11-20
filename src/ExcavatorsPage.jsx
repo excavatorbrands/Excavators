@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
-  ArrowRight, ChevronDown, Filter, Gauge, Search,
+  ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Filter, Gauge, Search,
 } from 'lucide-react';
 import { brands, models } from './data.js';
 import { Header, Footer } from './Chrome.jsx';
@@ -35,6 +35,25 @@ function CatalogCard({ model }) {
         </div>
       </div>
     </article>
+  );
+}
+
+function CatalogBrandRail({ brand, brandModels }) {
+  const railRef = useRef(null);
+  const scrollRail = (direction) => railRef.current?.scrollBy({ left: direction * 660, behavior: 'smooth' });
+  return (
+    <section className="catalog-brand-row" aria-label={`${brand.name} excavators`}>
+      <div className="catalog-brand-row-heading">
+        <div><span className="catalog-kicker">MANUFACTURER</span><h3>{brand.name}</h3><span>{brandModels.length} model{brandModels.length === 1 ? '' : 's'}</span></div>
+        <div className="catalog-rail-controls">
+          <button type="button" onClick={() => scrollRail(-1)} aria-label={`Scroll ${brand.name} models left`}><ChevronLeft size={18} /></button>
+          <button type="button" onClick={() => scrollRail(1)} aria-label={`Scroll ${brand.name} models right`}><ChevronRight size={18} /></button>
+        </div>
+      </div>
+      <div className="catalog-model-rail" ref={railRef}>
+        {brandModels.map(model => <CatalogCard key={model.id} model={model} />)}
+      </div>
+    </section>
   );
 }
 
@@ -105,7 +124,7 @@ export default function ExcavatorsPage() {
 
           {filtersOpen && <div className="mobile-filter-panel" id="mobile-catalog-filters"><div className="control-select"><span>Brand</span><select aria-label="Filter by brand" value={brand} onChange={e => setBrand(e.target.value)}><option value="all">All brands</option>{brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</select></div><div className="control-select"><span>Size</span><select aria-label="Filter by machine class" value={size} onChange={e => setSize(e.target.value)}>{sizeFilters.map(item => <option key={item}>{item}</option>)}</select></div><div className="control-select"><span>Status</span><select aria-label="Filter by availability confirmation" value={availability} onChange={e => setAvailability(e.target.value)}>{availabilityFilters.map(item => <option key={item}>{item}</option>)}</select></div></div>}
 
-          {filtered.length ? <div className="catalog-grid">{filtered.map(model => <CatalogCard key={model.id} model={model} />)}</div> : (
+          {filtered.length ? <div className="catalog-brand-rows">{brands.map(brandItem => { const brandModels = filtered.filter(model => model.brand === brandItem.id); return brandModels.length ? <CatalogBrandRail key={brandItem.id} brand={brandItem} brandModels={brandModels} /> : null; })}</div> : (
             <div className="catalog-empty" role="status"><Search size={26} /><h3>No excavators match your filters</h3><p>Try another model, manufacturer or availability status.</p><button type="button" onClick={() => { setSearch(''); setBrand('all'); setSize('All'); setAvailability('All'); }}>Clear filters</button></div>
           )}
         </section>

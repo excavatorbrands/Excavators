@@ -17,3 +17,14 @@
 @media(max-width:1100px){.catalog-grid{grid-template-columns:repeat(3,1fr)}.control-select{min-width:125px}}
 @media(max-width:820px){.catalog-controls{flex-wrap:wrap}.catalog-search{flex-basis:100%}.catalog-controls>.control-select{display:none}.mobile-filter-button{display:inline-flex;align-items:center;gap:7px;background:#ffc400;border:0;padding:10px 13px;border-radius:5px;font-size:10px;font-weight:900}.mobile-filter-panel{display:flex;gap:8px;flex-wrap:wrap;background:#101820;padding:12px;border-radius:8px;margin-bottom:15px}.mobile-filter-panel .control-select{display:block;flex:1;min-width:140px}.catalog-grid{grid-template-columns:repeat(2,1fr)}.catalog-heading{align-items:flex-start;flex-direction:column}.catalog-heading-right{width:100%;justify-content:space-between}.catalog-note-inner{padding:25px 0;flex-direction:column;align-items:flex-start}.excavators-hero h1{font-size:50px}}
 @media(max-width:560px){.catalog-grid{grid-template-columns:1fr}.catalog-card-image{height:220px}.hero-stat-strip{gap:14px;flex-wrap:wrap}.hero-stat-strip strong{font-size:18px}.catalog-heading h2{font-size:38px}.catalog-controls-wrap{margin-top:-20px}.excavators-hero{min-height:470px}.excavators-hero-inner{min-height:470px}}
+
+/* Manufacturer-by-manufacturer horizontal catalog rails */
+.catalog-brand-rows { display: grid; gap: 34px; }
+.catalog-brand-row { min-width: 0; }
+.catalog-brand-row-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 13px; }
+.catalog-brand-row-heading h3 { margin: 4px 0 2px; color: #111820; font-family: var(--display,Impact,sans-serif); font-size: 27px; line-height: 1; text-transform: uppercase; }
+.catalog-brand-row-heading > div:first-child > span:last-child { color: #7b8790; font-size: 9px; }
+.catalog-model-rail { display: flex; gap: 16px; overflow-x: auto; overflow-y: hidden; padding: 2px 2px 15px; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: #d4a900 #dfe4e7; }
+.catalog-model-rail .catalog-card { flex: 0 0 280px; width: 280px; scroll-snap-align: start; animation: catalogRailIn .35s ease both; }
+@keyframes catalogRailIn { from { opacity: .35; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+@media(max-width:560px) { .catalog-model-rail .catalog-card { flex-basis: 265px; width: 265px; } .catalog-brand-row-heading h3 { font-size: 23px; } }

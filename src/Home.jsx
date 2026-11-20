@@ -5,7 +5,7 @@ import {
   Mail, MapPin, MapPinned, Package, Search, Settings2,
   ShieldCheck, SlidersHorizontal, Truck, Users, Wrench, X,
 } from 'lucide-react';
-import { brands, categories, industries, models } from './data.js';
+import { brands, categories, heroSlides, industries, models } from './data.js';
 import { Header, Footer } from './Chrome.jsx';
 import { submitEnquiry } from './submitEnquiry.js';
 
@@ -147,6 +147,16 @@ export default function HomePage() {
   const [compareOpen, setCompareOpen] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState('');
+  const [activeHeroIndex, setActiveHeroIndex] = useState(0);
+
+  useEffect(() => {
+    const rotation = window.setInterval(() => {
+      setActiveHeroIndex((current) => (current + 1) % heroSlides.length);
+    }, 5000);
+    return () => window.clearInterval(rotation);
+  }, []);
+
+  const activeHero = heroSlides[activeHeroIndex];
 
   const filteredModels = useMemo(() => models.filter((model) => {
     const brandMatch = selectedBrand === 'all' || model.brand === selectedBrand;
@@ -164,7 +174,7 @@ export default function HomePage() {
 
       <main>
         <section className="hero-section" id="home">
-          <div className="hero-bg" />
+          <div key={activeHero.image} className="hero-bg hero-bg-slide" style={{ backgroundImage: `url("${activeHero.image}")` }} role="img" aria-label={`${activeHero.brand} ${activeHero.model} featured excavator`} />
           <div className="container hero-content">
             <div className="hero-copy">
               <SectionEyebrow>The all-brand excavator destination</SectionEyebrow>
@@ -172,7 +182,7 @@ export default function HomePage() {
               <p>Browse manufacturer and model examples, then ask for verified specifications, configuration and availability details for your project.</p>
               <div className="hero-actions"><button className="btn btn-primary btn-large" onClick={showModels}>Explore Excavators <ArrowRight size={17} /></button><button className="btn btn-outline btn-large" onClick={openQuote}><FileText size={16} /> Get a Quote</button></div>
             </div>
-            <div className="hero-machine-caption"><span>MODEL EXAMPLE</span><strong>HYUNDAI HX380L</strong><small>Confirm model configuration and availability</small></div>
+            <div className="hero-machine-caption" aria-live="polite"><span>FEATURED MACHINE · {activeHero.brand.toUpperCase()}</span><strong>{activeHero.model}</strong><small>{activeHero.type} · Confirm configuration and availability</small></div>
           </div>
           <div className="container hero-benefits">
             <div><Users /><span>Multiple<br />Brands</span></div><div><Wrench /><span>Parts & Service<br />Enquiries</span></div><div><Headphones /><span>Equipment<br />Guidance</span></div><div><ShieldCheck /><span>Stock Status<br />Confirmation</span></div><div><Globe2 /><span>Project<br />Enquiries</span></div><div><CircleDollarSign /><span>Request<br />Pricing</span></div>
@@ -238,7 +248,7 @@ export default function HomePage() {
               <div className="why-features">
                 <div><BadgeCheck /><strong>Multi-brand<br />Directory</strong></div><div><Package /><strong>Parts<br />Enquiries</strong></div><div><Headphones /><strong>Technical Support<br />Enquiries</strong></div><div><CircleDollarSign /><strong>Request<br />Pricing</strong></div><div><MapPinned /><strong>Confirm Local<br />Support</strong></div><div><Users /><strong>Project<br />Consultation</strong></div>
               </div>
-              <a href="/about" className="why-about-link">About the Iron Crest approach <ArrowRight size={14} /></a>
+              <a href="/contact-us#about" className="why-about-link">About the Iron Crest approach <ArrowRight size={14} /></a>
             </div>
           </div>
         </section>
@@ -263,9 +273,9 @@ export default function HomePage() {
               <div className="testimonial-content"><BadgeCheck size={27} /><p>Consider the site, material, access, duty cycle and attachments before comparing machine examples.</p></div>
               <div className="testimonial-author"><div className="avatar">IC</div><div><strong>Equipment selection</strong><small>Application · Configuration · Availability confirmation</small></div></div>
             </div>
-            <div className="news-panel"><div className="news-heading"><div><SectionEyebrow>Practical resources</SectionEyebrow><h2>Guides &amp; <em>Next steps</em></h2></div><a href="/resources">View resources <ArrowRight size={14} /></a></div>
+            <div className="news-panel"><div className="news-heading"><div><SectionEyebrow>Practical resources</SectionEyebrow><h2>Guides &amp; <em>Next steps</em></h2></div><a href="/contact-us#resources">View resources <ArrowRight size={14} /></a></div>
               <div className="news-list">
-                <article className="news-item"><img src="/images/category-large.webp" alt="Large excavator category example" loading="lazy" /><div><span>SELECTION GUIDE</span><h3>Choosing an Excavator Class for Your Project</h3><a href="/resources">Explore resources <ArrowUpRight size={13} /></a></div></article>
+                <article className="news-item"><img src="/images/category-large.webp" alt="Large excavator category example" loading="lazy" /><div><span>SELECTION GUIDE</span><h3>Choosing an Excavator Class for Your Project</h3><a href="/contact-us#resources">Explore resources <ArrowUpRight size={13} /></a></div></article>
                 <article className="news-item"><img src="/images/parts-service.webp" alt="Excavator parts and service detail" loading="lazy" /><div><span>PARTS &amp; SERVICE</span><h3>Prepare for a Parts or Service Enquiry</h3><a href="/parts-service">See support pathways <ArrowUpRight size={13} /></a></div></article>
               </div>
             </div>

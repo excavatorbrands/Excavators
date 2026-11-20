@@ -9,6 +9,19 @@ export const brands = [
   { id: 'sany', name: 'SANY', sub: 'Heavy Equipment', className: 'brand-sany' },
 ];
 
+// Rotating homepage hero: one featured example from each represented manufacturer.
+// Images are locally hosted in public/images/brands and rotate every five seconds.
+export const heroSlides = [
+  { brand: 'Hyundai', model: 'HX380L', type: 'Large crawler excavator', image: '/images/brands/hero-hyundai.webp' },
+  { brand: 'Doosan', model: 'DX300LC', type: 'Large crawler excavator', image: '/images/brands/hero-doosan.webp' },
+  { brand: 'Volvo', model: 'EC300E', type: 'Large crawler excavator', image: '/images/brands/hero-volvo.webp' },
+  { brand: 'Hitachi', model: 'ZX350LC-7', type: 'Large crawler excavator', image: '/images/brands/hero-hitachi.webp' },
+  { brand: 'CAT', model: '336', type: 'Large crawler excavator', image: '/images/brands/hero-cat.webp' },
+  { brand: 'Fiatallis', model: 'EX285', type: 'Large crawler excavator', image: '/images/brands/hero-fiatallis.webp' },
+  { brand: 'Komatsu', model: 'PC360LC-11', type: 'Large crawler excavator', image: '/images/brands/hero-komatsu.webp' },
+  { brand: 'SANY', model: 'SY365C', type: 'Large crawler excavator', image: '/images/brands/hero-sany.webp' },
+];
+
 // Model examples are not connected to an inventory feed; availability remains unverified.
 const catalog = [
   ['hyundai','Hyundai','HX17A','Mini crawler'],

@@ -12,10 +12,10 @@ const values = [
   { icon: <UsersRound />, title: 'Support beyond sale', text: 'Parts, service and ownership questions remain part of the equipment conversation.' },
 ];
 
-export default function AboutPage() {
+export default function AboutPage({ embedded = false }) {
   return (
-    <div className="inner-page about-page">
-      <Header active="about us" />
+    <div className="inner-page about-page" id={embedded ? "about" : undefined}>
+      {!embedded && <Header active="contact us" />}
       <main>
         <section className="about-hero">
           <div className="container about-hero-inner">
@@ -59,7 +59,7 @@ export default function AboutPage() {
           <div className="container about-difference-inner">
             <div className="about-difference-mark"><Compass size={32} /><span>IC</span></div>
             <div><span className="page-kicker">THE IRON CREST DIFFERENCE</span><h2>Professional by design.<br /><em>Practical by nature.</em></h2><p>The goal is simple: make a complex equipment decision easier to navigate without pretending that every machine, project or market is the same.</p></div>
-            <a href="/contact" className="btn btn-primary">Start a conversation <ArrowRight size={15} /></a>
+            <a href="/contact-us" className="btn btn-primary">Start a conversation <ArrowRight size={15} /></a>
           </div>
         </section>
 
@@ -70,7 +70,7 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      {!embedded && <Footer />}
     </div>
   );
 }

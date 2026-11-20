@@ -7,7 +7,7 @@ import { Header, Footer } from './Chrome.jsx';
 import { submitEnquiry } from './submitEnquiry.js';
 import './pages.css';
 
-export default function ContactPage() {
+export default function ContactPage({ embedded = false }) {
   const [submissionNotice, setSubmissionNotice] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const params = new URLSearchParams(window.location.search);
@@ -30,8 +30,8 @@ export default function ContactPage() {
     }
   };
   return (
-    <div className="inner-page contact-page">
-      <Header active="contact" />
+    <div className="inner-page contact-page" id={embedded ? "contact-information" : undefined}>
+      {!embedded && <Header active="contact us" />}
       <main>
         <section className="contact-hero">
           <div className="container contact-hero-inner">
@@ -78,7 +78,7 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      {!embedded && <Footer />}
     </div>
   );
 }

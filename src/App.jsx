@@ -4,9 +4,7 @@ import BrandsPage from './BrandsPage.jsx';
 import ExcavatorsPage from './ExcavatorsPage.jsx';
 import PartsServicePage from './PartsServicePage.jsx';
 import SolutionsPage from './SolutionsPage.jsx';
-import ResourcesPage from './ResourcesPage.jsx';
-import AboutPage from './AboutPage.jsx';
-import ContactPage from './ContactPage.jsx';
+import ContactUsPage from './ContactUsPage.jsx';
 import PrivacyPolicyPage from './PrivacyPolicyPage.jsx';
 import TermsAndConditionsPage from './TermsAndConditionsPage.jsx';
 
@@ -18,10 +16,11 @@ const pageMetadata = {
   '/excavators': ['Excavator Catalog | Iron Crest', 'Browse excavator model examples by manufacturer and machine class, and contact Iron Crest to confirm specifications and availability.'],
   '/parts-service': ['Parts & Service | Iron Crest', 'Explore excavator parts identification, maintenance planning and service support pathways from Iron Crest.'],
   '/solutions': ['Equipment Solutions | Iron Crest', 'Explore excavator applications for construction, mining, infrastructure, urban development, material handling and demolition.'],
-  '/resources': ['Equipment Resources | Iron Crest', 'Explore equipment selection guides, planning resources and common excavator questions from Iron Crest.'],
-  '/about': ['About Iron Crest | Excavator Solutions', 'Learn about the Iron Crest approach to multi-brand excavator selection, parts support and service enquiries.'],
-  '/about-us': ['About Iron Crest | Excavator Solutions', 'Learn about the Iron Crest approach to multi-brand excavator selection, parts support and service enquiries.'],
-  '/contact': ['Contact Iron Crest | Equipment Enquiries', 'Contact Iron Crest about excavators, parts, service support or project requirements.'],
+  '/resources': ['Contact Us | Iron Crest Excavator Solutions', 'Contact Iron Crest, explore equipment resources and learn about the company.'],
+  '/about': ['Contact Us | Iron Crest Excavator Solutions', 'Contact Iron Crest, explore equipment resources and learn about the company.'],
+  '/about-us': ['Contact Us | Iron Crest Excavator Solutions', 'Contact Iron Crest, explore equipment resources and learn about the company.'],
+  '/contact': ['Contact Us | Iron Crest Excavator Solutions', 'Contact Iron Crest, explore equipment resources and learn about the company.'],
+  '/contact-us': ['Contact Us | Iron Crest Excavator Solutions', 'Contact Iron Crest, explore equipment resources and learn about the company.'],
   '/privacy-policy': ['Privacy Policy | Iron Crest', 'Read how Iron Crest handles information when you visit the website or contact the team.'],
   '/terms-and-conditions': ['Terms & Conditions | Iron Crest', 'Review the terms for using the Iron Crest website and how they differ from sales and equipment agreements.'],
 };
@@ -49,7 +48,7 @@ export default function App() {
     setMeta('meta[name="twitter:title"]', 'content', title, 'meta');
     setMeta('meta[name="twitter:description"]', 'content', description, 'meta');
 
-    const canonicalPath = path === '/about-us' ? '/about' : path || '/';
+    const canonicalPath = ['/contact', '/resources', '/about', '/about-us'].includes(path) ? '/contact-us' : path || '/';
     setMeta('link[rel="canonical"]', 'href', `${window.location.origin}${canonicalPath}`, 'link');
   }, []);
 
@@ -57,9 +56,7 @@ export default function App() {
   if (path === '/excavators') return <ExcavatorsPage />;
   if (path === '/parts-service' || path === '/parts' || path === '/service') return <PartsServicePage />;
   if (path === '/solutions') return <SolutionsPage />;
-  if (path === '/resources') return <ResourcesPage />;
-  if (path === '/about' || path === '/about-us') return <AboutPage />;
-  if (path === '/contact') return <ContactPage />;
+  if (['/contact', '/contact-us', '/resources', '/about', '/about-us'].includes(path)) return <ContactUsPage />;
   if (path === '/privacy-policy') return <PrivacyPolicyPage />;
   if (path === '/terms-and-conditions') return <TermsAndConditionsPage />;
   return <HomePage />;

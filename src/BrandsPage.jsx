@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
-  ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, ClipboardList,
+  ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, ClipboardList,
   FileText, Filter, Gauge, Headphones, Menu, Package, Search, Scale,
   ShieldCheck, SlidersHorizontal, Wrench, X, MapPin, Phone, Mail,
 } from 'lucide-react';
@@ -112,35 +112,60 @@ function FeaturedBrand({ brand, model, onExplore }) {
   );
 }
 
+function BrandModelRail({ brand, brandModels, compareIds, onAddCompare }) {
+  const railRef = useRef(null);
+  const scrollRail = (direction) => railRef.current?.scrollBy({ left: direction * 620, behavior: 'smooth' });
+
+  return (
+    <section className="directory-brand-model-row" aria-label={`${brand.name} excavator models`}>
+      <div className="directory-brand-model-heading">
+        <div><span className="directory-section-kicker">MANUFACTURER</span><h3>{brand.name}</h3><span className="directory-brand-model-count">{brandModels.length} model{brandModels.length === 1 ? '' : 's'}</span></div>
+        <div className="directory-rail-controls">
+          <button type="button" onClick={() => scrollRail(-1)} aria-label={`Scroll ${brand.name} models left`}><ChevronLeft size={18} /></button>
+          <button type="button" onClick={() => scrollRail(1)} aria-label={`Scroll ${brand.name} models right`}><ChevronRight size={18} /></button>
+        </div>
+      </div>
+      <div className="directory-model-rail" ref={railRef}>
+        {brandModels.map((model) => {
+          const inCompare = compareIds.includes(model.id);
+          return (
+            <article className="directory-model-card directory-model-rail-card" key={model.id}>
+              <div className="directory-model-image"><img src={`/images/brands/model-${model.brand}.webp`} alt={`${model.brandName} ${model.model} excavator`} loading="lazy" /><span className="directory-model-brand">{model.brandName}</span></div>
+              <div className="directory-model-body">
+                <div className="directory-model-title"><div><span>{model.type}</span><h3>{model.model}</h3></div><ArrowUpRight size={16} /></div>
+                <div className="directory-model-specs">
+                  <span><Gauge size={14} /> Power <b>{model.power}</b></span>
+                  <span><Package size={14} /> Operating weight <b>{model.weight}</b></span>
+                  <span><Scale size={14} /> Bucket capacity <b>{model.bucket}</b></span>
+                </div>
+                <div className="directory-model-actions">
+                  <a href={`/contact?type=equipment&model=${encodeURIComponent(`${model.brandName} ${model.model}`)}`}>Request details <ArrowRight size={14} /></a>
+                  <button className={inCompare ? 'is-added' : ''} onClick={() => onAddCompare(model.id)} aria-pressed={inCompare}>{inCompare ? <Check size={14} /> : <span>+</span>} {inCompare ? 'Added' : 'Compare'}</button>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function ModelExplorer({ filteredModels, search, selectedSize, onAddCompare, compareIds, onClear }) {
+  const visibleBrandRows = brands.map((brand) => ({
+    brand,
+    brandModels: filteredModels.filter((model) => model.brand === brand.id),
+  })).filter((group) => group.brandModels.length > 0);
+
   return (
     <section className="model-explorer directory-container" id="brand-models" aria-labelledby="model-explorer-title">
       <div className="directory-section-head model-explorer-head">
-        <div><span className="directory-section-kicker">BROWSE THE LINEUP</span><h2 id="model-explorer-title">Model <em>Explorer</em></h2><p>Browse model examples associated with the manufacturers above.</p></div>
+        <div><span className="directory-section-kicker">BROWSE THE LINEUP</span><h2 id="model-explorer-title">Model <em>Explorer</em></h2><p>Each manufacturer has its own horizontal model lineup. Use the arrows or swipe to explore more machines.</p></div>
         <span className="model-result-count">{filteredModels.length.toString().padStart(2, '0')} LISTINGS</span>
       </div>
-      {filteredModels.length ? (
-        <div className="directory-model-grid">
-          {filteredModels.map((model) => {
-            const inCompare = compareIds.includes(model.id);
-            return (
-              <article className="directory-model-card" key={model.id}>
-                <div className="directory-model-image"><img src={`/images/brands/model-${model.brand}.webp`} alt={`${model.brandName} ${model.model} excavator`} loading="lazy" /><span className="directory-model-brand">{model.brandName}</span></div>
-                <div className="directory-model-body">
-                  <div className="directory-model-title"><div><span>{model.type}</span><h3>{model.model}</h3></div><ArrowUpRight size={16} /></div>
-                  <div className="directory-model-specs">
-                    <span><Gauge size={14} /> Power <b>{model.power}</b></span>
-                    <span><Package size={14} /> Operating weight <b>{model.weight}</b></span>
-                    <span><Scale size={14} /> Bucket capacity <b>{model.bucket}</b></span>
-                  </div>
-                  <div className="directory-model-actions">
-                    <a href={`/contact?type=equipment&model=${encodeURIComponent(`${model.brandName} ${model.model}`)}`}>Request details <ArrowRight size={14} /></a>
-                    <button className={inCompare ? 'is-added' : ''} onClick={() => onAddCompare(model.id)} aria-pressed={inCompare}>{inCompare ? <Check size={14} /> : <span>+</span>} {inCompare ? 'Added' : 'Compare'}</button>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
+      {visibleBrandRows.length ? (
+        <div className="directory-brand-model-rows">
+          {visibleBrandRows.map(({ brand, brandModels }) => <BrandModelRail key={brand.id} brand={brand} brandModels={brandModels} compareIds={compareIds} onAddCompare={onAddCompare} />)}
         </div>
       ) : (
         <div className="directory-empty model-empty"><SlidersHorizontal size={23} /><strong>No matching model examples</strong><span>{selectedSize !== 'All' ? `There are no ${selectedSize.toLowerCase()} excavator examples in the current sample dataset.` : 'Try another search term or clear the current filters.'}</span><button onClick={onClear}>Clear filters <ArrowRight size={14} /></button></div>
@@ -203,7 +228,7 @@ function DirectoryCTA() {
       <div className="directory-cta-inner directory-container">
         <div className="directory-cta-icon"><Headphones size={34} /></div>
         <div><span>NEED HELP WITH YOUR SHORTLIST?</span><h2>Choose your next excavator <em>with confidence.</em></h2><p>Share your project requirements and ask the Iron Crest team for guidance.</p></div>
-        <a href="/contact" className="directory-cta-button">Talk to our team <ArrowRight size={16} /></a>
+        <a href="/contact-us" className="directory-cta-button">Talk to our team <ArrowRight size={16} /></a>
         <img src="/images/brands/brand-featured-excavator.webp" alt="Excavator at a quarry" loading="lazy" />
       </div>
     </section>

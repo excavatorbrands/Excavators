@@ -380,3 +380,17 @@
 }
 .comparison-notice { margin-left: auto; color: var(--dir-yellow); font-size: 8px; line-height: 1.4; text-align: right; }
 @media (max-width: 680px) { .comparison-notice { flex-basis: 100%; order: 3; margin-left: 48px; text-align: left; } }
+
+/* Manufacturer-by-manufacturer horizontal model rails */
+.directory-brand-model-rows { display: grid; gap: 30px; }
+.directory-brand-model-row { min-width: 0; }
+.directory-brand-model-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 0 0 12px; }
+.directory-brand-model-heading h3 { margin: 4px 0 2px; color: #f4f6f7; font-size: 23px; font-weight: 900; text-transform: uppercase; letter-spacing: .2px; }
+.directory-brand-model-count { color: #83919b; font-size: 9px; }
+.directory-rail-controls, .catalog-rail-controls { display: flex; gap: 7px; }
+.directory-rail-controls button, .catalog-rail-controls button { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid rgba(255,196,0,.35); border-radius: 6px; background: rgba(255,196,0,.07); color: #ffc400; cursor: pointer; transition: background .2s, color .2s, transform .2s; }
+.directory-rail-controls button:hover, .catalog-rail-controls button:hover { background: #ffc400; color: #101820; transform: translateY(-1px); }
+.directory-model-rail { display: flex; gap: 12px; overflow-x: auto; overflow-y: hidden; padding: 2px 2px 12px; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: rgba(255,196,0,.55) rgba(255,255,255,.08); }
+.directory-model-rail-card { flex: 0 0 278px; width: 278px; scroll-snap-align: start; animation: directoryRailIn .35s ease both; }
+@keyframes directoryRailIn { from { opacity: .35; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+@media (max-width: 560px) { .directory-model-rail-card { flex-basis: 260px; width: 260px; } .directory-brand-model-heading h3 { font-size: 20px; } }
