@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  AlertCircle, ArrowRight, ArrowUpRight, BadgeCheck,
-  CircleDollarSign, Download, Factory, FileText, Gauge, Globe2, Headphones,
+  AlertCircle, ArrowRight, ArrowUpRight, BadgeCheck, Check,
+  CircleDollarSign, Download, Factory, FileText, Gauge, Headphones,
   Mail, MapPin, MapPinned, Package, Search, Settings2,
-  ShieldCheck, SlidersHorizontal, Truck, Users, Wrench, X,
+  Scale, SlidersHorizontal, Truck, Users, Wrench, X,
 } from 'lucide-react';
 import { brands, categories, heroSlides, industries, models } from './data.js';
 import { Header, Footer } from './Chrome.jsx';
@@ -111,7 +111,7 @@ function BrandStrip() {
   return <BrandLogoRail className="brand-logo-strip-home" id="brands" />;
 }
 
-function ModelCard({ model, onDetails }) {
+function ModelCard({ model, onDetails, onCompare, inCompare }) {
   return (
     <article className="model-card">
       <div className="model-image-wrap"><img src={model.image} alt={`${model.brandName} ${model.model} excavator`} loading="lazy" /></div>
@@ -124,7 +124,13 @@ function ModelCard({ model, onDetails }) {
           <span><Truck size={14} /> Operating weight <b>{model.weight}</b></span>
           <span><Package size={14} /> Bucket capacity <b>{model.bucket}</b></span>
         </div>
-        <button className="model-link" onClick={() => onDetails(model)}>View Details <ArrowRight size={15} /></button>
+        <div className="model-card-actions">
+          <button className="model-link" onClick={() => onDetails(model)}>View Details <ArrowRight size={15} /></button>
+          <button className={`model-compare-link ${inCompare ? 'is-added' : ''}`} onClick={() => onCompare(model)} aria-pressed={inCompare}>
+            {inCompare ? <Check size={13} /> : <span>+</span>}
+            {inCompare ? 'Added' : 'Compare'}
+          </button>
+        </div>
       </div>
     </article>
   );
@@ -134,7 +140,8 @@ export default function HomePage() {
   const [selectedBrand, setSelectedBrand] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [modal, setModal] = useState(null);
-  const [compareOpen, setCompareOpen] = useState(false);
+  const [compareIds, setCompareIds] = useState([]);
+  const [compareNotice, setCompareNotice] = useState('');
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState('');
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
@@ -142,7 +149,7 @@ export default function HomePage() {
   useEffect(() => {
     const rotation = window.setInterval(() => {
       setActiveHeroIndex((current) => (current + 1) % heroSlides.length);
-    }, 5000);
+    }, 6000);
     return () => window.clearInterval(rotation);
   }, []);
 
@@ -161,6 +168,24 @@ export default function HomePage() {
     const queryMatch = !query || `${model.brandName} ${model.model} ${model.type}`.toLowerCase().includes(query);
     return brandMatch && queryMatch;
   }), [selectedBrand, searchQuery]);
+
+  const selectedModels = compareIds.map((id) => models.find((model) => model.id === id)).filter(Boolean);
+
+  const toggleCompare = (model) => {
+    if (compareIds.includes(model.id)) {
+      setCompareIds((current) => current.filter((id) => id !== model.id));
+      setCompareNotice('');
+      return;
+    }
+    if (compareIds.length >= 3) {
+      setCompareNotice('The comparison is limited to three models. Remove one to add another.');
+      return;
+    }
+    setCompareIds((current) => [...current, model.id]);
+    setCompareNotice('');
+  };
+
+  const openModelSelection = () => document.getElementById('models')?.scrollIntoView({ behavior: 'smooth' });
 
   const openQuote = () => setModal({ type: 'quote' });
   const showModels = () => document.getElementById('models')?.scrollIntoView({ behavior: 'smooth' });
@@ -188,9 +213,6 @@ export default function HomePage() {
               <div className="hero-actions"><button className="btn btn-primary btn-large" onClick={showModels}>Explore Excavators <ArrowRight size={17} /></button><button className="btn btn-outline btn-large" onClick={openQuote}><FileText size={16} /> Get a Quote</button></div>
             </div>
             <div className="hero-machine-caption" aria-live="polite"><span>FEATURED MACHINE · {activeHero.brand.toUpperCase()}</span><strong>{activeHero.model}</strong><small>{activeHero.type} · Confirm configuration and availability</small></div>
-          </div>
-          <div className="container hero-benefits">
-            <div><Users /><span>Multiple<br />Brands</span></div><div><Wrench /><span>Parts & Service<br />Enquiries</span></div><div><Headphones /><span>Equipment<br />Guidance</span></div><div><ShieldCheck /><span>Stock Status<br />Confirmation</span></div><div><Globe2 /><span>Project<br />Enquiries</span></div><div><CircleDollarSign /><span>Request<br />Pricing</span></div>
           </div>
         </section>
 
@@ -220,24 +242,64 @@ export default function HomePage() {
               </div>
               <label className="model-search"><Search size={14} /><input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Find a model" /></label>
             </div>
-            {filteredModels.length ? <div className="models-grid">{filteredModels.map((model) => <ModelCard key={model.id} model={model} onDetails={(item) => setModal({ type: 'model', model: item })} />)}</div> : <div className="empty-state">No models match that search. <button onClick={() => { setSelectedBrand('all'); setSearchQuery(''); }}>Clear filters</button></div>}
+            {filteredModels.length ? (
+              <div className="home-brand-rows">
+                {brands.map((brand) => {
+                  const brandModels = filteredModels.filter((model) => model.brand === brand.id);
+                  return brandModels.length ? (
+                    <section className="home-brand-row" key={brand.id} aria-label={`${brand.name} excavators`}>
+                      <div className="home-brand-row-heading">
+                        <div>
+                          <span>MANUFACTURER</span>
+                          <h3>{brand.name}</h3>
+                        </div>
+                        <span>{brandModels.length} model{brandModels.length === 1 ? '' : 's'}</span>
+                      </div>
+                      <div className="models-grid">
+                        {brandModels.map((model) => (
+                          <ModelCard key={model.id} model={model} onDetails={(item) => setModal({ type: 'model', model: item })} onCompare={toggleCompare} inCompare={compareIds.includes(model.id)} />
+                        ))}
+                      </div>
+                    </section>
+                  ) : null;
+                })}
+              </div>
+            ) : (
+              <div className="empty-state">No models match that search. <button onClick={() => { setSelectedBrand('all'); setSearchQuery(''); }}>Clear filters</button></div>
+            )}
             <p className="spec-disclaimer">* Model specifications are illustrative examples for this design prototype and must be verified against current manufacturer data before publication.</p>
           </div>
         </section>
 
         <section className="compare-banner">
           <div className="compare-art"><img src="/images/compare-machines.webp" alt="Two excavators ready for a model comparison" loading="lazy" /></div>
-          <div className="compare-copy"><SectionEyebrow>Make an informed choice</SectionEyebrow><h2>Compare Excavators.<br /><em>Choose with Confidence.</em></h2><p>Compare operating weight, engine power, bucket capacity and key features across leading brands.</p><button className="btn btn-primary" onClick={() => setCompareOpen(!compareOpen)}>{compareOpen ? 'Hide Comparison' : 'Compare Models'} <ArrowRight size={16} /></button></div>
+          <div className="compare-copy"><SectionEyebrow>Make an informed choice</SectionEyebrow><h2>Compare Excavators.<br /><em>Choose with Confidence.</em></h2><p>Compare operating weight, engine power, bucket capacity and key features across leading brands.</p><button className="btn btn-primary" onClick={() => document.getElementById('home-comparison')?.scrollIntoView({ behavior: 'smooth' })}>Compare Models <ArrowRight size={16} /></button></div>
         </section>
-        {compareOpen && (
-          <section className="comparison-table-section section-dark">
-            <div className="container">
-              <SectionTitle eyebrow="Model comparison" title="At-a-Glance" accent="Specifications" description="A quick sample comparison of selected mid-size machines." />
-              <div className="table-wrap"><table><thead><tr><th>Model</th><th>Power</th><th>Operating weight</th><th>Bucket capacity</th></tr></thead><tbody>{models.slice(0, 5).map((model) => <tr key={model.id}><td><strong>{model.brandName} {model.model}</strong></td><td>{model.power}</td><td>{model.weight}</td><td>{model.bucket}</td></tr>)}</tbody></table></div>
-              <p className="spec-disclaimer">Illustrative values only. Confirm exact configurations and specifications with the relevant manufacturer.</p>
+        <section className="home-comparison-builder" id="home-comparison" aria-labelledby="home-comparison-title">
+          <div className="home-comparison-heading">
+            <div className="home-comparison-icon"><Scale size={25} /></div>
+            <div><span>SIDE-BY-SIDE REVIEW</span><h2 id="home-comparison-title">Compare <em>Excavators</em></h2><p>Select up to three model examples from the excavator section.</p></div>
+            {compareNotice && <span className="home-comparison-notice">{compareNotice}</span>}
+            {selectedModels.length > 0 && <button className="home-comparison-clear" onClick={() => { setCompareIds([]); setCompareNotice(''); }}>Clear selection <X size={14} /></button>}
+          </div>
+          {selectedModels.length ? (
+            <div className="home-comparison-table-wrap"><table className="home-comparison-table">
+              <thead><tr><th>Specification</th>{selectedModels.map((model) => <th key={model.id}><span>{model.brandName}</span><b>{model.model}</b><button onClick={() => toggleCompare(model)} aria-label={`Remove ${model.brandName} ${model.model}`}><X size={13} /></button></th>)}</tr></thead>
+              <tbody>
+                <tr><th>Machine type</th>{selectedModels.map((model) => <td key={model.id}>{model.type}</td>)}</tr>
+                <tr><th>Engine power</th>{selectedModels.map((model) => <td key={model.id}>{model.power}</td>)}</tr>
+                <tr><th>Operating weight</th>{selectedModels.map((model) => <td key={model.id}>{model.weight}</td>)}</tr>
+                <tr><th>Bucket capacity</th>{selectedModels.map((model) => <td key={model.id}>{model.bucket}</td>)}</tr>
+              </tbody>
+            </table></div>
+          ) : (
+            <div className="home-comparison-empty">
+              {[0, 1, 2].map((slot) => <button className="home-comparison-slot" type="button" key={slot} onClick={openModelSelection}><span>0{slot + 1}</span><b>+</b><small>Add a model</small></button>)}
+              <div className="home-comparison-empty-copy"><strong>Your comparison starts here</strong><span>Choose two or three models to review their listed specifications together.</span><button type="button" onClick={openModelSelection}>Browse model examples <ArrowRight size={14} /></button></div>
             </div>
-          </section>
-        )}
+          )}
+          <p className="home-comparison-disclaimer">Comparison values are illustrative dataset entries, not verified current manufacturer specifications. Always request official technical data before comparing or ordering machines.</p>
+        </section>
 
         <section className="solutions-section" id="solutions">
           <div className="container solutions-layout">

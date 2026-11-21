@@ -58,16 +58,6 @@ export function Header({ onQuote = () => { window.location.href = '/contact'; },
   };
   return (
     <>
-      <div className="utility-bar">
-        <div className="container utility-inner">
-          <div className="utility-left">
-            <a href="tel:+923001234567"><Phone size={12} /> +92 300 1234567</a>
-            <a href="mailto:sales@ironcrest.com"><Mail size={12} /> sales@ironcrest.com</a>
-            <span><MapPin size={12} /> Lahore, Pakistan</span>
-          </div>
-          <div className="utility-right"><a href="/contact-us#resources">Resources</a><a href="/contact-us#about">About Us</a><a href="/contact-us">Contact Us</a></div>
-        </div>
-      </div>
       <header className="site-header">
         <div className="container nav-inner">
           <IronCrestLogo />

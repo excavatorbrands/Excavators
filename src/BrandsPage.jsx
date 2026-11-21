@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import {
-  ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, ClipboardList,
-  FileText, Filter, Gauge, Headphones, Menu, Package, Search, Scale,
+  ArrowRight, ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, ClipboardList,
+  FileText, Filter, Gauge, Headphones, Menu, Package, Scale, Search,
   ShieldCheck, SlidersHorizontal, Wrench, X, MapPin, Phone, Mail,
 } from 'lucide-react';
 import { brands, models } from './data.js';
@@ -19,7 +19,7 @@ function BrandWordmark({ brand }) {
   );
 }
 
-function DirectoryHero({ search, setSearch, size, setSize, compareCount, goToCompare }) {
+function DirectoryHero({ search, setSearch, size, setSize }) {
   return (
     <section className="directory-hero">
       <div className="directory-hero-image" />
@@ -44,7 +44,6 @@ function DirectoryHero({ search, setSearch, size, setSize, compareCount, goToCom
             <button key={item} className={size === item ? 'selected' : ''} onClick={() => setSize(item)}>{item}</button>
           ))}
         </div>
-        <button className="directory-compare-shortcut" onClick={goToCompare}><Scale size={19} /> Compare <b>{compareCount}</b></button>
       </div>
     </section>
   );
@@ -110,7 +109,7 @@ function FeaturedBrand({ brand, model, onExplore }) {
   );
 }
 
-function BrandModelRail({ brand, brandModels, compareIds, onAddCompare }) {
+function BrandModelRail({ brand, brandModels }) {
   const railRef = useRef(null);
   const scrollRail = (direction) => railRef.current?.scrollBy({ left: direction * 620, behavior: 'smooth' });
 
@@ -124,9 +123,7 @@ function BrandModelRail({ brand, brandModels, compareIds, onAddCompare }) {
         </div>
       </div>
       <div className="directory-model-rail" ref={railRef}>
-        {brandModels.map((model) => {
-          const inCompare = compareIds.includes(model.id);
-          return (
+        {brandModels.map((model) => (
             <article className="directory-model-card directory-model-rail-card" key={model.id}>
               <div className="directory-model-image"><img src={`/images/brands/model-${model.brand}.webp`} alt={`${model.brandName} ${model.model} excavator`} loading="lazy" /><span className="directory-model-brand">{model.brandName}</span></div>
               <div className="directory-model-body">
@@ -138,18 +135,16 @@ function BrandModelRail({ brand, brandModels, compareIds, onAddCompare }) {
                 </div>
                 <div className="directory-model-actions">
                   <a href={`/contact?type=equipment&model=${encodeURIComponent(`${model.brandName} ${model.model}`)}`}>Request details <ArrowRight size={14} /></a>
-                  <button className={inCompare ? 'is-added' : ''} onClick={() => onAddCompare(model.id)} aria-pressed={inCompare}>{inCompare ? <Check size={14} /> : <span>+</span>} {inCompare ? 'Added' : 'Compare'}</button>
                 </div>
               </div>
             </article>
-          );
-        })}
+        ))}
       </div>
     </section>
   );
 }
 
-function ModelExplorer({ filteredModels, search, selectedSize, onAddCompare, compareIds, onClear }) {
+function ModelExplorer({ filteredModels, selectedSize, onClear }) {
   const visibleBrandRows = brands.map((brand) => ({
     brand,
     brandModels: filteredModels.filter((model) => model.brand === brand.id),
@@ -163,42 +158,12 @@ function ModelExplorer({ filteredModels, search, selectedSize, onAddCompare, com
       </div>
       {visibleBrandRows.length ? (
         <div className="directory-brand-model-rows">
-          {visibleBrandRows.map(({ brand, brandModels }) => <BrandModelRail key={brand.id} brand={brand} brandModels={brandModels} compareIds={compareIds} onAddCompare={onAddCompare} />)}
+          {visibleBrandRows.map(({ brand, brandModels }) => <BrandModelRail key={brand.id} brand={brand} brandModels={brandModels} />)}
         </div>
       ) : (
         <div className="directory-empty model-empty"><SlidersHorizontal size={23} /><strong>No matching model examples</strong><span>{selectedSize !== 'All' ? `There are no ${selectedSize.toLowerCase()} excavator examples in the current sample dataset.` : 'Try another search term or clear the current filters.'}</span><button onClick={onClear}>Clear filters <ArrowRight size={14} /></button></div>
       )}
       <p className="directory-data-note">Model names and technical figures shown here are sample directory content. Confirm current specifications, model availability and machine configurations with the manufacturer before making a purchase decision.</p>
-    </section>
-  );
-}
-
-function ComparisonBuilder({ selectedModels, onRemove, onClear, notice }) {
-  return (
-    <section className="comparison-builder directory-container" id="brand-comparison" aria-labelledby="comparison-title">
-      <div className="comparison-heading">
-        <div className="comparison-icon"><Scale size={25} /></div>
-        <div><span className="directory-section-kicker">SIDE-BY-SIDE REVIEW</span><h2 id="comparison-title">Compare <em>Excavators</em></h2><p>Select up to three model examples from the Model Explorer.</p></div>
-        {notice && <span className="comparison-notice">{notice}</span>}
-        {selectedModels.length > 0 && <button className="comparison-clear" onClick={onClear}>Clear selection <X size={14} /></button>}
-      </div>
-      {selectedModels.length ? (
-        <div className="comparison-table-scroll"><table className="directory-comparison-table">
-          <thead><tr><th>Specification</th>{selectedModels.map((model) => <th key={model.id}><span>{model.brandName}</span><b>{model.model}</b><button onClick={() => onRemove(model.id)} aria-label={`Remove ${model.brandName} ${model.model}`}><X size={13} /></button></th>)}</tr></thead>
-          <tbody>
-            <tr><th>Machine type</th>{selectedModels.map((model) => <td key={model.id}>{model.type}</td>)}</tr>
-            <tr><th>Engine power</th>{selectedModels.map((model) => <td key={model.id}>{model.power}</td>)}</tr>
-            <tr><th>Operating weight</th>{selectedModels.map((model) => <td key={model.id}>{model.weight}</td>)}</tr>
-            <tr><th>Bucket capacity</th>{selectedModels.map((model) => <td key={model.id}>{model.bucket}</td>)}</tr>
-          </tbody>
-        </table></div>
-      ) : (
-        <div className="comparison-empty">
-          {[0, 1, 2].map((slot) => <div className="comparison-slot" key={slot}><span>0{slot + 1}</span><b>+</b><small>Add a model</small></div>)}
-          <div className="comparison-empty-copy"><strong>Your comparison starts here</strong><span>Choose two or three models to review their listed specifications together.</span><a href="#brand-models">Browse model examples <ArrowDown size={14} /></a></div>
-        </div>
-      )}
-      <p className="comparison-disclaimer">Comparison values are illustrative dataset entries, not verified current manufacturer specifications. Always request official technical data before comparing or ordering machines.</p>
     </section>
   );
 }
@@ -243,9 +208,6 @@ export default function BrandsPage() {
     const requested = new URLSearchParams(window.location.search).get('brand');
     return brands.some(item => item.id === requested) ? requested : 'hyundai';
   });
-  const [compareIds, setCompareIds] = useState([]);
-  const [compareNotice, setCompareNotice] = useState('');
-
   const searchTerm = search.trim().toLowerCase();
   const filteredBrands = useMemo(() => brands.filter((brand) => {
     const brandMatches = `${brand.name} ${brand.sub}`.toLowerCase().includes(searchTerm);
@@ -261,40 +223,22 @@ export default function BrandsPage() {
 
   const activeBrand = filteredBrands.find((brand) => brand.id === selectedBrand) || filteredBrands[0] || brands.find((brand) => brand.id === selectedBrand) || brands[0];
   const featuredModel = models.find((model) => model.brand === activeBrand.id);
-  const selectedModels = compareIds.map((id) => models.find((model) => model.id === id)).filter(Boolean);
-
-  const addCompare = (modelId) => {
-    if (compareIds.includes(modelId)) {
-      setCompareIds((current) => current.filter((id) => id !== modelId));
-      setCompareNotice('');
-      return;
-    }
-    if (compareIds.length >= 3) {
-      setCompareNotice('The comparison is limited to three models. Remove one to add another.');
-      return;
-    }
-    setCompareIds((current) => [...current, modelId]);
-    setCompareNotice('');
-  };
-
   const exploreSelectedBrand = () => {
     setSearch(activeBrand.name);
     setSelectedSize('All');
     document.getElementById('brand-models')?.scrollIntoView({ behavior: 'smooth' });
   };
-  const goToCompare = () => document.getElementById('brand-comparison')?.scrollIntoView({ behavior: 'smooth' });
   const clearFilters = () => { setSearch(''); setSelectedSize('All'); };
 
   return (
     <div className="brands-page" id="top">
       <Header active="brands" />
       <main>
-        <DirectoryHero search={search} setSearch={setSearch} size={selectedSize} setSize={setSelectedSize} compareCount={compareIds.length} goToCompare={goToCompare} />
+        <DirectoryHero search={search} setSearch={setSearch} size={selectedSize} setSize={setSelectedSize} />
         <BrandLogoRail className="brand-logo-strip-directory" />
         <BrandIndex filteredBrands={filteredBrands} selectedBrand={activeBrand.id} onSelect={setSelectedBrand} />
         {filteredBrands.length > 0 && <FeaturedBrand brand={activeBrand} model={featuredModel} onExplore={exploreSelectedBrand} />}
-        <ModelExplorer filteredModels={filteredModels} search={search} selectedSize={selectedSize} onAddCompare={addCompare} compareIds={compareIds} onClear={clearFilters} />
-        <ComparisonBuilder selectedModels={selectedModels} onRemove={addCompare} onClear={() => { setCompareIds([]); setCompareNotice(''); }} notice={compareNotice} />
+        <ModelExplorer filteredModels={filteredModels} selectedSize={selectedSize} onClear={clearFilters} />
         <DirectoryResources />
         <DirectoryCTA />
       </main>

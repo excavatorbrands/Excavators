@@ -22,7 +22,6 @@ html, body { background: #f6f7f8 !important; color: #17212a !important; }
 body, .app-shell { background: #f6f7f8 !important; color: #17212a !important; }
 
 /* Shared chrome */
-.utility-bar { background: #f0f2f3 !important; color: #5f6b73 !important; border-bottom-color: #dfe3e6 !important; }
 .site-header { background: rgba(255,255,255,.96) !important; border-bottom: 1px solid #e0e4e7 !important; box-shadow: 0 5px 22px rgba(20,31,40,.045); }
 .logo-type strong { color: #17212a !important; }
 .logo-type small { color: #68747c !important; }
@@ -65,7 +64,7 @@ td strong { color: #17212a !important; }
 .industry-shade { background: linear-gradient(0deg,rgba(9,16,22,.78),rgba(9,16,22,.02) 80%) !important; }
 .why-image::after { background: linear-gradient(90deg,transparent 55%,#f6f7f8 100%) !important; }
 .why-features > div { color: #35424b !important; }
-.why-features svg, .hero-benefits svg { color: #bd8d00 !important; }
+.why-features svg { color: #bd8d00 !important; }
 .resource-card { background: #fff !important; border-color: #e0e5e8 !important; box-shadow: 0 10px 30px rgba(20,31,40,.055); }
 .resource-visual { background: radial-gradient(circle at 40% 50%,rgba(230,173,0,.12),transparent 58%),#eef1f3 !important; }
 .catalog-sheet { background: linear-gradient(145deg,#fff,#e9edf0 70%) !important; border-color: #d7b44d !important; box-shadow: 0 14px 30px rgba(20,31,40,.14) !important; }
@@ -79,9 +78,6 @@ td strong { color: #17212a !important; }
 .service-network { background: radial-gradient(ellipse at 55% 50%,rgba(226,232,235,.9),transparent 48%),#f6f7f8 !important; }
 .service-map span { color: #26323a !important; text-shadow: none !important; }
 .stat-note { color: #77828a !important; }
-.hero-benefits { border-top-color: #e1e5e8 !important; background: #fff !important; }
-.hero-benefits > div { border-right-color: #e4e7e9 !important; }
-.hero-benefits span { color: #39464f !important; }
 .newsletter-section { background: #f0c332 !important; color: #17212a !important; }
 .newsletter-icon { background: #26323a !important; color: #ffd34c !important; }
 .newsletter-form button { background: #26323a !important; }
@@ -272,9 +268,6 @@ body textarea {
 }
 
 /* Header and navigation: improve visibility without changing the layout */
-.utility-bar { font-size: 11px !important; }
-.utility-right { font-size: 10px !important; }
-.utility-left { gap: 24px; }
 .logo-type strong { font-size: 25px !important; }
 .logo-type small { font-size: 9px !important; }
 .main-nav a { font-size: 13px !important; }
@@ -303,7 +296,6 @@ body textarea {
 
 @media (max-width: 820px) {
   .main-nav a { font-size: 14px !important; }
-  .utility-bar { font-size: 10px !important; }
   .footer-column h4 { font-size: 12px !important; }
   .footer-column a,
   .footer-column span { font-size: 11px !important; }

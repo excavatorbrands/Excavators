@@ -10,7 +10,7 @@ export const brands = [
 ];
 
 // Rotating homepage hero: one featured example from each represented manufacturer.
-// Images are locally hosted in public/images/heroimages and rotate every five seconds.
+// Images are locally hosted in public/images/heroimages and rotate every six seconds.
 export const heroSlides = [
   { brand: 'Hyundai', model: 'HX220L', type: 'Medium crawler excavator', image: '/images/heroimages/hyundai-hx220l.png' },
   { brand: 'Doosan', model: 'DX225LC', type: 'Medium crawler excavator', image: '/images/heroimages/doosan-dx225lc.png' },
