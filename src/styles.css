@@ -140,6 +140,12 @@ img { display: block; max-width: 100%; }
 .home-brand-row-heading > div > span { color: var(--yellow); font-size: 8px; font-weight: 900; letter-spacing: 1.4px; }
 .home-brand-row-heading h3 { margin: 4px 0 0; color: #fff; font-family: var(--display,Impact,sans-serif); font-size: 27px; line-height: 1; text-transform: uppercase; }
 .home-brand-row-heading > span { color: #9aa7b0; font-size: 9px; }
+.home-model-rail-actions { display: flex; align-items: center; gap: 7px; }
+.home-model-rail-actions > span { margin-right: 4px; color: #9aa7b0; font-size: 9px; }
+.home-model-rail-actions button { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid rgba(255,196,0,.35); border-radius: 6px; background: rgba(255,196,0,.07); color: var(--yellow); cursor: pointer; transition: background .2s, color .2s, transform .2s; }
+.home-model-rail-actions button:hover { background: var(--yellow); color: #101820; transform: translateY(-1px); }
+.home-model-rail { display: flex; gap: 14px; overflow-x: auto; overflow-y: hidden; padding: 2px 2px 16px; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: #d4a900 #29343d; }
+.home-model-rail .model-card { flex: 0 0 280px; width: 280px; scroll-snap-align: start; }
 .model-card { overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,.1); border-radius: 10px; background: #f8fafb; color: #121a21; box-shadow: 0 10px 25px rgba(0,0,0,.16); transition: transform .25s ease, box-shadow .25s ease; }
 .model-card:hover { transform: translateY(-5px); box-shadow: 0 16px 32px rgba(0,0,0,.28); }
 .model-image-wrap { height: 148px; display: grid; place-items: center; padding: 10px 12px 0; background: #f5f7f8; }
@@ -412,6 +418,8 @@ tr:last-child td { border-bottom: 0; }
 
 @media (max-width: 560px) {
   .container { width: calc(100% - 28px); }
+  .home-model-rail { gap: 8px; }
+  .home-model-rail .model-card { flex-basis: 240px; width: 240px; }
   .home-comparison-builder { padding: 24px 14px; }
   .home-comparison-heading { grid-template-columns: 39px 1fr auto; gap: 9px; }
   .home-comparison-icon { width: 39px; height: 39px; }

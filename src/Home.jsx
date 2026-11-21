@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  AlertCircle, ArrowRight, ArrowUpRight, BadgeCheck, Check,
+  AlertCircle, ArrowRight, ArrowUpRight, BadgeCheck, Check, ChevronLeft, ChevronRight,
   CircleDollarSign, Download, Factory, FileText, Gauge, Headphones,
   Mail, MapPin, MapPinned, Package, Search, Settings2,
   Scale, SlidersHorizontal, Truck, Users, Wrench, X,
@@ -136,6 +136,38 @@ function ModelCard({ model, onDetails, onCompare, inCompare }) {
   );
 }
 
+function HomeBrandModelRail({ brand, brandModels, compareIds, toggleCompare, onDetails }) {
+  const railRef = useRef(null);
+  const scrollRail = (direction) => railRef.current?.scrollBy({ left: direction * 620, behavior: 'smooth' });
+
+  return (
+    <section className="home-brand-row" aria-label={`${brand.name} excavators`}>
+      <div className="home-brand-row-heading">
+        <div>
+          <span>MANUFACTURER</span>
+          <h3>{brand.name}</h3>
+        </div>
+        <div className="home-model-rail-actions">
+          <span>{brandModels.length} model{brandModels.length === 1 ? '' : 's'}</span>
+          <button type="button" onClick={() => scrollRail(-1)} aria-label={`Scroll ${brand.name} models left`}><ChevronLeft size={18} /></button>
+          <button type="button" onClick={() => scrollRail(1)} aria-label={`Scroll ${brand.name} models right`}><ChevronRight size={18} /></button>
+        </div>
+      </div>
+      <div className="home-model-rail" ref={railRef}>
+        {brandModels.map((model) => (
+          <ModelCard
+            key={model.id}
+            model={model}
+            onDetails={onDetails}
+            onCompare={toggleCompare}
+            inCompare={compareIds.includes(model.id)}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default function HomePage() {
   const [selectedBrand, setSelectedBrand] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -247,20 +279,14 @@ export default function HomePage() {
                 {brands.map((brand) => {
                   const brandModels = filteredModels.filter((model) => model.brand === brand.id);
                   return brandModels.length ? (
-                    <section className="home-brand-row" key={brand.id} aria-label={`${brand.name} excavators`}>
-                      <div className="home-brand-row-heading">
-                        <div>
-                          <span>MANUFACTURER</span>
-                          <h3>{brand.name}</h3>
-                        </div>
-                        <span>{brandModels.length} model{brandModels.length === 1 ? '' : 's'}</span>
-                      </div>
-                      <div className="models-grid">
-                        {brandModels.map((model) => (
-                          <ModelCard key={model.id} model={model} onDetails={(item) => setModal({ type: 'model', model: item })} onCompare={toggleCompare} inCompare={compareIds.includes(model.id)} />
-                        ))}
-                      </div>
-                    </section>
+                    <HomeBrandModelRail
+                      key={brand.id}
+                      brand={brand}
+                      brandModels={brandModels}
+                      compareIds={compareIds}
+                      toggleCompare={toggleCompare}
+                      onDetails={(item) => setModal({ type: 'model', model: item })}
+                    />
                   ) : null;
                 })}
               </div>
