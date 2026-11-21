@@ -230,10 +230,11 @@ export default function HomePage() {
         <section className="hero-section" id="home">
           <div className="hero-image-track" aria-hidden="true">
             {heroSlides.map((slide, index) => (
-              <div
+              <img
                 key={slide.image}
+                src={slide.image}
+                alt=""
                 className={`hero-bg ${index === activeHeroIndex ? 'hero-bg-active' : ''}`}
-                style={{ backgroundImage: `url("${slide.image}")` }}
               />
             ))}
           </div>
