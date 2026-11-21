@@ -223,7 +223,7 @@ export default function HomePage() {
   const showModels = () => document.getElementById('models')?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <div className="app-shell">
+    <div className="app-shell home-shell">
       <Header active="home" onQuote={openQuote} onSearch={setSearchQuery} />
 
       <main>

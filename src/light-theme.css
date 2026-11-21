@@ -23,6 +23,8 @@ body, .app-shell { background: #f6f7f8 !important; color: #17212a !important; }
 
 /* Shared chrome */
 .site-header { background: rgba(255,255,255,.96) !important; border-bottom: 1px solid #e0e4e7 !important; box-shadow: 0 5px 22px rgba(20,31,40,.045); }
+.home-shell > .site-header { background: #fff !important; box-shadow: none !important; border-bottom: 0 !important; }
+.home-shell > .site-header::after { background: #dfe4e7 !important; }
 .logo-type strong { color: #17212a !important; }
 .logo-type small { color: #68747c !important; }
 .main-nav a, .icon-button, .mobile-menu-button { color: #27343c !important; }

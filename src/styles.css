@@ -36,6 +36,8 @@ img { display: block; max-width: 100%; }
 
 /* Header */
 .site-header { position: sticky; top: 0; z-index: 40; background: rgba(8,13,18,.96); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
+.home-shell > .site-header { position: relative; top: auto; z-index: 40; box-shadow: none; border-bottom: 0; backdrop-filter: none; }
+.home-shell > .site-header::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--line); }
 .nav-inner { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 22px; }
 .main-nav { display: flex; align-items: center; gap: clamp(12px, 1.7vw, 25px); margin-left: auto; }
 .main-nav a { display: inline-flex; align-items: center; gap: 5px; color: #e3e8ec; font-size: 11px; font-weight: 700; white-space: nowrap; transition: color .2s ease; }
