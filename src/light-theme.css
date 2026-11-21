@@ -501,3 +501,53 @@ input, select, textarea,
   .hero-copy { padding-left: 0; }
   .hero-copy h1 { font-size: clamp(42px, 11vw, 60px); }
 }
+
+/* Final theme normalization */
+:root {
+  --ink: #f5f6f7 !important;
+  --ink-2: #ffffff !important;
+  --panel: #ffffff !important;
+  --panel-2: #eef1f3 !important;
+  --line: #dfe4e7 !important;
+  --muted: #65727b !important;
+  --soft: #33414a !important;
+  --white: #17212a !important;
+  --black: #10171d !important;
+  --yellow: #b98200 !important;
+  --yellow-2: #9f7000 !important;
+}
+
+body, .app-shell { color: #17212a !important; background: #f5f6f7 !important; }
+.site-header { background: rgba(255,255,255,.98) !important; border-bottom: 1px solid #dfe4e7 !important; }
+.home-shell > .site-header { border-bottom: 0 !important; box-shadow: none !important; }
+.home-shell > .site-header::after { display: none !important; }
+.main-nav a, .icon-button, .mobile-menu-button { color: #27343c !important; }
+.main-nav a:hover, .main-nav a.active { color: #9f7000 !important; }
+.main-nav a.active { background: #fff3c4 !important; }
+.logo-type strong { color: #17212a !important; }
+.logo-type small { color: #68747c !important; }
+
+.hero-copy h1 { color: #fff !important; }
+.hero-copy h1 em { color: #f0bd24 !important; }
+.hero-copy p { color: #e0e6ea !important; }
+.hero-copy .eyebrow { color: #f1f4f6 !important; }
+.hero-machine-caption strong { color: #fff !important; }
+.hero-machine-caption small { color: #d7dfe4 !important; }
+
+h1, h2, h3, h4, h5, h6,
+.section-heading h2, .compare-copy h2, .solutions-intro h2,
+.why-content h2, .resource-copy h3, .testimonial-panel h2,
+.news-panel h2 { color: #17212a !important; }
+.section-heading p, .compare-copy p, .solutions-intro p,
+.why-content > p, .resource-copy p, .news-item p { color: #5f6c75 !important; }
+
+.btn-primary { color: #fff !important; background: #b98200 !important; border-color: #b98200 !important; }
+.btn-primary:hover { color: #fff !important; background: #9f7000 !important; border-color: #9f7000 !important; }
+.btn-outline { color: #27343c !important; background: rgba(255,255,255,.95) !important; border-color: #c79b2a !important; }
+.btn-outline:hover { color: #17212a !important; background: #fff7df !important; }
+
+/* Reduce accidental visual weight from oversized image crops. */
+.hero-bg,
+.excavators-hero-image,
+.ps-hero-image,
+.directory-hero-image { background-position: center center !important; }
