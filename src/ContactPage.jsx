@@ -3,7 +3,8 @@ import {
   ArrowRight, ChevronRight, Mail, MapPin,
   MessageSquare, Phone, Send, ShieldCheck,
 } from 'lucide-react';
-import { Header, Footer } from './Chrome.jsx';
+import { Header } from './Header.jsx';
+import { Footer } from './Footer.jsx';
 import { submitEnquiry } from './submitEnquiry.js';
 import './pages.css';
 

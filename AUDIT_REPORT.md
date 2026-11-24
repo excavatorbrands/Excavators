@@ -1,3 +1,7 @@
+# Original project audit
+
+This report records the source archive's earlier audit. The refreshed website was built and tested separately after applying the redesign and replacing the imagery.
+
 # Iron Crest ZIP Audit & Repair Report
 
 **Project:** Iron Crest – Excavator Solutions  

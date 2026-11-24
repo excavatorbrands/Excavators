@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AlertCircle, ArrowRight, ArrowUpRight, BadgeCheck, Check,
   ChevronLeft, ChevronRight, CircleDollarSign, Download,
-  Factory, FileText, Gauge, Headphones, Mail, MapPin,
+  Factory, FileText, Gauge, Headphones, MapPin,
   MapPinned, Package, Search, Settings2, Scale,
   SlidersHorizontal, Truck, Users, Wrench, X,
 } from 'lucide-react';
@@ -16,7 +16,8 @@ import {
   models,
 } from './data.js';
 
-import { Header, Footer } from './Chrome.jsx';
+import { Header } from './Header.jsx';
+import { Footer } from './Footer.jsx';
 import BrandLogoRail from './BrandLogoRail.jsx';
 import { submitEnquiry } from './submitEnquiry.js';
 
@@ -271,7 +272,7 @@ function ModelCard({ model, onDetails, onCompare, inCompare }) {
       <div className="model-image-wrap">
         <img
           src={model.image}
-          alt={`${model.brandName} ${model.model} excavator`}
+          alt="Illustrative excavator"
           loading="lazy"
         />
       </div>
@@ -579,7 +580,7 @@ function ExcavatorDrawer({
                         <div className="ic-catalog-card-image">
                           <img
                             src={model.image}
-                            alt={`${model.brandName} ${model.model}`}
+                            alt="Illustrative excavator"
                             loading="lazy"
                           />
 
@@ -679,7 +680,7 @@ function ExcavatorDrawer({
                           </button>
 
                           <div className="ic-comparison-machine-image">
-                            <img src={model.image} alt={`${model.brandName} ${model.model}`} />
+                            <img src={model.image} alt="Illustrative excavator" />
                           </div>
 
                           <span className="ic-machine-brand">{model.brandName}</span>
@@ -839,26 +840,24 @@ export default function HomePage() {
   const [drawerMode, setDrawerMode] = useState(null);
   const [replaceSlot, setReplaceSlot] = useState(null);
 
-  const [newsletterEmail, setNewsletterEmail] = useState('');
-  const [newsletterStatus, setNewsletterStatus] = useState('');
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
 
+  const [paused, setPaused] = useState(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
   useEffect(() => {
+    if (paused) return;
     const rotation = window.setInterval(() => {
       setActiveHeroIndex((current) => (current + 1) % heroSlides.length);
     }, 6000);
 
     return () => window.clearInterval(rotation);
-  }, []);
-
-  useEffect(() => {
-    heroSlides.forEach((slide) => {
-      const image = new Image();
-      image.src = slide.image;
-    });
-  }, []);
+  }, [paused]);
 
   const activeHero = heroSlides[activeHeroIndex];
+  const selectHero = (index) => {
+    setPaused(true);
+    setActiveHeroIndex(index);
+  };
 
   const filteredModels = useMemo(() => {
     return models.filter((model) => {
@@ -969,22 +968,19 @@ export default function HomePage() {
       <Header
         active="home"
         onQuote={openQuote}
-        onSearch={setSearchQuery}
+        onSearch={(query) => { setSelectedBrand("all"); setSearchQuery(query); }}
       />
 
       <main>
         {/* HERO */}
-        <section className="hero-section" id="home">
+        <section className="hero-section" id="home" aria-label="Excavator manufacturers">
           <div className="hero-image-track" aria-hidden="true">
-            {heroSlides.map((slide, index) => (
-              <div
-                key={slide.image}
-                className={`hero-bg ${
-                  index === activeHeroIndex ? 'hero-bg-active' : ''
-                }`}
-                style={{ backgroundImage: `url("${slide.image}")` }}
-              />
-            ))}
+            <div className="hero-bg hero-bg-active">
+              <picture>
+                <source media="(max-width: 760px)" srcSet={activeHero.mobileImage} />
+                <img src={activeHero.image} alt="" fetchPriority="high" />
+              </picture>
+            </div>
           </div>
 
           <div className="container hero-content">
@@ -1019,12 +1015,28 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="hero-machine-caption" aria-live="polite">
-              <span>FEATURED MACHINE · {activeHero.brand.toUpperCase()}</span>
-              <strong>{activeHero.model}</strong>
-              <small>
-                {activeHero.type} · Confirm configuration and availability
-              </small>
+            <div className="hero-machine-caption">
+              <div className="hero-brand-details" aria-live={paused ? 'polite' : 'off'}>
+                <a className="hero-brand-link" href={`/brands?brand=${activeHero.id}`}>{activeHero.name} <ArrowRight size={16} /></a>
+                <small>Illustrative equipment image</small>
+              </div>
+              <div className="hero-slide-controls">
+                <div className="hero-slide-list" role="group" aria-label="Choose a manufacturer">
+                  {heroSlides.map((slide, index) => (
+                    <button
+                      type="button"
+                      key={slide.id}
+                      aria-label={`View ${slide.name} slide`}
+                      title={slide.name}
+                      aria-pressed={index === activeHeroIndex}
+                      onClick={() => selectHero(index)}
+                    ><span /></button>
+                  ))}
+                </div>
+                <button type="button" className="rotation-control" onClick={() => setPaused(value => !value)}>
+                  {paused ? 'Play slideshow' : 'Pause slideshow'}
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -1032,7 +1044,8 @@ export default function HomePage() {
         <BrandStrip />
 
         {/* CATEGORIES */}
-        <section className="category-section section-dark" id="categories">
+        <section className="category-section section-dark" id="categories" aria-labelledby="equipment-classes-title">
+          <div className="container"><h2 className="equipment-classes-title" id="equipment-classes-title">Find the right machine class</h2></div>
           <div className="container category-grid">
             {categories.map((category) => (
               <a
@@ -1062,6 +1075,7 @@ export default function HomePage() {
 
         {/* MODELS */}
         <section className="models-section section-dark" id="models">
+          <p className="container image-disclosure">Equipment images are AI-generated illustrations. Ask us for photos of the exact machine.</p>
           <div className="container">
             <SectionTitle
               eyebrow="Featured models"
@@ -1165,7 +1179,7 @@ export default function HomePage() {
           <div className="compare-art">
             <img
               src="/images/compare-machines.webp"
-              alt="Two excavators ready for a model comparison"
+              alt="A lineup of excavators in different sizes"
               loading="lazy"
             />
           </div>
@@ -1231,7 +1245,7 @@ export default function HomePage() {
               <div className="ic-builder-models">
                 {selectedModels.map((model) => (
                   <div className="ic-builder-model" key={model.id}>
-                    <img src={model.image} alt={`${model.brandName} ${model.model}`} />
+                    <img src={model.image} alt="Illustrative excavator" />
 
                     <div>
                       <span>{model.brandName}</span>
@@ -1564,55 +1578,12 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* NEWSLETTER */}
         <section className="newsletter-section">
           <div className="container newsletter-inner">
-            <div className="newsletter-icon">
-              <Mail size={23} />
-            </div>
-
-            <div className="newsletter-copy">
-              <h3>Stay Updated with Iron Crest</h3>
-              <p>
-                Get new model updates, special offers and industry insights in
-                your inbox.
-              </p>
-            </div>
-
-            <form
-              className="newsletter-form"
-              onSubmit={(event) => {
-                event.preventDefault();
-
-                setNewsletterStatus(
-                  'Your address has not been subscribed because this website is not connected to a mailing-list service.'
-                );
-              }}
-            >
-              <input
-                type="email"
-                required
-                value={newsletterEmail}
-                onChange={(event) => setNewsletterEmail(event.target.value)}
-                placeholder="Enter your email address"
-                aria-label="Email address"
-              />
-
-              <button type="submit">
-                Subscribe <ArrowRight size={15} />
-              </button>
-            </form>
+            <div className="newsletter-icon"><FileText aria-hidden="true" /></div>
+            <div className="newsletter-copy"><h3>Equipment guides</h3><p>Plan machine selection, maintenance and your next equipment enquiry.</p></div>
+            <a className="btn btn-primary" href="/resources">Browse guides <ArrowRight size={16} /></a>
           </div>
-
-          {newsletterStatus && (
-            <div className="container newsletter-status" role="alert">
-              <AlertCircle size={14} />
-              {newsletterStatus}
-              {' '}Contact{' '}
-              <a href="mailto:sales@ironcrest.com">sales@ironcrest.com</a>
-              {' '}for enquiries.
-            </div>
-          )}
         </section>
       </main>
 

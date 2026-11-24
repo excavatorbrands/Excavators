@@ -1,5 +1,6 @@
 import { ChevronRight, Scale } from 'lucide-react';
-import { Header, Footer } from './Chrome.jsx';
+import { Header } from './Header.jsx';
+import { Footer } from './Footer.jsx';
 import './legal.css';
 
 const sections = [

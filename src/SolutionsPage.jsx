@@ -3,7 +3,8 @@ import {
   ArrowRight, ArrowUpRight, Building2, Check, ChevronRight, Factory,
   Layers3, Mountain, Route, Sparkles, Truck, X,
 } from 'lucide-react';
-import { Header, Footer } from './Chrome.jsx';
+import { Header } from './Header.jsx';
+import { Footer } from './Footer.jsx';
 import { industries } from './data.js';
 import './pages.css';
 
