@@ -8,7 +8,6 @@ export default function BrandLogoRail({ className = '', id }) {
     <section className={`brand-logo-strip ${className} ${paused ? "brand-logo-strip-paused" : ""}`} id={id} aria-label="Excavator brands">
       <div className="container brand-logo-toolbar">
         <span>Browse by manufacturer</span>
-        <button type="button" aria-controls={viewportId} onClick={() => setPaused(value => !value)}>{paused ? "Play logo movement" : "Pause logo movement"}</button>
       </div>
       <div className="brand-logo-viewport" id={viewportId}>
         <div className="brand-logo-track">

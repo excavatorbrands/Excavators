@@ -1033,9 +1033,6 @@ export default function HomePage() {
                     ><span /></button>
                   ))}
                 </div>
-                <button type="button" className="rotation-control" onClick={() => setPaused(value => !value)}>
-                  {paused ? 'Play slideshow' : 'Pause slideshow'}
-                </button>
               </div>
             </div>
           </div>

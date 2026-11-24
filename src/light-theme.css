@@ -606,3 +606,11 @@ input, select, textarea,
 #models .model-brand-label {
   color: #46535c;
 }
+
+/* Keep the shared header at the top while scrolling */
+.site-header,
+.home-shell > .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
