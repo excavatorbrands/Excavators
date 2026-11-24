@@ -86,7 +86,7 @@
 
 .privacy-hero-meta span {
   color: #96a2ab;
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 900;
   letter-spacing: 1.3px;
 }
@@ -94,7 +94,7 @@
 .privacy-hero-meta strong {
   margin-top: 5px;
   color: #fff;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0;
 }
 
@@ -135,7 +135,7 @@
 .terms-document-heading > span,
 .terms-closing > span {
   color: #a27b0a;
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 900;
   letter-spacing: 1.4px;
 }
@@ -159,7 +159,7 @@
   gap: 9px;
   padding: 7px 5px;
   color: #52616a;
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.4;
   transition: color .2s ease, background .2s ease;
 }
@@ -167,7 +167,7 @@
 .privacy-toc nav a span {
   min-width: 17px;
   color: #b28a15;
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 900;
 }
 
@@ -185,7 +185,7 @@
   padding: 13px 5px 0;
   border-top: 1px solid #e1e6e8;
   color: #65727a;
-  font-size: 8px;
+  font-size: 11px;
   line-height: 1.6;
 }
 
@@ -209,7 +209,7 @@
 .privacy-intro-note p {
   margin: 9px 0 0;
   color: #43515a;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.8;
 }
 
@@ -248,7 +248,7 @@
   max-width: 770px;
   margin: 0 0 11px;
   color: #52616a;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.85;
 }
 
@@ -321,7 +321,7 @@
 
 .terms-document-stamp span {
   color: #e6eaed;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 900;
   letter-spacing: 1.5px;
   line-height: 1.5;
@@ -332,7 +332,7 @@
   padding-top: 7px;
   border-top: 1px solid rgba(255, 196, 0, .35);
   color: #aeb9c1;
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 1px;
 }
 
@@ -343,14 +343,14 @@
   padding: 13px 0;
   border-top: 1px solid rgba(255, 255, 255, .14);
   color: #aeb9c1;
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 900;
   letter-spacing: 1.2px;
 }
 
 .terms-updated strong {
   color: #fff;
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: .2px;
 }
 
@@ -378,7 +378,7 @@
 .terms-document-heading p {
   margin: 0;
   color: #6b777f;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -401,7 +401,7 @@
 .terms-notice p {
   margin: 0;
   color: #5b5540;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.7;
 }
 
@@ -443,7 +443,7 @@
   margin-top: 7px;
   color: #9aa5ab;
   font-family: var(--font);
-  font-size: 7px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 1px;
 }
@@ -455,7 +455,7 @@
 
 .terms-section p {
   max-width: 740px;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .terms-margin-note {
@@ -463,7 +463,7 @@
   top: 32px;
   right: 25px;
   color: #a7b0b5;
-  font-size: 7px;
+  font-size: 11px;
   font-weight: 900;
   letter-spacing: 1px;
   line-height: 1.5;
@@ -489,7 +489,7 @@
 .terms-closing p {
   margin: 0;
   color: #53616a;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 @keyframes legal-rise {
@@ -520,16 +520,16 @@
   .privacy-hero-copy { padding: 38px 0 72px; }
   .privacy-hero-copy h1 { font-size: 55px; }
   .privacy-hero-copy p,
-  .terms-hero-copy p { font-size: 11px; }
+  .terms-hero-copy p { font-size: 13px; }
   .privacy-hero-meta { bottom: 20px; }
   .privacy-document { padding: 35px 0 50px; }
   .privacy-toc { padding: 17px 12px 12px; }
   .privacy-toc nav { grid-template-columns: 1fr; }
   .privacy-section { grid-template-columns: 28px minmax(0, 1fr); gap: 11px; padding: 22px 0; }
   .privacy-section h2 { font-size: 15px; }
-  .privacy-section p { font-size: 10px; }
+  .privacy-section p { font-size: 12px; }
   .privacy-intro-note { padding: 18px; }
-  .privacy-intro-note p { font-size: 10px; }
+  .privacy-intro-note p { font-size: 12px; }
   .terms-hero-inner { min-height: 390px; padding-top: 20px; }
   .terms-hero-content { min-height: 290px; }
   .terms-hero-copy h1 { font-size: 50px; }
@@ -542,7 +542,7 @@
   .terms-margin-note { display: none; }
   .terms-section-number { font-size: 23px; }
   .terms-section h2 { font-size: 15px; }
-  .terms-section p { font-size: 9px; }
+  .terms-section p { font-size: 12px; }
   .terms-closing { align-items: flex-start; flex-direction: column; padding: 22px 14px; }
 }
 

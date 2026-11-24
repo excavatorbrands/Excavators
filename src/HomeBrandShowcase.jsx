@@ -25,22 +25,19 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare, onD
       className={`brand-showcase${reverse ? ' brand-showcase--reverse' : ''}`}
       aria-labelledby={`showcase-${brand.id}`}
     >
-      <div className="brand-showcase__banner">
-        <img className="brand-showcase__banner-image" src={`/images/brand-banners/${brand.id}.webp`} alt="" loading="lazy" decoding="async" />
-        <div className="brand-showcase__identity">
-          {brand.logo && <img className="brand-showcase__logo" src={brand.logo} alt="" loading="lazy" />}
-          <h3 id={`showcase-${brand.id}`}>{brand.name}</h3>
-        </div>
-      </div>
+      <figure className="brand-showcase__product-image">
+        <img src={model.image} alt="" loading="lazy" decoding="async" />
+        <figcaption>Illustrative equipment image</figcaption>
+      </figure>
 
       <div className="brand-showcase__product">
-        <figure
-  className="brand-showcase__product-image"
-  style={{ '--model-backdrop': `url("${model.image}")` }}
->
-          <img src={model.image} alt="" loading="lazy" />
-          <figcaption>Illustrative equipment image</figcaption>
-        </figure>
+        <div className="brand-showcase__banner">
+          <img className="brand-showcase__banner-image" src={`/images/brand-banners/${brand.id}.webp`} alt="" loading="lazy" decoding="async" />
+          <div className="brand-showcase__identity">
+            {brand.logo && <img className="brand-showcase__logo" src={brand.logo} alt="" loading="lazy" />}
+            <h3 id={`showcase-${brand.id}`}>{brand.name}</h3>
+          </div>
+        </div>
 
         <div className="brand-showcase__body">
           <div className="brand-showcase__toolbar">

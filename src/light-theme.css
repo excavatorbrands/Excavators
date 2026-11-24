@@ -153,7 +153,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* Remaining site-specific typography */
 .directory-nav a { font-size: 13px !important; }
 .directory-logo strong { font-size: 25px !important; }
-.directory-logo small { font-size: 9px !important; }
+.directory-logo small { font-size: 12px !important; }
 .directory-footer-main > div:first-child p,
 .directory-footer-main > div > a:not(.directory-logo),
 .directory-footer-main > div > span { font-size: 10.5px !important; }
@@ -161,19 +161,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 @media (max-width: 820px) {
   .main-nav a { font-size: 14px !important; }
-  .footer-column h4 { font-size: 12px !important; }
+  .footer-column h4 { font-size: 14px !important; }
   .footer-column a,
-  .footer-column span { font-size: 11px !important; }
+  .footer-column span { font-size: 13px !important; }
 }
 
 @media (max-width: 520px) {
   .logo-type strong { font-size: 21px !important; }
-  .logo-type small { font-size: 7px !important; }
+  .logo-type small { font-size: 11px !important; }
   .main-nav a { font-size: 14px !important; }
   .footer-brand-col > p,
   .footer-column a,
-  .footer-column span { font-size: 11px !important; }
-  .footer-bottom { font-size: 9px !important; }
+  .footer-column span { font-size: 13px !important; }
+  .footer-bottom { font-size: 12px !important; }
 }
 
 
@@ -405,10 +405,10 @@ input, select, textarea,
   background: #17212a;
   border: 1px solid #a7b1b8;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 14px;
 }
-.hero-machine-caption small { font-size: 12px; }
-.hero-machine-caption span { font-size: 10px; }
+.hero-machine-caption small { font-size: 14px; }
+.hero-machine-caption span { font-size: 12px; }
 .hero-copy p { max-width: 48ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.55; }
 .section-heading .eyebrow, .why-content .eyebrow, .solutions-intro .eyebrow,
 .resource-copy .eyebrow, .compare-copy .eyebrow { color: #655018 !important; }
@@ -494,7 +494,7 @@ input, select, textarea,
   background: transparent;
   border: 1px solid #d4dce0;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 14px;
 }
 .brand-logo-strip .brand-logo-link { width: max(122px, 12.5vw); margin-right: 0; }
 .brand-logo-strip .brand-logo-link img { width: 76%; max-width: 142px; height: 48px; }
@@ -531,7 +531,7 @@ input, select, textarea,
 }
 .category-card .category-copy { right: 36px; }
 .category-copy strong { font-size: 15px; line-height: 1.2; }
-.category-copy small { font-size: 12px; }
+.category-copy small { font-size: 14px; }
 @media (max-width: 760px) {
   .category-grid { width: min(1280px, calc(100% - 40px)); }
   .category-copy strong { font-size: 14px; }
