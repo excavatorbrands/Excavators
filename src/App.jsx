@@ -1,4 +1,8 @@
 import { useEffect } from 'react';
+import AboutPage from './AboutPage.jsx';
+import ResourcesPage from './ResourcesPage.jsx';
+import { Header } from './Header.jsx';
+import { Footer } from './Footer.jsx';
 import HomePage from './Home.jsx';
 import BrandsPage from './BrandsPage.jsx';
 import ExcavatorsPage from './ExcavatorsPage.jsx';
@@ -27,13 +31,15 @@ const pageMetadata = {
 
 export default function App() {
   useEffect(() => {
-    const [title, description] = pageMetadata[path] || pageMetadata['/'];
+    const [title, description] = pageMetadata[path] || (['/service', '/parts'].includes(path) ? pageMetadata['/parts-service'] : ['Page not found | Iron Crest', 'Return to the equipment catalog.']);
     document.title = title;
 
     const setMeta = (selector, attribute, value, create) => {
       let element = document.head.querySelector(selector);
       if (!element) {
         element = document.createElement(create);
+        const [, key, identifier] = selector.match(/\[(\w+)="([^"]+)"\]/);
+        element.setAttribute(key, identifier);
         document.head.appendChild(element);
       }
       element.setAttribute(attribute, value);
@@ -48,7 +54,7 @@ export default function App() {
     setMeta('meta[name="twitter:title"]', 'content', title, 'meta');
     setMeta('meta[name="twitter:description"]', 'content', description, 'meta');
 
-    const canonicalPath = ['/contact', '/resources', '/about', '/about-us'].includes(path) ? '/contact-us' : path || '/';
+    const canonicalPath = ({ '/contact': '/contact-us', '/about-us': '/about', '/service': '/parts-service', '/parts': '/parts-service' })[path] || path;
     setMeta('link[rel="canonical"]', 'href', `${window.location.origin}${canonicalPath}`, 'link');
   }, []);
 
@@ -56,8 +62,11 @@ export default function App() {
   if (path === '/excavators') return <ExcavatorsPage />;
   if (path === '/parts-service' || path === '/parts' || path === '/service') return <PartsServicePage />;
   if (path === '/solutions') return <SolutionsPage />;
-  if (['/contact', '/contact-us', '/resources', '/about', '/about-us'].includes(path)) return <ContactUsPage />;
+  if (path === '/resources') return <ResourcesPage />;
+  if (path === '/about' || path === '/about-us') return <AboutPage />;
+  if (['/contact', '/contact-us'].includes(path)) return <ContactUsPage />;
   if (path === '/privacy-policy') return <PrivacyPolicyPage />;
   if (path === '/terms-and-conditions') return <TermsAndConditionsPage />;
-  return <HomePage />;
+  if (path === "/") return <HomePage />;
+  return <><Header /><main className="container missing-page"><h1>Page not found</h1><a className="btn btn-primary" href="/excavators">Browse excavators</a></main><Footer /></>;
 }

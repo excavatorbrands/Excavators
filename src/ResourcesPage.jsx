@@ -3,7 +3,8 @@ import {
   ArrowRight, BookOpen, CalendarDays, CheckCircle2, ChevronRight,
   Download, FileText, HelpCircle, Search, ShieldCheck, Wrench,
 } from 'lucide-react';
-import { Header, Footer } from './Chrome.jsx';
+import { Header } from './Header.jsx';
+import { Footer } from './Footer.jsx';
 import './pages.css';
 
 const resources = [

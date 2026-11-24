@@ -7,14 +7,15 @@ import {
 import { brands, models } from './data.js';
 import BrandLogoRail from './BrandLogoRail.jsx';
 import './brands.css';
-import { Header, Footer } from './Chrome.jsx';
+import { Header } from './Header.jsx';
+import { Footer } from './Footer.jsx';
 
 const sizeFilters = ['All', 'Mini', 'Medium', 'Large', 'Mining'];
 
 function BrandWordmark({ brand }) {
   return (
     <span className={`directory-wordmark wordmark-${brand.id}`}>
-      <img src={brand.logo} alt={`${brand.name} logo`} />
+      <img src={brand.logo} alt="" />
     </span>
   );
 }
@@ -77,9 +78,9 @@ function FeaturedBrand({ brand, model, onExplore }) {
   return (
     <section className="featured-brand directory-container" aria-labelledby="featured-brand-title">
       <div className="featured-visual">
-        <img src={model ? `/images/brands/model-${model.brand}.webp` : "/images/brands/brand-featured-excavator.webp"} alt={`${brand.name} excavator model`} />
+        <img src={model ? model.image : "/images/hero-quarry.webp"} alt="Illustrative excavator" />
         <span className="featured-image-shade" />
-        <span className="featured-label"><span>★</span> SELECTED MANUFACTURER</span>
+        <span className="featured-label"><span>★</span> ILLUSTRATIVE IMAGE</span>
         <div className="featured-visual-caption"><span>IRON CREST DIRECTORY</span><strong>EXCAVATOR<br />MANUFACTURERS</strong></div>
       </div>
       <div className="featured-details">
@@ -125,7 +126,7 @@ function BrandModelRail({ brand, brandModels }) {
       <div className="directory-model-rail" ref={railRef}>
         {brandModels.map((model) => (
             <article className="directory-model-card directory-model-rail-card" key={model.id}>
-              <div className="directory-model-image"><img src={`/images/brands/model-${model.brand}.webp`} alt={`${model.brandName} ${model.model} excavator`} loading="lazy" /><span className="directory-model-brand">{model.brandName}</span></div>
+              <div className="directory-model-image"><img src={model.image} alt="Illustrative excavator" loading="lazy" /><span className="directory-model-brand">{model.brandName}</span></div>
               <div className="directory-model-body">
                 <div className="directory-model-title"><div><span>{model.type}</span><h3>{model.model}</h3></div><ArrowUpRight size={16} /></div>
                 <div className="directory-model-specs">
@@ -192,7 +193,7 @@ function DirectoryCTA() {
         <div className="directory-cta-icon"><Headphones size={34} /></div>
         <div><span>NEED HELP WITH YOUR SHORTLIST?</span><h2>Choose your next excavator <em>with confidence.</em></h2><p>Share your project requirements and ask the Iron Crest team for guidance.</p></div>
         <a href="/contact-us" className="directory-cta-button">Talk to our team <ArrowRight size={16} /></a>
-        <img src="/images/brands/brand-featured-excavator.webp" alt="Excavator at a quarry" loading="lazy" />
+        <img src="/images/hero-quarry.webp" alt="Excavator at a quarry" loading="lazy" />
       </div>
     </section>
   );

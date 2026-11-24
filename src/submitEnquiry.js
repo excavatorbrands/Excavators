@@ -7,7 +7,7 @@ export async function submitEnquiry(enquiry) {
 
   const contentType = response.headers.get('content-type') || '';
   const result = contentType.includes('application/json') ? await response.json() : null;
-  if (!response.ok) {
+  if (!response.ok || !result?.message) {
     throw new Error(result?.message || 'We could not send your enquiry. Please try again or email us directly.');
   }
 

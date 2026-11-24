@@ -1,7 +1,8 @@
 import {
-  ArrowRight, Bell, Clock3, Cog, ShieldCheck, Wrench,
+  ArrowRight, Clock3, Cog, ShieldCheck, Wrench,
 } from 'lucide-react';
-import { Header } from './Chrome.jsx';
+import { Header } from './Header.jsx';
+import { Footer } from './Footer.jsx';
 import './pages.css';
 
 const launchBenefits = [
@@ -20,7 +21,7 @@ export default function PartsServicePage() {
         <div className="parts-coming-soon-content">
           <div className="parts-coming-soon-heading">
             <div className="parts-coming-soon-mark"><Cog aria-hidden="true" /><Wrench aria-hidden="true" /></div>
-            <div className="parts-coming-soon-title"><span />PARTS &amp; SERVICE<span /></div>
+            <h1 className="parts-coming-soon-title"><span />Parts &amp; Service<span /></h1>
           </div>
 
           <div className="parts-coming-soon-sign" aria-label="Coming soon">
@@ -39,13 +40,14 @@ export default function PartsServicePage() {
           </div>
 
           <a className="parts-coming-soon-notify" href="/contact?type=parts">
-            <Bell aria-hidden="true" />
-            <strong>Notify Me</strong>
+            <Wrench aria-hidden="true" />
+            <strong>Enquire about parts</strong>
             <ArrowRight aria-hidden="true" />
           </a>
-          <p className="parts-coming-soon-note">Be the first to know when our Parts &amp; Service page goes live.</p>
+          <p className="parts-coming-soon-note">Include the machine model and part number if available.</p>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

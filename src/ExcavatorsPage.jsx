@@ -3,7 +3,8 @@ import {
   ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Filter, Gauge, Search,
 } from 'lucide-react';
 import { brands, models } from './data.js';
-import { Header, Footer } from './Chrome.jsx';
+import { Header } from './Header.jsx';
+import { Footer } from './Footer.jsx';
 import './excavators.css';
 
 const availabilityFilters = ['All', 'Needs confirmation', 'Confirmed available', 'Confirmed unavailable'];
@@ -17,7 +18,7 @@ function CatalogCard({ model }) {
   return (
     <article className="catalog-card">
       <div className="catalog-card-image">
-        <img src={model.image} alt={`${model.brandName} ${model.model} excavator`} loading="lazy" />
+        <img src={model.image} alt="Illustrative excavator" loading="lazy" />
         <span className="availability-badge unverified">
           {statusKey(model.availability)}
         </span>
@@ -117,6 +118,7 @@ export default function ExcavatorsPage() {
         </section>
 
         <section className="catalog-section container" id="catalog">
+          <p className="image-disclosure">Equipment images are AI-generated illustrations. Ask us for photos of the exact machine.</p>
           <div className="catalog-heading">
             <div><span className="catalog-kicker">PRODUCT DIRECTORY</span><h2>Excavator <em>Catalog</em></h2><p>Choose a machine, check its status and request the exact local configuration.</p></div>
             <div className="catalog-heading-right"><span>{filtered.length} of {catalogModels.length} model examples</span></div>

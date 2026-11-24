@@ -9,17 +9,55 @@ export const brands = [
   { id: 'sany', name: 'SANY', sub: 'Heavy Equipment', className: 'brand-sany', logo: '/images/logos/sany.png' },
 ];
 
-// Rotating homepage hero: one featured example from each represented manufacturer.
-// Images are locally hosted in public/images/heroimages and rotate every six seconds.
 export const heroSlides = [
-  { brand: 'Hyundai', model: 'HX220L', type: 'Medium crawler excavator', image: '/images/heroimages/hyundai-hx220l.png' },
-  { brand: 'Doosan', model: 'DX225LC', type: 'Medium crawler excavator', image: '/images/heroimages/doosan-dx225lc.png' },
-  { brand: 'Volvo', model: 'EC220E', type: 'Medium crawler excavator', image: '/images/heroimages/volvo-ec220e.png' },
-  { brand: 'Hitachi', model: 'ZX210LC-6', type: 'Medium crawler excavator', image: '/images/heroimages/hitachi-zx210lc-6.png' },
-  { brand: 'CAT', model: '320', type: 'Medium crawler excavator', image: '/images/heroimages/cat-320.png' },
-  { brand: 'Fiatallis', model: 'FX215', type: 'Medium crawler excavator', image: '/images/heroimages/fiatallis-fx215.png' },
-  { brand: 'Komatsu', model: 'PC210LC', type: 'Medium crawler excavator', image: '/images/heroimages/komatsu-pc210lc.png' },
-  { brand: 'SANY', model: 'SY215C', type: 'Medium crawler excavator', image: '/images/heroimages/sany-sy215c.png' },
+  {
+    "id": "hyundai",
+    "name": "Hyundai",
+    "image": "/images/manufacturer-heroes/hyundai.webp",
+    "mobileImage": "/images/manufacturer-heroes/hyundai-mobile.webp"
+  },
+  {
+    "id": "doosan",
+    "name": "Doosan",
+    "image": "/images/manufacturer-heroes/doosan.webp",
+    "mobileImage": "/images/manufacturer-heroes/doosan-mobile.webp"
+  },
+  {
+    "id": "volvo",
+    "name": "Volvo",
+    "image": "/images/manufacturer-heroes/volvo.webp",
+    "mobileImage": "/images/manufacturer-heroes/volvo-mobile.webp"
+  },
+  {
+    "id": "hitachi",
+    "name": "Hitachi",
+    "image": "/images/manufacturer-heroes/hitachi.webp",
+    "mobileImage": "/images/manufacturer-heroes/hitachi-mobile.webp"
+  },
+  {
+    "id": "cat",
+    "name": "CAT",
+    "image": "/images/manufacturer-heroes/cat.webp",
+    "mobileImage": "/images/manufacturer-heroes/cat-mobile.webp"
+  },
+  {
+    "id": "fiatallis",
+    "name": "Fiatallis",
+    "image": "/images/manufacturer-heroes/fiatallis.webp",
+    "mobileImage": "/images/manufacturer-heroes/fiatallis-mobile.webp"
+  },
+  {
+    "id": "komatsu",
+    "name": "Komatsu",
+    "image": "/images/manufacturer-heroes/komatsu.webp",
+    "mobileImage": "/images/manufacturer-heroes/komatsu-mobile.webp"
+  },
+  {
+    "id": "sany",
+    "name": "SANY",
+    "image": "/images/manufacturer-heroes/sany.webp",
+    "mobileImage": "/images/manufacturer-heroes/sany-mobile.webp"
+  }
 ];
 
 // Model examples are not connected to an inventory feed; availability remains unverified.
@@ -79,17 +117,17 @@ export const models = catalog.map(([brand, brandName, model, type], index) => ({
   power: 'Verify configuration',
   weight: 'Verify configuration',
   bucket: 'Verify configuration',
-  image: `/images/model-${brand}.webp`,
-  note: `Catalog listing for ${brandName} ${model}. Confirm local configuration, specifications and stock before publication.`,
+  image: '/images/category-' + ({ Mini: 'mini', Large: 'large', Mining: 'mining' }[type.split(' ')[0]] || 'medium') + '.webp',
+  note: `Catalog listing for ${brandName} ${model}. Confirm local configuration, specifications and stock with the Iron Crest team.`,
   sourceOrder: index + 1,
 }));
 
 export const categories = [
-  { id: 'mini', title: 'Mini Excavators', range: '1–8 Ton', image: '/images/category-mini.webp', description: 'Compact power for restricted access and smaller jobs.' },
-  { id: 'medium', title: 'Medium Excavators', range: '8–25 Ton', image: '/images/category-medium.webp', description: 'Versatile machines for general construction.' },
-  { id: 'large', title: 'Large Excavators', range: '25–55 Ton', image: '/images/category-large.webp', description: 'High-capacity machines for heavy earthmoving.' },
-  { id: 'mining', title: 'Mining Excavators', range: '55+ Ton', image: '/images/category-mining.webp', description: 'Heavy-duty equipment for demanding quarry sites.' },
-  { id: 'special', title: 'Special Applications', range: 'Demolition / Long Reach', image: '/images/category-special.webp', description: 'Purpose-configured machines for specialist work.' },
+  { id: 'mini', title: 'Mini Excavators', range: '1–8 Ton', image: '/images/category-mini.webp', description: 'Compact power for restricted access and smaller jobs.', logo: '/images/logos/mini.png' },
+  { id: 'medium', title: 'Medium Excavators', range: '8–25 Ton', image: '/images/category-medium.webp', description: 'Versatile machines for general construction.', logo: '/images/logos/medium.png' },
+  { id: 'large', title: 'Large Excavators', range: '25–55 Ton', image: '/images/category-large.webp', description: 'High-capacity machines for heavy earthmoving.', logo: '/images/logos/large.png' },
+  { id: 'mining', title: 'Mining Excavators', range: '55+ Ton', image: '/images/category-mining.webp', description: 'Heavy-duty equipment for demanding quarry sites.', logo: '/images/logos/mining.png' },
+  { id: 'special', title: 'Special Applications', range: 'Demolition / Long Reach', image: '/images/category-special.webp', description: 'Purpose-configured machines for specialist work.', logo: '/images/logos/special.png' },
 ];
 
 export const industries = [
