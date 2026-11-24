@@ -1,0 +1,100 @@
+.quarry-panorama {
+  --quarry-gold: #ffcb43;
+  padding-block: clamp(24px, 4vw, 48px);
+  color: #f6fbfc;
+  background:
+    linear-gradient(90deg, #101c24f5, #14232de8 42%, #14232db0),
+    url('/images/hero-quarry.webp') center 58% / cover no-repeat,
+    #14232d;
+}
+
+.quarry-panorama h2 {
+  margin: 0;
+  color: #f6fbfc !important;
+  font-size: clamp(24px, 4vw, 40px);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.quarry-panorama__stats {
+  position: relative;
+  height: 270px;
+  margin: 10px 0 0;
+}
+
+.quarry-panorama__stat {
+  position: absolute;
+  top: var(--stat-top);
+  left: var(--stat-left);
+  width: var(--stat-width, 24%);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 5px;
+  padding-inline-start: 9px;
+  border-inline-start: 1px solid #ffcb4370;
+}
+
+.quarry-panorama__stat dt {
+  color: #f1f5f7;
+  font-size: clamp(12px, 1.7vw, 15px);
+  font-weight: 650;
+  line-height: 1.15;
+}
+
+.quarry-panorama__stat dd {
+  display: flex;
+  align-items: flex-start;
+  gap: 3px;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(31px, 6vw, 51px);
+  font-weight: 850;
+  line-height: 0.95;
+  letter-spacing: -0.065em;
+  font-variant-numeric: tabular-nums;
+}
+
+.quarry-panorama__plus {
+  color: var(--quarry-gold);
+  font-size: 0.49em;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.quarry-panorama__stat--models {
+  --stat-left: 2%;
+  --stat-top: 19px;
+  --stat-width: 30%;
+}
+
+.quarry-panorama__stat--models dd {
+  color: var(--quarry-gold);
+  font-size: clamp(59px, 12vw, 100px);
+}
+
+.quarry-panorama__stat--brands { --stat-left: 42%; --stat-top: 31px; }
+.quarry-panorama__stat--categories { --stat-left: 72%; --stat-top: 7px; --stat-width: 28%; }
+.quarry-panorama__stat--mini { --stat-left: 32%; --stat-top: 130px; }
+.quarry-panorama__stat--medium { --stat-left: 59%; --stat-top: 111px; }
+.quarry-panorama__stat--large { --stat-left: 17%; --stat-top: 208px; }
+.quarry-panorama__stat--mining { --stat-left: 77%; --stat-top: 184px; --stat-width: 23%; }
+
+.quarry-panorama__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 540px) {
+  .quarry-panorama__stats { height: 360px; }
+  .quarry-panorama__stat--models { --stat-left: 0%; --stat-top: 12px; --stat-width: 47%; }
+  .quarry-panorama__stat--brands { --stat-left: 55%; --stat-top: 25px; --stat-width: 45%; }
+  .quarry-panorama__stat--categories { --stat-left: 49%; --stat-top: 100px; --stat-width: 51%; }
+  .quarry-panorama__stat--mini { --stat-left: 3%; --stat-top: 146px; --stat-width: 39%; }
+  .quarry-panorama__stat--medium { --stat-left: 58%; --stat-top: 183px; --stat-width: 42%; }
+  .quarry-panorama__stat--large { --stat-left: 13%; --stat-top: 235px; --stat-width: 45%; }
+  .quarry-panorama__stat--mining { --stat-left: 48%; --stat-top: 298px; --stat-width: 52%; }
+}
