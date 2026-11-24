@@ -34,7 +34,10 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare, onD
       </div>
 
       <div className="brand-showcase__product">
-        <figure className="brand-showcase__product-image">
+        <figure
+  className="brand-showcase__product-image"
+  style={{ '--model-backdrop': `url("${model.image}")` }}
+>
           <img src={model.image} alt="" loading="lazy" />
           <figcaption>Illustrative equipment image</figcaption>
         </figure>
