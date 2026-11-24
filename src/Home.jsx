@@ -1,9 +1,9 @@
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   AlertCircle, ArrowRight, ArrowUpRight, BadgeCheck, Check,
-  ChevronLeft, ChevronRight, CircleDollarSign, Download,
-  Factory, FileText, Gauge, Headphones, MapPin,
+  CircleDollarSign, Download,
+  Factory, FileText, Headphones, MapPin,
   MapPinned, Package, Search, Settings2, Scale,
   SlidersHorizontal, Truck, Users, Wrench, X,
 } from 'lucide-react';
@@ -19,6 +19,8 @@ import {
 import { Header } from './Header.jsx';
 import { Footer } from './Footer.jsx';
 import BrandLogoRail from './BrandLogoRail.jsx';
+import HomeBrandShowcases from './HomeBrandShowcase.jsx';
+import QuarryPanorama from './QuarryPanorama.jsx';
 import { submitEnquiry } from './submitEnquiry.js';
 
 import './HomeComparisonDrawer.css';
@@ -240,166 +242,6 @@ function QuoteModal({ modal, onClose }) {
 
 function BrandStrip() {
   return <BrandLogoRail className="brand-logo-strip-home" id="brands" />;
-}
-
-
-// --------------------------------------------------
-// FULLY CLICKABLE MODEL CARD
-// --------------------------------------------------
-
-function ModelCard({ model, onDetails, onCompare, inCompare }) {
-  const handleKeyDown = (event) => {
-    if (event.target !== event.currentTarget) return;
-
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      onDetails(model);
-    }
-  };
-
-  return (
-    <article
-      className="model-card home-clickable-model-card"
-      role="button"
-      tabIndex={0}
-      aria-label={`View details for ${model.brandName} ${model.model}`}
-      onClick={(event) => {
-        if (event.target.closest('button, a')) return;
-        onDetails(model);
-      }}
-      onKeyDown={handleKeyDown}
-    >
-      <div className="model-image-wrap">
-        <img
-          src={model.image}
-          alt="Illustrative excavator"
-          loading="lazy"
-        />
-      </div>
-
-      <div className="model-card-body">
-        <div className="model-brand-label">{model.brandName}</div>
-
-        <h3>{model.model}</h3>
-
-        <p className="model-type">{model.type}</p>
-
-        <div className="spec-list">
-          <span>
-            <Gauge size={14} />
-            Engine power
-            <b>{model.power}</b>
-          </span>
-
-          <span>
-            <Truck size={14} />
-            Operating weight
-            <b>{model.weight}</b>
-          </span>
-
-          <span>
-            <Package size={14} />
-            Bucket capacity
-            <b>{model.bucket}</b>
-          </span>
-        </div>
-
-        <div className="model-card-actions">
-          <button
-            type="button"
-            className="model-link"
-            onClick={(event) => {
-              event.stopPropagation();
-              onDetails(model);
-            }}
-          >
-            View Details
-            <ArrowRight size={15} />
-          </button>
-
-          <button
-            type="button"
-            className={`model-compare-link ${inCompare ? 'is-added' : ''}`}
-            onClick={(event) => {
-              event.stopPropagation();
-              onCompare(model);
-            }}
-            aria-pressed={inCompare}
-          >
-            {inCompare ? <Check size={13} /> : <span>+</span>}
-            {inCompare ? 'Added' : 'Compare'}
-          </button>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-
-// --------------------------------------------------
-// MANUFACTURER MODEL RAIL
-// --------------------------------------------------
-
-function HomeBrandModelRail({
-  brand,
-  brandModels,
-  compareIds,
-  onCompare,
-  onDetails,
-}) {
-  const railRef = useRef(null);
-
-  const scrollRail = (direction) => {
-    railRef.current?.scrollBy({
-      left: direction * 620,
-      behavior: 'smooth',
-    });
-  };
-
-  return (
-    <section className="home-brand-row" aria-label={`${brand.name} excavators`}>
-      <div className="home-brand-row-heading">
-        <div>
-          <span>MANUFACTURER</span>
-          <h3>{brand.name}</h3>
-        </div>
-
-        <div className="home-model-rail-actions">
-          <span>
-            {brandModels.length} model{brandModels.length === 1 ? '' : 's'}
-          </span>
-
-          <button
-            type="button"
-            onClick={() => scrollRail(-1)}
-            aria-label={`Scroll ${brand.name} models left`}
-          >
-            <ChevronLeft size={18} />
-          </button>
-
-          <button
-            type="button"
-            onClick={() => scrollRail(1)}
-            aria-label={`Scroll ${brand.name} models right`}
-          >
-            <ChevronRight size={18} />
-          </button>
-        </div>
-      </div>
-
-      <div className="home-model-rail" ref={railRef}>
-        {brandModels.map((model) => (
-          <ModelCard
-            key={model.id}
-            model={model}
-            onDetails={onDetails}
-            onCompare={onCompare}
-            inCompare={compareIds.includes(model.id)}
-          />
-        ))}
-      </div>
-    </section>
-  );
 }
 
 
@@ -1039,7 +881,7 @@ export default function HomePage() {
         </section>
 
         <BrandStrip />
-
+        <QuarryPanorama />
         {/* CATEGORIES */}
         <section className="category-section section-dark" id="categories" aria-labelledby="equipment-classes-title">
           <div className="container"><h2 className="equipment-classes-title" id="equipment-classes-title">Find the right machine class</h2></div>
@@ -1082,7 +924,7 @@ export default function HomePage() {
               action={
                 <div className="model-count">
                   <span>{filteredModels.length.toString().padStart(2, '0')}</span>
-                  MODELS SHOWN
+                  MATCHING MODELS
                 </div>
               }
             />
@@ -1126,28 +968,14 @@ export default function HomePage() {
             </div>
 
             {filteredModels.length ? (
-              <div className="home-brand-rows">
-                {brands.map((brand) => {
-                  const brandModels = filteredModels.filter(
-                    (model) => model.brand === brand.id
-                  );
-
-                  if (!brandModels.length) return null;
-
-                  return (
-                    <HomeBrandModelRail
-                      key={brand.id}
-                      brand={brand}
-                      brandModels={brandModels}
-                      compareIds={compareIds}
-                      onCompare={handleCardCompare}
-                      onDetails={(item) =>
-                        setModal({ type: 'model', model: item })
-                      }
-                    />
-                  );
-                })}
-              </div>
+              <HomeBrandShowcases
+                brands={brands}
+                models={filteredModels}
+                showAll={selectedBrand !== 'all' || Boolean(searchQuery.trim())}
+                compareIds={compareIds}
+                onCompare={handleCardCompare}
+                onDetails={(item) => setModal({ type: 'model', model: item })}
+              />
             ) : (
               <div className="empty-state">
                 No models match that search.
