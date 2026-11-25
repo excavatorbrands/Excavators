@@ -8,6 +8,7 @@ import { brands, models } from './data.js';
 import BrandLogoRail from './BrandLogoRail.jsx';
 import './brands.css';
 import { Header } from './Header.jsx';
+import { brandUrl, modelPrice, modelUrl } from './catalogLinks.js';
 import { Footer } from './Footer.jsx';
 
 const sizeFilters = ['All', 'Mini', 'Medium', 'Large', 'Mining'];
@@ -50,7 +51,7 @@ function DirectoryHero({ search, setSearch, size, setSize }) {
   );
 }
 
-function BrandIndex({ filteredBrands, selectedBrand, onSelect }) {
+function BrandIndex({ filteredBrands, selectedBrand }) {
   return (
     <section className="brand-index directory-container" aria-labelledby="brand-index-title">
       <div className="directory-section-head">
@@ -60,12 +61,12 @@ function BrandIndex({ filteredBrands, selectedBrand, onSelect }) {
       {filteredBrands.length ? (
         <div className="brand-index-grid">
           {filteredBrands.map((brand) => (
-            <button type="button" key={brand.id} className={`brand-index-card ${selectedBrand === brand.id ? 'is-selected' : ''}`} onClick={() => onSelect(brand.id)} aria-pressed={selectedBrand === brand.id}>
+            <a key={brand.id} href={brandUrl(brand)} className={`brand-index-card ${selectedBrand === brand.id ? 'is-selected' : ''}`}>
               <span className="brand-index-card-top"><span className="brand-index-number">{String(brands.findIndex((item) => item.id === brand.id) + 1).padStart(2, '0')}</span><ArrowUpRight size={15} /></span>
               <BrandWordmark brand={brand} />
               <span className="brand-index-sub">{brand.sub}</span>
               <span className="brand-index-action">Explore range <ArrowRight size={13} /></span>
-            </button>
+            </a>
           ))}
         </div>
       ) : <div className="directory-empty"><Search size={22} /><strong>No brands found</strong><span>Try a different manufacturer or model name.</span></div>}
@@ -73,7 +74,7 @@ function BrandIndex({ filteredBrands, selectedBrand, onSelect }) {
   );
 }
 
-function FeaturedBrand({ brand, model, onExplore }) {
+function FeaturedBrand({ brand, model }) {
   const brandModelCount = models.filter((item) => item.brand === brand.id).length;
   return (
     <section className="featured-brand directory-container" aria-labelledby="featured-brand-title">
@@ -95,7 +96,7 @@ function FeaturedBrand({ brand, model, onExplore }) {
           <div><Headphones size={20} /><span><b>Expert</b><small>Enquiry assistance</small></span></div>
         </div>
         <div className="featured-actions">
-          <button className="directory-primary-button" onClick={onExplore}>View {brand.name} models <ArrowRight size={16} /></button>
+          <a className="directory-primary-button" href={brandUrl(brand)}>View {brand.name} models <ArrowRight size={16} /></a>
           <a className="directory-text-link" href={`/contact?type=equipment&brand=${brand.id}`}>Request brand information <ArrowUpRight size={15} /></a>
         </div>
       </div>
@@ -125,7 +126,7 @@ function BrandModelRail({ brand, brandModels }) {
       </div>
       <div className="directory-model-rail" ref={railRef}>
         {brandModels.map((model) => (
-            <article className="directory-model-card directory-model-rail-card" key={model.id}>
+            <article className="directory-model-card directory-model-rail-card model-click-surface" key={model.id}>
               <div className="directory-model-image"><img src={model.image} alt="Illustrative excavator" loading="lazy" /><span className="directory-model-brand">{model.brandName}</span></div>
               <div className="directory-model-body">
                 <div className="directory-model-title"><div><span>{model.type}</span><h3>{model.model}</h3></div><ArrowUpRight size={16} /></div>
@@ -135,7 +136,7 @@ function BrandModelRail({ brand, brandModels }) {
                   <span><Scale size={14} /> Bucket capacity <b>{model.bucket}</b></span>
                 </div>
                 <div className="directory-model-actions">
-                  <a href={`/contact?type=equipment&model=${encodeURIComponent(`${model.brandName} ${model.model}`)}`}>Request details <ArrowRight size={14} /></a>
+                  <span>{modelPrice(model)}</span><a className="model-click-target" href={modelUrl(model)} aria-label={`View ${model.brandName} ${model.model} details`}>View details <ArrowRight size={14} /></a>
                 </div>
               </div>
             </article>
@@ -205,7 +206,7 @@ export default function BrandsPage() {
     const requested = new URLSearchParams(window.location.search).get('size');
     return sizeFilters.find(item => item.toLowerCase() === requested?.toLowerCase()) || 'All';
   });
-  const [selectedBrand, setSelectedBrand] = useState(() => {
+  const [selectedBrand] = useState(() => {
     const requested = new URLSearchParams(window.location.search).get('brand');
     return brands.some(item => item.id === requested) ? requested : 'hyundai';
   });
@@ -224,11 +225,6 @@ export default function BrandsPage() {
 
   const activeBrand = filteredBrands.find((brand) => brand.id === selectedBrand) || filteredBrands[0] || brands.find((brand) => brand.id === selectedBrand) || brands[0];
   const featuredModel = models.find((model) => model.brand === activeBrand.id);
-  const exploreSelectedBrand = () => {
-    setSearch(activeBrand.name);
-    setSelectedSize('All');
-    document.getElementById('brand-models')?.scrollIntoView({ behavior: 'smooth' });
-  };
   const clearFilters = () => { setSearch(''); setSelectedSize('All'); };
 
   return (
@@ -237,8 +233,8 @@ export default function BrandsPage() {
       <main>
         <DirectoryHero search={search} setSearch={setSearch} size={selectedSize} setSize={setSelectedSize} />
         <BrandLogoRail className="brand-logo-strip-directory" />
-        <BrandIndex filteredBrands={filteredBrands} selectedBrand={activeBrand.id} onSelect={setSelectedBrand} />
-        {filteredBrands.length > 0 && <FeaturedBrand brand={activeBrand} model={featuredModel} onExplore={exploreSelectedBrand} />}
+        <BrandIndex filteredBrands={filteredBrands} selectedBrand={activeBrand.id} />
+        {filteredBrands.length > 0 && <FeaturedBrand brand={activeBrand} model={featuredModel} />}
         <ModelExplorer filteredModels={filteredModels} selectedSize={selectedSize} onClear={clearFilters} />
         <DirectoryResources />
         <DirectoryCTA />

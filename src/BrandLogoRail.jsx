@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import { brands } from './data.js';
+import { brandUrl } from './catalogLinks.js';
 
 export default function BrandLogoRail({ className = '', id }) {
   const viewportId = useId();
@@ -16,7 +17,7 @@ export default function BrandLogoRail({ className = '', id }) {
               {brands.map((brand) => (
                 <a
                   className="brand-logo-link"
-                  href={`/brands?brand=${brand.id}`}
+                  href={brandUrl(brand)}
                   key={brand.id}
                   tabIndex={copy === 1 ? -1 : undefined}
                   aria-label={copy === 1 ? undefined : `Explore ${brand.name} excavators`}

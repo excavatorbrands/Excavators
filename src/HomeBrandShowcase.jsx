@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { ArrowRight, Check, ChevronLeft, ChevronRight, Gauge, Package, Truck } from 'lucide-react';
+import { modelPrice, modelUrl } from './catalogLinks.js';
 import './home-brand-showcase.css';
 
-function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare, onDetails }) {
+function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare }) {
   const [selectedModelId, setSelectedModelId] = useState(null);
   const index = Math.max(0, brandModels.findIndex((model) => model.id === selectedModelId));
   const model = brandModels[index];
@@ -22,7 +23,7 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare, onD
 
   return (
     <section
-      className={`brand-showcase${reverse ? ' brand-showcase--reverse' : ''}`}
+      className={`brand-showcase model-click-surface${reverse ? ' brand-showcase--reverse' : ''}`}
       aria-labelledby={`showcase-${brand.id}`}
     >
       <figure className="brand-showcase__product-image">
@@ -54,7 +55,7 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare, onD
 
           <div aria-live="polite" aria-atomic="true">
             <h4>{model.model}</h4>
-            <p className="brand-showcase__type">{model.type}</p>
+            <p className="brand-showcase__type">{model.type} · {modelPrice(model)}</p>
           </div>
 
           <dl className="brand-showcase__specs">
@@ -67,9 +68,9 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare, onD
           </dl>
 
           <div className="brand-showcase__actions">
-            <button type="button" className="btn btn-primary" onClick={() => onDetails(model)}>
+            <a className="btn btn-primary model-click-target" href={modelUrl(model)} aria-label={`View ${model.brandName} ${model.model} details`}>
               View details <ArrowRight size={16} aria-hidden="true" />
-            </button>
+            </a>
             <button
               type="button"
               className="brand-showcase__compare"
@@ -86,7 +87,7 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare, onD
   );
 }
 
-export default function HomeBrandShowcases({ brands, models, showAll, compareIds, onCompare, onDetails }) {
+export default function HomeBrandShowcases({ brands, models, showAll, compareIds, onCompare }) {
   const groups = brands.map((brand) => ({
     brand,
     brandModels: models.filter((model) => model.brand === brand.id),
@@ -102,7 +103,6 @@ export default function HomeBrandShowcases({ brands, models, showAll, compareIds
       reverse={index % 2 === 1}
       compareIds={compareIds}
       onCompare={onCompare}
-      onDetails={onDetails}
     />
   );
 

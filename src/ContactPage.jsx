@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Header } from './Header.jsx';
 import { Footer } from './Footer.jsx';
+import { enquiryLabels } from './catalogLinks.js';
 import { submitEnquiry } from './submitEnquiry.js';
 import './pages.css';
 
@@ -14,7 +15,10 @@ export default function ContactPage({ embedded = false }) {
   const params = new URLSearchParams(window.location.search);
   const requestedType = params.get('type');
   const enquiryType = ['equipment', 'parts', 'service', 'project', 'warranty', 'resource', 'other'].includes(requestedType) ? requestedType : 'equipment';
+  const intent = params.get('intent');
+  const action = Object.hasOwn(enquiryLabels, intent) ? enquiryLabels[intent] : '';
   const context = params.get('model') || params.get('brand') || params.get('resource') || '';
+  const interest = [action, context].filter(Boolean).join(' — ').slice(0, 160);
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -56,14 +60,15 @@ export default function ContactPage({ embedded = false }) {
               <div className="contact-assurance"><ShieldCheck size={19} /><span><b>Clear information first.</b> Exact machine configuration, availability and technical data should be verified before purchase.</span></div>
             </div>
 
-            <div className="contact-form-card">
+            <div className="contact-form-card" id="equipment-enquiry">
                   <div className="contact-form-head"><div><span className="page-kicker">SEND AN ENQUIRY</span><h2>What can we <em>help with?</em></h2></div><MessageSquare size={26} /></div>
                   <form onSubmit={handleSubmit}>
+                    {interest && <p className="equipment-enquiry-context">{interest}<input type="hidden" name="interest" value={interest} /></p>}
                     <label className="form-honeypot" aria-hidden="true">Leave this field empty<input name="website" tabIndex="-1" autoComplete="off" /></label>
                     <div className="contact-form-row"><label>Full name<input name="name" required placeholder="Your name" /></label><label>Company<input name="company" placeholder="Company name" /></label></div>
                     <div className="contact-form-row"><label>Email<input name="email" required type="email" placeholder="you@company.com" /></label><label>Phone<input name="phone" required type="tel" placeholder="+92 ..." /></label></div>
                     <label>Enquiry type<select name="type" defaultValue={enquiryType}><option value="equipment">Equipment / excavator</option><option value="parts">Parts request</option><option value="service">Service support</option><option value="project">Project consultation</option><option value="warranty">Warranty enquiry</option><option value="resource">Resource request</option><option value="other">Other</option></select></label>
-                    <label>Project / requirement details<textarea name="message" required rows="5" defaultValue={context ? `Regarding ${context}: ` : ''} placeholder="Tell us the machine, application, location and timeline..."></textarea></label>
+                    <label>Project / requirement details<textarea name="message" required rows="5" defaultValue={interest ? `${interest}: ` : ''} placeholder="Tell us the machine, application, location and timeline..."></textarea></label>
                     <button className="btn btn-primary contact-submit" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Sending...' : 'Send enquiry'} <Send size={15} /></button>
                     <small className="contact-form-note">Your enquiry will be sent to Iron Crest by email. Please do not include sensitive personal information.</small>
                     {submissionNotice && <p className={`contact-form-note ${submissionNotice.startsWith('Thank you') ? 'contact-form-success' : 'contact-form-unavailable'}`} role={submissionNotice.startsWith('Thank you') ? 'status' : 'alert'}>{submissionNotice}</p>}

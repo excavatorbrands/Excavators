@@ -3,6 +3,10 @@ import AboutPage from './AboutPage.jsx';
 import ResourcesPage from './ResourcesPage.jsx';
 import { Header } from './Header.jsx';
 import { Footer } from './Footer.jsx';
+import { brands, models } from './data.js';
+import { brandHeroUrl, modelUrl, brandUrl } from './catalogLinks.js';
+import BrandDetailPage from './BrandDetailPage.jsx';
+import ModelDetailPage from './ModelDetailPage.jsx';
 import HomePage from './Home.jsx';
 import BrandsPage from './BrandsPage.jsx';
 import ExcavatorsPage from './ExcavatorsPage.jsx';
@@ -14,6 +18,13 @@ import TermsAndConditionsPage from './TermsAndConditionsPage.jsx';
 
 const rawPath = window.location.pathname;
 const path = rawPath.length > 1 && rawPath.endsWith('/') ? rawPath.slice(0, -1) : rawPath;
+const pageBrand = brands.find((brand) => brandUrl(brand) === path);
+const pageModel = models.find((model) => modelUrl(model) === path);
+const modelBrand = pageModel && brands.find((brand) => brand.id === pageModel.brand);
+const detailMetadata = pageBrand
+  ? [`${pageBrand.name} Excavators | Iron Crest`, `Browse the ${pageBrand.name} model lineup and check pricing and availability with Iron Crest.`]
+  : pageModel && [`${pageModel.brandName} ${pageModel.model} | Iron Crest`, `Explore ${pageModel.brandName} ${pageModel.model} details, pricing, booking and order enquiries.`];
+
 const pageMetadata = {
   '/': ['Iron Crest | Excavator Solutions', 'Explore excavator brands, model examples, equipment solutions, parts and service support from Iron Crest.'],
   '/brands': ['Excavator Brands Directory | Iron Crest', 'Browse excavator brands and model examples in the Iron Crest manufacturer directory.'],
@@ -31,7 +42,7 @@ const pageMetadata = {
 
 export default function App() {
   useEffect(() => {
-    const [title, description] = pageMetadata[path] || (['/service', '/parts'].includes(path) ? pageMetadata['/parts-service'] : ['Page not found | Iron Crest', 'Return to the equipment catalog.']);
+    const [title, description] = detailMetadata || pageMetadata[path] || (['/service', '/parts'].includes(path) ? pageMetadata['/parts-service'] : ['Page not found | Iron Crest', 'Return to the equipment catalog.']);
     document.title = title;
 
     const setMeta = (selector, attribute, value, create) => {
@@ -49,7 +60,7 @@ export default function App() {
     setMeta('meta[property="og:title"]', 'content', title, 'meta');
     setMeta('meta[property="og:description"]', 'content', description, 'meta');
     setMeta('meta[property="og:type"]', 'content', 'website', 'meta');
-    setMeta('meta[property="og:image"]', 'content', `${window.location.origin}/images/hero-quarry.webp`, 'meta');
+    setMeta('meta[property="og:image"]', 'content', `${window.location.origin}${pageBrand ? brandHeroUrl(pageBrand) : pageModel?.image || "/images/hero-quarry.webp"}`, 'meta');
     setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image', 'meta');
     setMeta('meta[name="twitter:title"]', 'content', title, 'meta');
     setMeta('meta[name="twitter:description"]', 'content', description, 'meta');
@@ -58,6 +69,8 @@ export default function App() {
     setMeta('link[rel="canonical"]', 'href', `${window.location.origin}${canonicalPath}`, 'link');
   }, []);
 
+  if (pageBrand) return <BrandDetailPage brand={pageBrand} models={models} />;
+  if (pageModel && modelBrand) return <ModelDetailPage model={pageModel} brand={modelBrand} models={models} />;
   if (path === '/brands') return <BrandsPage />;
   if (path === '/excavators') return <ExcavatorsPage />;
   if (path === '/parts-service' || path === '/parts' || path === '/service') return <PartsServicePage />;

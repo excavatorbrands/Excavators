@@ -19,6 +19,7 @@ import {
 import { Header } from './Header.jsx';
 import { Footer } from './Footer.jsx';
 import BrandLogoRail from './BrandLogoRail.jsx';
+import { brandUrl, modelUrl } from './catalogLinks.js';
 import HomeBrandShowcases from './HomeBrandShowcase.jsx';
 import QuarryPanorama from './QuarryPanorama.jsx';
 import { submitEnquiry } from './submitEnquiry.js';
@@ -418,7 +419,7 @@ function ExcavatorDrawer({
                     );
 
                     return (
-                      <article className="ic-catalog-card" key={model.id}>
+                      <article className="ic-catalog-card model-click-surface" key={model.id}>
                         <div className="ic-catalog-card-image">
                           <img
                             src={model.image}
@@ -430,7 +431,7 @@ function ExcavatorDrawer({
                         </div>
 
                         <div className="ic-catalog-card-body">
-                          <h3>{model.model}</h3>
+                          <h3><a className="model-click-target" href={modelUrl(model)} aria-label={`View ${model.brandName} ${model.model} details`}>{model.model}</a></h3>
                           <p>{model.type}</p>
 
                           <div className="ic-catalog-card-specs">
@@ -859,7 +860,7 @@ export default function HomePage() {
 
             <div className="hero-machine-caption">
               <div className="hero-brand-details" aria-live={paused ? 'polite' : 'off'}>
-                <a className="hero-brand-link" href={`/brands?brand=${activeHero.id}`}>{activeHero.name} <ArrowRight size={16} /></a>
+                <a className="hero-brand-link" href={brandUrl(activeHero)}>{activeHero.name} <ArrowRight size={16} /></a>
                 <small>Illustrative equipment image</small>
               </div>
               <div className="hero-slide-controls">
@@ -974,7 +975,6 @@ export default function HomePage() {
                 showAll={selectedBrand !== 'all' || Boolean(searchQuery.trim())}
                 compareIds={compareIds}
                 onCompare={handleCardCompare}
-                onDetails={(item) => setModal({ type: 'model', model: item })}
               />
             ) : (
               <div className="empty-state">

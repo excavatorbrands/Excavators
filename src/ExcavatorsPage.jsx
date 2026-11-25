@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { brands, models } from './data.js';
 import { Header } from './Header.jsx';
+import { modelPrice, modelUrl } from './catalogLinks.js';
 import { Footer } from './Footer.jsx';
 import './excavators.css';
 
@@ -16,7 +17,7 @@ const statusKey = (value) => value === 'available'
 
 function CatalogCard({ model }) {
   return (
-    <article className="catalog-card">
+    <article className="catalog-card model-click-surface">
       <div className="catalog-card-image">
         <img src={model.image} alt="Illustrative excavator" loading="lazy" />
         <span className="availability-badge unverified">
@@ -30,9 +31,9 @@ function CatalogCard({ model }) {
         <div className="catalog-divider" />
         <div className="catalog-spec-row"><span>Brand</span><b>{model.brandName}</b></div>
         <div className="catalog-spec-row"><span>Machine class</span><b>{model.type}</b></div>
-        <div className="catalog-spec-row"><span>Specifications</span><b>On request</b></div>
+        <div className="catalog-spec-row"><span>Price</span><b>{modelPrice(model)}</b></div>
         <div className="catalog-actions">
-          <a href={`/contact?type=equipment&model=${encodeURIComponent(`${model.brandName} ${model.model}`)}`} className="catalog-cta">Request details <ArrowRight size={15} /></a>
+          <a href={modelUrl(model)} className="catalog-cta model-click-target" aria-label={`View ${model.brandName} ${model.model} details`}>View details <ArrowRight size={15} /></a>
         </div>
       </div>
     </article>

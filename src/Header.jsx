@@ -1,16 +1,26 @@
-import { useState, useEffect } from 'react';
-import { ArrowRight, Menu, Search, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { ArrowRight, ChevronDown, Menu, Search, X } from 'lucide-react';
+import { brands } from './data.js';
+import { brandUrl } from './catalogLinks.js';
 import { IronCrestLogo } from './IronCrestLogo.jsx';
 
 export function Header({ onQuote = () => { window.location.href = '/contact'; }, onSearch = () => {}, active = '' }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [brandsOpen, setBrandsOpen] = useState(false);
+  const brandMenu = useRef(null);
+  const brandToggle = useRef(null);
   const [searchText, setSearchText] = useState('');
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     if (menuOpen) document.body.style.overflow = 'hidden';
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
+        if (brandsOpen) {
+          setBrandsOpen(false);
+          brandToggle.current?.focus();
+          return;
+        }
         setMenuOpen(false);
         setSearchOpen(false);
       }
@@ -20,9 +30,17 @@ export function Header({ onQuote = () => { window.location.href = '/contact'; },
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = previousOverflow;
     };
-  }, [menuOpen]);
+  }, [menuOpen, brandsOpen]);
+  useEffect(() => {
+    if (!brandsOpen) return;
+    const closeOutside = (event) => {
+      if (!brandMenu.current?.contains(event.target)) setBrandsOpen(false);
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    return () => document.removeEventListener('pointerdown', closeOutside);
+  }, [brandsOpen]);
   const navItems = [
-    ['Brands', '/brands'], ['Excavators', '/excavators'], ['Parts & Service', '/parts-service'],
+    ['Excavators', '/excavators'], ['Parts & Service', '/parts-service'],
     ['Solutions', '/solutions'], ['Contact Us', '/contact-us'],
   ];
   const submitSearch = (event) => {
@@ -42,16 +60,32 @@ export function Header({ onQuote = () => { window.location.href = '/contact'; },
       <header className="site-header">
         <div className="container nav-inner">
           <IronCrestLogo />
-          <button type="button" className="mobile-menu-button" onClick={() => { setSearchOpen(false); setMenuOpen(!menuOpen); }} aria-expanded={menuOpen} aria-controls="main-nav" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}>{menuOpen ? <X /> : <Menu />}</button>
+          <button type="button" className="mobile-menu-button" onClick={() => { setSearchOpen(false); setBrandsOpen(false); setMenuOpen(!menuOpen); }} aria-expanded={menuOpen} aria-controls="main-nav" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}>{menuOpen ? <X /> : <Menu />}</button>
           <nav id="main-nav" className={`main-nav ${menuOpen ? 'nav-open' : ''}`} aria-label="Main navigation">
             <a className={active === 'home' ? 'nav-home active' : 'nav-home'} aria-current={active === 'home' ? 'page' : undefined} href="/" onClick={() => setMenuOpen(false)}>Home</a>
+            <div className="header-brands" ref={brandMenu}
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) setBrandsOpen(false);
+              }}>
+              <button type="button" className={`header-brands__toggle${active === 'brands' ? ' is-current' : ''}`}
+                ref={brandToggle} aria-expanded={brandsOpen} aria-controls="header-brand-links"
+                onClick={() => setBrandsOpen((open) => !open)}>
+                Brands <ChevronDown size={15} aria-hidden="true" />
+              </button>
+              <ul id="header-brand-links" className="header-brands__links" hidden={!brandsOpen}>
+                <li><a href="/brands" aria-current={window.location.pathname === '/brands' ? 'page' : undefined}>View all brands</a></li>
+                {brands.map((brand) => <li key={brand.id}>
+                  <a href={brandUrl(brand)} aria-current={window.location.pathname === brandUrl(brand) ? 'page' : undefined}>{brand.name}</a>
+                </li>)}
+              </ul>
+            </div>
             {navItems.map(([label, href]) => {
               const isActive = active === label.toLowerCase();
               return <a className={isActive ? 'active' : ''} aria-current={isActive ? 'page' : undefined} key={label} href={href} onClick={() => setMenuOpen(false)}>{label}</a>;
             })}
           </nav>
           <div className="nav-actions">
-            <button type="button" className="icon-button" aria-label="Search models" aria-expanded={searchOpen} aria-controls="search-drawer" onClick={() => { setMenuOpen(false); setSearchOpen(!searchOpen); }}><Search size={19} /></button>
+            <button type="button" className="icon-button" aria-label="Search models" aria-expanded={searchOpen} aria-controls="search-drawer" onClick={() => { setMenuOpen(false); setBrandsOpen(false); setSearchOpen(!searchOpen); }}><Search size={19} /></button>
             <button type="button" className="btn btn-primary nav-quote" onClick={() => onQuote()}>Get a Quote</button>
           </div>
         </div>
