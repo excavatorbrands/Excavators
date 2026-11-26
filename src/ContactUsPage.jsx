@@ -18,13 +18,6 @@ export default function ContactUsPage() {
     <div className="inner-page contact-us-combined project-brief-page">
       <Header active="contact us" />
       <main>
-        <nav className="project-brief-nav" aria-label="On this page">
-          <div className="container">
-            <a href="#contact-information">Contact</a>
-            <a href="#resources">Resources</a>
-            <a href="#about">About Us</a>
-          </div>
-        </nav>
         <ContactPage embedded />
         <ResourcesPage embedded />
         <AboutPage embedded />
