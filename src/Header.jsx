@@ -10,7 +10,25 @@ export function Header({ onQuote = () => { window.location.href = '/contact'; },
   const [brandsOpen, setBrandsOpen] = useState(false);
   const brandMenu = useRef(null);
   const brandToggle = useRef(null);
+  const brandCloseTimer = useRef(null);
   const [searchText, setSearchText] = useState('');
+  useEffect(() => () => window.clearTimeout(brandCloseTimer.current), []);
+
+  function handleBrandPointerEnter(event) {
+    if (event.pointerType !== 'mouse' || !window.matchMedia('(min-width: 821px) and (any-hover: hover)').matches) return;
+    window.clearTimeout(brandCloseTimer.current);
+    setBrandsOpen(true);
+  }
+
+  function handleBrandPointerLeave(event) {
+    if (event.pointerType !== 'mouse') return;
+    window.clearTimeout(brandCloseTimer.current);
+    brandCloseTimer.current = window.setTimeout(() => {
+      const focused = document.activeElement;
+      if (focused === brandToggle.current || !brandMenu.current?.contains(focused)) setBrandsOpen(false);
+    }, 220);
+  }
+
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     if (menuOpen) document.body.style.overflow = 'hidden';
@@ -64,20 +82,31 @@ export function Header({ onQuote = () => { window.location.href = '/contact'; },
           <nav id="main-nav" className={`main-nav ${menuOpen ? 'nav-open' : ''}`} aria-label="Main navigation">
             <a className={active === 'home' ? 'nav-home active' : 'nav-home'} aria-current={active === 'home' ? 'page' : undefined} href="/" onClick={() => setMenuOpen(false)}>Home</a>
             <div className="header-brands" ref={brandMenu}
+              onPointerEnter={handleBrandPointerEnter}
+              onPointerLeave={handleBrandPointerLeave}
               onBlur={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget)) setBrandsOpen(false);
               }}>
               <button type="button" className={`header-brands__toggle${active === 'brands' ? ' is-current' : ''}`}
                 ref={brandToggle} aria-expanded={brandsOpen} aria-controls="header-brand-links"
-                onClick={() => setBrandsOpen((open) => !open)}>
+                onClick={() => {
+                  window.clearTimeout(brandCloseTimer.current);
+                  setBrandsOpen((open) => !open);
+                }}>
                 Brands <ChevronDown size={15} aria-hidden="true" />
               </button>
-              <ul id="header-brand-links" className="header-brands__links" hidden={!brandsOpen}>
-                <li><a href="/brands" aria-current={window.location.pathname === '/brands' ? 'page' : undefined}>View all brands</a></li>
-                {brands.map((brand) => <li key={brand.id}>
-                  <a href={brandUrl(brand)} aria-current={window.location.pathname === brandUrl(brand) ? 'page' : undefined}>{brand.name}</a>
-                </li>)}
-              </ul>
+              <div id="header-brand-links" className="header-brands__links" hidden={!brandsOpen}>
+                <div className="header-brands__feature">
+                  <a href="/brands" aria-current={window.location.pathname === '/brands' ? 'page' : undefined}>
+                    View all brands <ArrowRight size={14} aria-hidden="true" />
+                  </a>
+                </div>
+                <ul className="header-brands__grid">
+                  {brands.map((brand) => <li key={brand.id}>
+                    <a href={brandUrl(brand)} aria-current={window.location.pathname === brandUrl(brand) ? 'page' : undefined}>{brand.name}</a>
+                  </li>)}
+                </ul>
+              </div>
             </div>
             {navItems.map(([label, href]) => {
               const isActive = active === label.toLowerCase();

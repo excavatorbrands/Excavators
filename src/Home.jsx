@@ -1,18 +1,14 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  AlertCircle, ArrowRight, ArrowUpRight, BadgeCheck, Check,
-  CircleDollarSign, Download,
-  Factory, FileText, Headphones, MapPin,
-  MapPinned, Package, Search, Settings2, Scale,
-  SlidersHorizontal, Truck, Users, Wrench, X,
+  AlertCircle, ArrowRight, BadgeCheck, Check, CircleDollarSign, FileText,
+  Headphones, MapPinned, Package, Search, Scale, SlidersHorizontal, Users, X,
 } from 'lucide-react';
 
 import {
   brands,
   categories,
   heroSlides,
-  industries,
   models,
 } from './data.js';
 
@@ -22,6 +18,8 @@ import BrandLogoRail from './BrandLogoRail.jsx';
 import { brandUrl, modelUrl } from './catalogLinks.js';
 import HomeBrandShowcases from './HomeBrandShowcase.jsx';
 import QuarryPanorama from './QuarryPanorama.jsx';
+import IndustryStudio from './IndustryStudio.jsx';
+import HomeTaskGuide from './HomeTaskGuide.jsx';
 import { submitEnquiry } from './submitEnquiry.js';
 
 import './HomeComparisonDrawer.css';
@@ -94,8 +92,13 @@ function QuoteModal({ modal, onClose }) {
     const formData = new FormData(form);
     const interest = formData.get('interest');
 
-    const interestLabel =
-      form.elements.namedItem('interest').selectedOptions[0]?.textContent?.trim() || '';
+    const interestLabel = isCatalog
+      ? 'Iron Crest product catalog'
+      : form.elements.namedItem('interest').selectedOptions[0]?.textContent?.trim() || '';
+    const type = isCatalog ? 'resource' : ({
+      parts: 'parts',
+      consultation: 'project',
+    }[interest] || 'equipment');
 
     setIsSubmitting(true);
     setRequestNotice('');
@@ -105,12 +108,7 @@ function QuoteModal({ modal, onClose }) {
         name: formData.get('name'),
         email: formData.get('email'),
         phone: formData.get('phone'),
-        type:
-          interest === 'parts'
-            ? 'parts'
-            : interest === 'consultation'
-              ? 'project'
-              : 'equipment',
+        type,
         interest: interestLabel,
         message: formData.get('message'),
         website: formData.get('website'),
@@ -177,7 +175,7 @@ function QuoteModal({ modal, onClose }) {
             </label>
           </div>
 
-          <label>
+          {!isCatalog && <label>
             What are you looking for?
             <select defaultValue={isModel ? modal.model.id : ''} name="interest" required>
               <option value="" disabled>Select an excavator or service</option>
@@ -191,14 +189,14 @@ function QuoteModal({ modal, onClose }) {
               <option value="parts">Parts & service</option>
               <option value="consultation">Equipment consultation</option>
             </select>
-          </label>
+          </label>}
 
           <label>
             Project details
             <textarea
               name="message"
               rows="3"
-              placeholder="Tell us about your project, location and expected timeline."
+              placeholder={isCatalog ? 'Add a note about the information you need (optional).' : 'Tell us about your project, location and expected timeline.'}
             />
           </label>
 
@@ -1149,42 +1147,7 @@ export default function HomePage() {
 
         </section>
 
-        {/* SOLUTIONS */}
-        <section className="solutions-section" id="solutions">
-          <div className="container solutions-layout">
-            <div className="solutions-intro">
-              <SectionEyebrow>Industry solutions</SectionEyebrow>
-
-              <h2>
-                Built for <em>Every Industry</em>
-              </h2>
-
-              <p>
-                Explore application profiles and equipment planning topics across
-                a range of project types.
-              </p>
-
-              <a href="/solutions" className="btn btn-primary">
-                Explore Solutions <ArrowRight size={16} />
-              </a>
-            </div>
-
-            <div className="industry-grid">
-              {industries.map((industry) => (
-                <a
-                  href={`/solutions?industry=${encodeURIComponent(industry.title)}`}
-                  className="industry-card"
-                  key={industry.title}
-                >
-                  <img src={industry.image} alt="" loading="lazy" />
-                  <span className="industry-shade" />
-                  <span className="industry-name">{industry.title}</span>
-                  <ArrowUpRight className="industry-arrow" size={17} />
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
+        <IndustryStudio />
 
         {/* WHY IRON CREST */}
         <section className="why-section section-dark" id="why-us">
@@ -1225,187 +1188,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* RESOURCES */}
-        <section className="resource-section section-dark" id="resources">
-          <div className="container resource-grid">
-            <div className="resource-card catalog-card">
-              <div className="resource-visual catalog-visual">
-                <div className="catalog-sheet">
-                  <span>IRON CREST</span>
-                  <strong>EXCAVATOR<br />RANGE</strong>
-                  <small>PRODUCT GUIDE</small>
-                </div>
-
-                <div className="catalog-sheet catalog-sheet-back">
-                  <span>IRON CREST</span>
-                  <strong>MODEL<br />OVERVIEW</strong>
-                </div>
-              </div>
-
-              <div className="resource-copy">
-                <SectionEyebrow>Product information</SectionEyebrow>
-
-                <h3>
-                  Download Our
-                  <br />
-                  <em>Product Catalog</em>
-                </h3>
-
-                <p>
-                  Get model information, machine categories and selection guidance
-                  in one place.
-                </p>
-
-                <button
-                  className="btn btn-primary"
-                  onClick={() => setModal({ type: 'catalog' })}
-                >
-                  Request Catalog <Download size={15} />
-                </button>
-              </div>
-            </div>
-
-            <div className="resource-card support-card" id="support">
-              <div className="support-icon">
-                <Wrench size={35} />
-                <Settings2 size={26} />
-              </div>
-
-              <div className="resource-copy">
-                <SectionEyebrow>Parts & service</SectionEyebrow>
-
-                <h3>
-                  Keep Your Fleet
-                  <br />
-                  <em>Working Strong.</em>
-                </h3>
-
-                <p>
-                  Ask about parts support, maintenance planning, technical guidance
-                  and service availability.
-                </p>
-
-                <button type="button" className="btn btn-primary" onClick={openQuote}>
-                  Talk to Service Team <ArrowRight size={15} />
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* PROOF AND NEWS */}
-        <section className="proof-news-section section-dark">
-          <div className="container proof-news-grid">
-            <div className="testimonial-panel">
-              <SectionEyebrow>Before you shortlist</SectionEyebrow>
-
-              <h2>
-                Start with the <em>application.</em>
-              </h2>
-
-              <div className="testimonial-content">
-                <BadgeCheck size={27} />
-                <p>
-                  Consider the site, material, access, duty cycle and attachments
-                  before comparing machine examples.
-                </p>
-              </div>
-
-              <div className="testimonial-author">
-                <div className="avatar">IC</div>
-                <div>
-                  <strong>Equipment selection</strong>
-                  <small>
-                    Application · Configuration · Availability confirmation
-                  </small>
-                </div>
-              </div>
-            </div>
-
-            <div className="news-panel">
-              <div className="news-heading">
-                <div>
-                  <SectionEyebrow>Practical resources</SectionEyebrow>
-                  <h2>
-                    Guides &amp; <em>Next steps</em>
-                  </h2>
-                </div>
-
-                <a href="/contact-us#resources">
-                  View resources <ArrowRight size={14} />
-                </a>
-              </div>
-
-              <div className="news-list">
-                <article className="news-item">
-                  <img
-                    src="/images/category-large.webp"
-                    alt="Large excavator category example"
-                    loading="lazy"
-                  />
-
-                  <div>
-                    <span>SELECTION GUIDE</span>
-                    <h3>Choosing an Excavator Class for Your Project</h3>
-                    <a href="/contact-us#resources">
-                      Explore resources <ArrowUpRight size={13} />
-                    </a>
-                  </div>
-                </article>
-
-                <article className="news-item">
-                  <img
-                    src="/images/parts-service.webp"
-                    alt="Excavator parts and service detail"
-                    loading="lazy"
-                  />
-
-                  <div>
-                    <span>PARTS &amp; SERVICE</span>
-                    <h3>Prepare for a Parts or Service Enquiry</h3>
-                    <a href="/parts-service">
-                      See support pathways <ArrowUpRight size={13} />
-                    </a>
-                  </div>
-                </article>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* SERVICE NETWORK */}
-        <section className="service-network section-dark">
-          <div className="container service-network-inner">
-            <div className="service-copy">
-              <SectionEyebrow>Support that moves with you</SectionEyebrow>
-
-              <h2>
-                Our Service <em>Network</em>
-              </h2>
-
-              <p>
-                Connect with the Iron Crest team for equipment guidance, parts
-                enquiries and after-sales support.
-              </p>
-
-              <button className="btn btn-primary" onClick={openQuote}>
-                Find Support <ArrowRight size={15} />
-              </button>
-            </div>
-
-            <div className="service-map">
-              <div className="map-dots" />
-              <span><MapPin /> Contact Iron Crest</span>
-            </div>
-
-            <div className="stat-grid">
-              <div><Factory /><strong>Brand directory</strong><small>Explore manufacturer listings</small></div>
-              <div><Truck /><strong>Model examples</strong><small>Confirm current configurations</small></div>
-              <div><Wrench /><strong>Parts &amp; service</strong><small>Review support pathways</small></div>
-              <div><Users /><strong>Project enquiries</strong><small>Share your requirements</small></div>
-            </div>
-          </div>
-        </section>
+        <HomeTaskGuide onRequestCatalog={() => setModal({ type: 'catalog' })} />
 
         <section className="newsletter-section">
           <div className="container newsletter-inner">

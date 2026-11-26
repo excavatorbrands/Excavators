@@ -1,7 +1,9 @@
 import { ArrowRight, ChevronRight } from 'lucide-react';
 import { Header } from './Header.jsx';
 import { Footer } from './Footer.jsx';
-import { brandHeroUrl, modelPrice, modelUrl } from './catalogLinks.js';
+import { brands } from './data.js';
+import { brandHeroUrl, brandUrl } from './catalogLinks.js';
+import CatalogModelTile from './CatalogModelTile.jsx';
 
 export default function BrandDetailPage({ brand, models }) {
   const brandModels = models.filter((model) => model.brand === brand.id);
@@ -23,20 +25,21 @@ export default function BrandDetailPage({ brand, models }) {
             <a href="#brand-lineup" className="btn btn-primary">Browse models <ArrowRight size={17} aria-hidden="true" /></a>
           </div>
         </section>
+        <nav className="container brand-switcher" aria-label="Switch manufacturer">
+          <ul>
+            <li><a href="/brands">All brands</a></li>
+            {brands.map((item) => (
+              <li key={item.id}>
+                <a href={brandUrl(item)} aria-current={item.id === brand.id ? 'page' : undefined}>{item.name}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
         <section className="container brand-detail-lineup" id="brand-lineup" aria-labelledby="brand-lineup-title">
           <h2 id="brand-lineup-title">Explore the {brand.name} lineup</h2>
           <p>Images illustrate machine classes.</p>
           <div className="brand-detail-grid">
-            {brandModels.map((model) => (
-              <a className="brand-detail-card" href={modelUrl(model)} key={model.id}>
-                <img src={model.image} alt="" loading="lazy" decoding="async" />
-                <div className="brand-detail-card__body">
-                  <p>{model.type}</p>
-                  <h3>{model.model}</h3>
-                  <div><span>{modelPrice(model)}</span><ArrowRight size={17} aria-hidden="true" /></div>
-                </div>
-              </a>
-            ))}
+            {brandModels.map((model) => <CatalogModelTile key={model.id} model={model} />)}
           </div>
         </section>
       </main>

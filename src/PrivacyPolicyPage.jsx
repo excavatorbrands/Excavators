@@ -5,7 +5,7 @@ import './legal.css';
 
 const sections = [
   {
-    title: 'Introduction',
+    title: 'What This Privacy Policy Covers',
     paragraphs: [
       'This Privacy Policy explains how Iron Crest Excavator Solutions (“Iron Crest”, “we”, “us” or “our”) handles information when you visit this website or contact us through it. We aim to handle personal information responsibly and use it only in ways consistent with this policy and applicable law.',
       'This policy applies to this website. It does not replace any separate privacy notice or terms that may apply to a particular transaction, service or business relationship.',
@@ -103,7 +103,7 @@ const sections = [
     ],
   },
   {
-    title: 'Contact Information',
+    title: 'Privacy Enquiries',
     paragraphs: [
       'For privacy questions or requests, contact Iron Crest Excavator Solutions at sales@ironcrest.com or +92 300 1234567. A verified postal address and any formal privacy contact details have not yet been provided; add them here if required by applicable law before publication.',
     ],

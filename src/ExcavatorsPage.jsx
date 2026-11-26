@@ -1,142 +1,177 @@
-import { useMemo, useRef, useState } from 'react';
-import {
-  ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Filter, Gauge, Search,
-} from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowDown, ArrowRight, Gauge, Search, SlidersHorizontal } from 'lucide-react';
 import { brands, models } from './data.js';
 import { Header } from './Header.jsx';
 import { modelPrice, modelUrl } from './catalogLinks.js';
 import { Footer } from './Footer.jsx';
+import { CatalogFAQs } from './EquipmentFAQs.jsx';
 import './excavators.css';
 
 const availabilityFilters = ['All', 'Needs confirmation', 'Confirmed available', 'Confirmed unavailable'];
 const sizeFilters = ['All', 'Mini', 'Medium', 'Large', 'Mining'];
+const batchSize = 9;
+const brandNames = Object.fromEntries(brands.map(({ id, name }) => [id, name]));
+const defaultFilters = { search: '', brand: 'all', size: 'All', availability: 'All' };
 
 const statusKey = (value) => value === 'available'
   ? 'Confirmed available'
   : value === 'not-available' ? 'Confirmed unavailable' : 'Needs confirmation';
 
-function CatalogCard({ model }) {
+const normalizeSearch = (value) => value.trim().toLowerCase().replace(/\s+/g, ' ');
+
+function initialFilters() {
+  const params = new URLSearchParams(window.location.search);
+  const brand = params.get('brand')?.toLowerCase();
+  const size = sizeFilters.find(value => value.toLowerCase() === params.get('size')?.toLowerCase());
+  const availability = availabilityFilters.find(value => value.toLowerCase() === params.get('availability')?.toLowerCase());
+  return {
+    search: params.get('search') || '',
+    brand: brands.some(item => item.id === brand) ? brand : defaultFilters.brand,
+    size: size || defaultFilters.size,
+    availability: availability || defaultFilters.availability,
+  };
+}
+
+function CatalogCard({ model, firstNewCardRef }) {
   return (
-    <article className="catalog-card model-click-surface">
-      <div className="catalog-card-image">
-        <img src={model.image} alt="Illustrative excavator" loading="lazy" />
-        <span className="availability-badge unverified">
-          {statusKey(model.availability)}
-        </span>
-        <span className="catalog-brand">{model.brandName}</span>
-      </div>
-      <div className="catalog-card-body">
-        <div className="catalog-type">{model.type}</div>
-        <h3>{model.model}</h3>
-        <div className="catalog-divider" />
-        <div className="catalog-spec-row"><span>Brand</span><b>{model.brandName}</b></div>
-        <div className="catalog-spec-row"><span>Machine class</span><b>{model.type}</b></div>
-        <div className="catalog-spec-row"><span>Price</span><b>{modelPrice(model)}</b></div>
-        <div className="catalog-actions">
-          <a href={modelUrl(model)} className="catalog-cta model-click-target" aria-label={`View ${model.brandName} ${model.model} details`}>View details <ArrowRight size={15} /></a>
+    <article className="gallery-card">
+      <a className="gallery-card__link" ref={firstNewCardRef} href={modelUrl(model)} aria-label={`View ${model.brandName} ${model.model} details`}>
+        <img className="gallery-card__image" src={model.image} alt="" loading="lazy" />
+        <div className="gallery-card__body">
+          <p className="gallery-kicker">{model.brandName}</p>
+          <h3>{model.model}</h3>
+          <p className="gallery-card__type">{model.type}</p>
+          <p className="gallery-card__status">{statusKey(model.availability)}</p>
+          <div className="gallery-card__bottom">
+            <strong>{modelPrice(model)}</strong>
+            <span className="gallery-card__arrow" aria-hidden="true"><ArrowRight size={17} /></span>
+          </div>
         </div>
-      </div>
+      </a>
     </article>
   );
 }
 
-function CatalogBrandRail({ brand, brandModels }) {
-  const railRef = useRef(null);
-  const scrollRail = (direction) => railRef.current?.scrollBy({ left: direction * 660, behavior: 'smooth' });
-  return (
-    <section className="catalog-brand-row" aria-label={`${brand.name} excavators`}>
-      <div className="catalog-brand-row-heading">
-        <div><span className="catalog-kicker">MANUFACTURER</span><h3>{brand.name}</h3><span>{brandModels.length} model{brandModels.length === 1 ? '' : 's'}</span></div>
-        <div className="catalog-rail-controls">
-          <button type="button" onClick={() => scrollRail(-1)} aria-label={`Scroll ${brand.name} models left`}><ChevronLeft size={18} /></button>
-          <button type="button" onClick={() => scrollRail(1)} aria-label={`Scroll ${brand.name} models right`}><ChevronRight size={18} /></button>
-        </div>
-      </div>
-      <div className="catalog-model-rail" ref={railRef}>
-        {brandModels.map(model => <CatalogCard key={model.id} model={model} />)}
-      </div>
-    </section>
-  );
-}
-
 export default function ExcavatorsPage() {
-  const catalogModels = models;
-  const [search, setSearch] = useState(() => new URLSearchParams(window.location.search).get('search') || '');
-  const [brand, setBrand] = useState(() => {
-    const requested = new URLSearchParams(window.location.search).get('brand');
-    return brands.some(item => item.id === requested) ? requested : 'all';
+  const [filters, setFilters] = useState(initialFilters);
+  const [visibleCount, setVisibleCount] = useState(batchSize);
+  const firstNewCardRef = useRef(null);
+  const searchRef = useRef(null);
+  const { search, brand, size, availability } = filters;
+  const terms = normalizeSearch(search).split(' ').filter(Boolean);
+  const filtered = models.filter(model => {
+    const searchable = normalizeSearch(`${model.brandName} ${model.model} ${model.type} ${brandNames[model.brand] || ''}`);
+    return terms.every(term => searchable.includes(term)) &&
+      (brand === 'all' || model.brand === brand) &&
+      (size === 'All' || model.type.toLowerCase().includes(size.toLowerCase())) &&
+      (availability === 'All' || statusKey(model.availability) === availability);
   });
-  const [size, setSize] = useState(() => {
-    const requested = new URLSearchParams(window.location.search).get('size');
-    return sizeFilters.find(item => item.toLowerCase() === requested?.toLowerCase()) || 'All';
-  });
-  const [availability, setAvailability] = useState(() => {
-    const requested = new URLSearchParams(window.location.search).get('availability');
-    return availabilityFilters.find(item => item.toLowerCase() === requested?.toLowerCase()) || 'All';
-  });
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const filtered = useMemo(() => catalogModels.filter(model => {
-    const q = search.trim().toLowerCase();
-    const matchesSearch = !q || `${model.brandName} ${model.model} ${model.type}`.toLowerCase().includes(q);
-    const matchesBrand = brand === 'all' || model.brand === brand;
-    const matchesSize = size === 'All' || model.type.toLowerCase().includes(size.toLowerCase());
-    const matchesAvailability = availability === 'All' || statusKey(model.availability) === availability;
-    return matchesSearch && matchesBrand && matchesSize && matchesAvailability;
-  }), [catalogModels, search, brand, size, availability]);
+  useEffect(() => {
+    if (visibleCount > batchSize) firstNewCardRef.current?.focus();
+  }, [visibleCount]);
+
+  const updateFilter = (event) => {
+    const { name, value } = event.target;
+    setFilters(current => ({ ...current, [name]: value }));
+    setVisibleCount(batchSize);
+  };
+
+  const clearFilters = () => {
+    setFilters(defaultFilters);
+    setVisibleCount(batchSize);
+    searchRef.current?.focus();
+  };
+
+  const hasFilters = Boolean(search || brand !== 'all' || size !== 'All' || availability !== 'All');
+  const shown = Math.min(filtered.length, visibleCount);
 
   return (
-    <div className="excavators-page" id="top">
+    <div className="excavators-page catalog-gallery" id="top">
       <Header active="excavators" />
-      <main>
-        <section className="excavators-hero">
-          <div className="excavators-hero-image" />
-          <div className="excavators-hero-inner container">
-            <div className="excavators-breadcrumb"><a href="/">Home</a><span>›</span><b>Excavators</b></div>
-            <div className="excavators-hero-copy">
-              <span className="excavators-kicker">IRON CREST / GLOBAL EXCAVATOR CATALOG</span>
-              <h1>THE COMPLETE<br /><em>EXCAVATOR RANGE</em></h1>
-              <p>Browse model examples by manufacturer and machine class. Stock status and exact configurations must be confirmed with the Iron Crest team.</p>
-              <div className="hero-stat-strip">
-                <span><strong>{brands.length}</strong> brands</span>
-                <span><strong>{catalogModels.length}</strong> model examples</span>
-                <span><strong>Confirm</strong> stock status</span>
+      <main className="container gallery-main">
+        <nav className="gallery-breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">Excavators</span>
+        </nav>
+        <section className="gallery-hero" aria-labelledby="gallery-title">
+          <div className="gallery-hero__copy">
+            <p className="gallery-kicker">{brands.length} brands · {models.length} models</p>
+            <h1 id="gallery-title">Excavator catalog</h1>
+            <p>Browse the range, from compact machines to heavy quarry equipment.</p>
+          </div>
+          <img src="/images/brands/brand-directory-hero.webp" alt="" fetchPriority="high" />
+        </section>
+
+        <div className="gallery-layout" id="catalog">
+          <aside className="gallery-filters" aria-labelledby="gallery-filter-title">
+            <h2 id="gallery-filter-title"><SlidersHorizontal size={18} aria-hidden="true" /> Filter models</h2>
+            <div className="gallery-filters__fields">
+              <label className="gallery-filter-search">
+                Search models
+                <span className="gallery-search-input">
+                  <Search size={16} aria-hidden="true" />
+                  <input ref={searchRef} type="search" name="search" value={search} onChange={updateFilter} placeholder="e.g. Volvo EC60E" />
+                </span>
+              </label>
+              <label>
+                Manufacturer
+                <select name="brand" value={brand} onChange={updateFilter}>
+                  <option value="all">All brands</option>
+                  {brands.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+                </select>
+              </label>
+              <label>
+                Machine class
+                <select name="size" value={size} onChange={updateFilter}>
+                  {sizeFilters.map(item => <option key={item} value={item}>{item === 'All' ? 'All classes' : item}</option>)}
+                </select>
+              </label>
+              <label>
+                Availability
+                <select name="availability" value={availability} onChange={updateFilter}>
+                  {availabilityFilters.map(item => <option key={item} value={item}>{item === 'All' ? 'All statuses' : item}</option>)}
+                </select>
+              </label>
+            </div>
+            {hasFilters && <button className="gallery-clear" type="button" onClick={clearFilters}>Clear filters</button>}
+          </aside>
+
+          <section className="gallery-results" aria-labelledby="gallery-results-title">
+            <div className="gallery-results__heading">
+              <h2 id="gallery-results-title">Browse models</h2>
+              <p role="status">{shown} shown · {filtered.length} of {models.length} models</p>
+            </div>
+            {filtered.length ? (
+              <div className="gallery-grid">
+                {filtered.slice(0, visibleCount).map((model, index) => (
+                  <CatalogCard key={model.id} model={model} firstNewCardRef={index === visibleCount - batchSize ? firstNewCardRef : undefined} />
+                ))}
               </div>
-            </div>
+            ) : (
+              <div className="gallery-empty">
+                <Search size={24} aria-hidden="true" />
+                <h3>No excavators match your filters</h3>
+                <p>Try another model, manufacturer, or availability status.</p>
+              </div>
+            )}
+            {visibleCount < filtered.length && (
+              <button className="btn gallery-more" type="button" onClick={() => setVisibleCount(count => count + batchSize)}>
+                Show more models <ArrowDown size={16} aria-hidden="true" />
+              </button>
+            )}
+            <p className="gallery-image-note">Equipment images are AI-generated illustrations. Ask us for photos of the exact machine.</p>
+          </section>
+        </div>
+
+        <CatalogFAQs />
+
+        <section className="gallery-support" aria-labelledby="gallery-support-title">
+          <Gauge size={25} aria-hidden="true" />
+          <div>
+            <h2 id="gallery-support-title">Need an exact specification?</h2>
+            <p>Ask the Iron Crest team for the verified specification sheet and current availability.</p>
           </div>
-        </section>
-
-        <section className="catalog-controls-wrap">
-          <div className="container">
-            <div className="catalog-controls">
-              <label className="catalog-search"><Search size={18} /><input aria-label="Search brand, model or machine class" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search brand, model or machine class…" /><span>SEARCH</span></label>
-              <div className="control-select"><span>Brand</span><select aria-label="Filter by brand" value={brand} onChange={e => setBrand(e.target.value)}><option value="all">All brands</option>{brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</select><ChevronDown size={14} /></div>
-              <div className="control-select"><span>Size</span><select aria-label="Filter by machine class" value={size} onChange={e => setSize(e.target.value)}>{sizeFilters.map(item => <option key={item}>{item}</option>)}</select><ChevronDown size={14} /></div>
-              <div className="control-select"><span>Status</span><select aria-label="Filter by availability confirmation" value={availability} onChange={e => setAvailability(e.target.value)}>{availabilityFilters.map(item => <option key={item}>{item}</option>)}</select><ChevronDown size={14} /></div>
-              <button type="button" className="mobile-filter-button" aria-expanded={filtersOpen} aria-controls="mobile-catalog-filters" onClick={() => setFiltersOpen(!filtersOpen)}><Filter size={16} /> Filters</button>
-            </div>
-          </div>
-        </section>
-
-        <section className="catalog-section container" id="catalog">
-          <p className="image-disclosure">Equipment images are AI-generated illustrations. Ask us for photos of the exact machine.</p>
-          <div className="catalog-heading">
-            <div><span className="catalog-kicker">PRODUCT DIRECTORY</span><h2>Excavator <em>Catalog</em></h2><p>Choose a machine, check its status and request the exact local configuration.</p></div>
-            <div className="catalog-heading-right"><span>{filtered.length} of {catalogModels.length} model examples</span></div>
-          </div>
-
-          {filtersOpen && <div className="mobile-filter-panel" id="mobile-catalog-filters"><div className="control-select"><span>Brand</span><select aria-label="Filter by brand" value={brand} onChange={e => setBrand(e.target.value)}><option value="all">All brands</option>{brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</select></div><div className="control-select"><span>Size</span><select aria-label="Filter by machine class" value={size} onChange={e => setSize(e.target.value)}>{sizeFilters.map(item => <option key={item}>{item}</option>)}</select></div><div className="control-select"><span>Status</span><select aria-label="Filter by availability confirmation" value={availability} onChange={e => setAvailability(e.target.value)}>{availabilityFilters.map(item => <option key={item}>{item}</option>)}</select></div></div>}
-
-          {filtered.length ? <div className="catalog-brand-rows">{brands.map(brandItem => { const brandModels = filtered.filter(model => model.brand === brandItem.id); return brandModels.length ? <CatalogBrandRail key={brandItem.id} brand={brandItem} brandModels={brandModels} /> : null; })}</div> : (
-            <div className="catalog-empty" role="status"><Search size={26} /><h3>No excavators match your filters</h3><p>Try another model, manufacturer or availability status.</p><button type="button" onClick={() => { setSearch(''); setBrand('all'); setSize('All'); setAvailability('All'); }}>Clear filters</button></div>
-          )}
-        </section>
-
-        <section className="catalog-note">
-          <div className="container catalog-note-inner">
-            <div><Gauge size={28} /><div><strong>Need an exact specification?</strong><p>Model configurations can vary by market and attachment. Request the verified specification sheet and current stock status from Iron Crest before purchase.</p></div></div>
-            <a href="/contact?type=equipment" className="btn btn-primary">Talk to a specialist <ArrowRight size={16} /></a>
-          </div>
+          <a href="/contact?type=equipment" className="btn btn-primary">Talk to a specialist <ArrowRight size={16} aria-hidden="true" /></a>
         </section>
       </main>
       <Footer />

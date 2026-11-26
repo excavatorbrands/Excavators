@@ -14,16 +14,25 @@ const values = [
 ];
 
 export default function AboutPage({ embedded = false }) {
+  const Content = embedded ? 'section' : 'main';
+
   return (
     <div className="inner-page about-page" id={embedded ? "about" : undefined}>
       {!embedded && <Header active="contact us" />}
-      <main>
-        <section className="about-hero">
+      <Content aria-labelledby={embedded ? 'project-brief-about-title' : undefined}>
+        {embedded ? (
+          <header className="project-brief-chapter">
+            <div className="container">
+              <h2 id="project-brief-about-title">About Iron Crest</h2>
+              <p>Excavator selection, parts, and service support for work across industries.</p>
+            </div>
+          </header>
+        ) : <section className="about-hero">
           <div className="container about-hero-inner">
             <div className="page-breadcrumb"><a href="/">Home</a><ChevronRight size={13} /><b>About Us</b></div>
             <div className="about-hero-copy"><span className="page-kicker">THE IRON CREST APPROACH</span><h1>EQUIPMENT<br /><em>WITHOUT THE NOISE.</em></h1><p>A focused, multi-brand approach to excavator selection, parts support and service conversations — built around the realities of the work.</p></div>
           </div>
-        </section>
+        </section>}
 
         <section className="about-intro">
           <div className="container about-intro-grid">
@@ -69,7 +78,7 @@ export default function AboutPage({ embedded = false }) {
             <div className="about-commitment-points"><div><BadgeCheck /><span>Multi-brand discovery</span></div><div><Layers3 /><span>Application-led thinking</span></div><div><ShieldCheck /><span>Verification-first communication</span></div></div>
           </div>
         </section>
-      </main>
+      </Content>
       {!embedded && <Footer />}
     </div>
   );

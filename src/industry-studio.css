@@ -1,0 +1,125 @@
+.industry-studio {
+  --studio-ink: #172632;
+  --studio-muted: #425763;
+  --studio-line: #d8e1e6;
+  --studio-accent: #775500;
+  padding-block: clamp(30px, 5vw, 68px);
+  background: #eef2f4;
+  color: var(--studio-ink);
+}
+
+.industry-studio__heading { margin-bottom: clamp(14px, 2.5vw, 24px); }
+.industry-studio__heading h2 {
+  margin: 0;
+  color: var(--studio-ink);
+  font-size: clamp(27px, 4vw, 45px);
+  line-height: 1.1;
+  letter-spacing: -.04em;
+}
+.industry-studio__heading p { margin: 7px 0 0; color: var(--studio-muted); font-size: 15px; }
+
+.industry-studio__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.industry-studio__tabs button {
+  min-height: 44px;
+  padding: 7px 13px;
+  border: 1px solid #aab9c1;
+  border-radius: 5px;
+  background: #fff;
+  color: var(--studio-ink);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: start;
+}
+.industry-studio__tabs button:hover { border-color: #8b6809; background: #fff9e7; }
+.industry-studio__tabs button[aria-pressed='true'] {
+  border-color: #987006;
+  background: #ffefb6;
+  color: #3b2c08;
+}
+
+.industry-studio__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: clamp(10px, 1.8vw, 22px);
+  align-items: stretch;
+}
+.industry-studio__media {
+  min-width: 0;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 7px;
+  background: #152632;
+  align-self: start;
+}
+.industry-studio__media img,
+.industry-studio__media video { display: block; width: 100%; height: 100%; }
+.industry-studio__media img { object-fit: cover; object-position: center; }
+.industry-studio__media video { object-fit: contain; }
+.industry-studio__profile {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  padding: clamp(15px, 2.7vw, 33px);
+  border: 1px solid var(--studio-line);
+  border-inline-start: 4px solid #d9a311;
+  border-radius: 7px;
+  background: #fff;
+}
+.industry-studio__profile h3 {
+  margin: 0 0 8px;
+  color: var(--studio-ink);
+  font-size: clamp(21px, 3vw, 35px);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+.industry-studio__profile p { margin: 0; color: var(--studio-muted); font-size: 15px; line-height: 1.55; }
+.industry-studio__profile ul { display: grid; gap: 7px; margin: 14px 0 0; padding: 0; list-style: none; }
+.industry-studio__profile li { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.industry-studio__profile li svg { flex: none; color: var(--studio-accent); }
+
+.solutions-page .sol-hero { background: #fff; border-bottom-color: #d8e1e6; }
+.solutions-page .sol-hero-grid { min-height: auto; padding-block: clamp(25px, 5vw, 60px); }
+.solutions-page .sol-hero-copy { min-width: 0; padding: 0; }
+.solutions-page .sol-hero-copy .page-breadcrumb { margin-bottom: clamp(14px, 3vw, 29px); color: #425763; }
+.solutions-page .sol-hero-copy h1 {
+  color: #172632;
+  font-size: clamp(34px, 5.5vw, 72px);
+  line-height: 1.01;
+  letter-spacing: -.045em;
+}
+.solutions-page .sol-hero-copy h1 em { color: #775500; }
+.solutions-page .sol-hero-copy p { color: #425763; font-size: 16px; line-height: 1.58; }
+.solutions-page .sol-hero-art { height: auto; aspect-ratio: 16 / 11; border-radius: 7px; }
+.solutions-page .sol-hero-art::after { content: none; }
+.solutions-page .sol-hero-art img { filter: none; }
+.solutions-page .sol-method { background: #142632; }
+.solutions-page .sol-method .page-section-head h2,
+.solutions-page .sol-method-grid h3 { color: #f5f8fa; line-height: 1.14; }
+.solutions-page .sol-method .page-section-head h2 em,
+.solutions-page .sol-method-grid article > svg,
+.solutions-page .sol-method .page-kicker { color: #ffcc43 !important; }
+.solutions-page .sol-method-grid article { background: #1f3542; border-color: #42606e; }
+.solutions-page .sol-method-grid article > span,
+.solutions-page .sol-method-grid p { color: #dbe6eb; }
+.solutions-page .sol-method-grid p { font-size: 14px; }
+.solutions-page .sol-project-band { background: #fff4ce; color: #172632; }
+.solutions-page .sol-project-band .page-kicker { color: #775500; }
+.solutions-page .sol-project-inner p { font-size: 15px; color: #425763; }
+
+@media (max-width: 760px) {
+  .industry-studio__layout { grid-template-columns: minmax(0, 1fr); }
+  .solutions-page .sol-hero-art { aspect-ratio: 16 / 10; }
+}
+@media (max-width: 520px) {
+  .industry-studio__tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .industry-studio__tabs button { padding-inline: 8px; }
+}

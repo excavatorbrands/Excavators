@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import {
-  ArrowRight, ChevronRight, Mail, MapPin,
-  MessageSquare, Phone, Send, ShieldCheck,
+  ArrowRight, Mail, Phone, Send,
 } from 'lucide-react';
 import { Header } from './Header.jsx';
 import { Footer } from './Footer.jsx';
 import { enquiryLabels } from './catalogLinks.js';
 import { submitEnquiry } from './submitEnquiry.js';
+import LocationLink from './LocationLink.jsx';
 import './pages.css';
 
 export default function ContactPage({ embedded = false }) {
@@ -34,56 +34,78 @@ export default function ContactPage({ embedded = false }) {
       setIsSubmitting(false);
     }
   };
+  const Content = embedded ? 'section' : 'main';
+
   return (
-    <div className="inner-page contact-page" id={embedded ? "contact-information" : undefined}>
+    <div className="inner-page contact-page project-brief">
       {!embedded && <Header active="contact us" />}
-      <main>
-        <section className="contact-hero">
-          <div className="container contact-hero-inner">
-            <div className="page-breadcrumb"><a href="/">Home</a><ChevronRight size={13} /><b>Contact</b></div>
-            <div className="contact-hero-copy"><span className="page-kicker">LET'S TALK EQUIPMENT</span><h1>YOUR PROJECT.<br /><em>OUR NEXT CONVERSATION.</em></h1><p>Send an equipment or support enquiry to the Iron Crest team, or contact us directly by phone or email.</p></div>
-          </div>
-          <div className="contact-hero-side"><span>CONTACT<br />IRON CREST</span><strong>IC</strong><small>CALL OR EMAIL<br />OUR TEAM</small></div>
-        </section>
+      <Content id="contact-information" aria-labelledby="project-brief-title">
+        <div className="container project-brief__content">
+          <header className="project-brief__hero">
+            <img src="/images/industry-infrastructure.webp" alt="" fetchPriority="high" />
+            <div className="project-brief__hero-copy">
+              <h1 id="project-brief-title">Tell us about your project</h1>
+              <p>Share your site, application and timeline so we can discuss the right equipment, parts, or support.</p>
+              <a className="btn btn-primary" href="#equipment-enquiry">Start an enquiry <ArrowRight size={16} aria-hidden="true" /></a>
+            </div>
+          </header>
 
-        <section className="contact-main">
-          <div className="container contact-layout">
-            <div className="contact-info">
-              <span className="page-kicker">IRON CREST CONTACT DESK</span>
-              <h2>Start with the <em>details.</em></h2>
-              <p>The more context you share, the easier it is to guide you toward the right machine, part or service pathway.</p>
-              <div className="contact-methods">
-                <a href="tel:+923001234567"><span><Phone /></span><div><small>CALL</small><strong>+92 300 1234567</strong></div></a>
-                <a href="mailto:sales@ironcrest.com"><span><Mail /></span><div><small>EMAIL</small><strong>sales@ironcrest.com</strong></div></a>
-                <div><span><MapPin /></span><div><small>LOCATION</small><strong>Lahore, Pakistan</strong></div></div>
+          <div className="project-brief__layout">
+            <section className="project-brief__panel" id="equipment-enquiry" aria-labelledby="project-brief-form-title">
+              <h2 id="project-brief-form-title">Send an enquiry</h2>
+              <form className="project-brief__form" onSubmit={handleSubmit}>
+                {interest && <p className="equipment-enquiry-context">{interest}<input type="hidden" name="interest" value={interest} /></p>}
+                <label className="form-honeypot" aria-hidden="true">Leave this field empty<input name="website" tabIndex="-1" autoComplete="off" /></label>
+                <div className="project-brief__fields">
+                  <label>Full name<input name="name" autoComplete="name" required /></label>
+                  <label>Company (optional)<input name="company" autoComplete="organization" /></label>
+                  <label>Email<input name="email" autoComplete="email" required type="email" /></label>
+                  <label>Phone<input name="phone" autoComplete="tel" required type="tel" /></label>
+                </div>
+                <label>
+                  Enquiry type
+                  <select name="type" defaultValue={enquiryType}>
+                    <option value="equipment">Equipment / excavator</option>
+                    <option value="parts">Parts request</option>
+                    <option value="service">Service support</option>
+                    <option value="project">Project consultation</option>
+                    <option value="warranty">Warranty enquiry</option>
+                    <option value="resource">Resource request</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+                <label>
+                  Project details
+                  <textarea name="message" required rows="5" defaultValue={interest ? `${interest}: ` : ''} placeholder="Machine, job site and timeline" />
+                </label>
+                <button className="btn btn-primary project-brief__send" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Sending…' : 'Send enquiry'} <Send size={16} aria-hidden="true" />
+                </button>
+                <small>We send your enquiry to the Iron Crest team by email.</small>
+                {submissionNotice && (
+                  <p className={`project-brief__notice${submissionNotice.startsWith('Thank you') ? ' is-success' : ''}`} role={submissionNotice.startsWith('Thank you') ? 'status' : 'alert'}>
+                    {submissionNotice}
+                  </p>
+                )}
+              </form>
+            </section>
+
+            <aside className="project-brief__panel project-brief__direct" aria-labelledby="project-brief-contact-title">
+              <h2 id="project-brief-contact-title">Contact details</h2>
+              <dl>
+                <div><dt><Phone size={16} aria-hidden="true" /> Phone</dt><dd><a href="tel:+923001234567">+92 300 1234567</a></dd></div>
+                <div><dt><Mail size={16} aria-hidden="true" /> Email</dt><dd><a href="mailto:sales@ironcrest.com">sales@ironcrest.com</a></dd></div>
+                <div><dt>Location</dt><dd><LocationLink showMapLabel /></dd></div>
+              </dl>
+              <div className="project-brief__catalog">
+                <h3>Still narrowing your shortlist?</h3>
+                <p>Browse manufacturers and compare machine classes before sending your project brief.</p>
+                <a href="/excavators">Browse excavators <ArrowRight size={15} aria-hidden="true" /></a>
               </div>
-              <div className="contact-assurance"><ShieldCheck size={19} /><span><b>Clear information first.</b> Exact machine configuration, availability and technical data should be verified before purchase.</span></div>
-            </div>
-
-            <div className="contact-form-card" id="equipment-enquiry">
-                  <div className="contact-form-head"><div><span className="page-kicker">SEND AN ENQUIRY</span><h2>What can we <em>help with?</em></h2></div><MessageSquare size={26} /></div>
-                  <form onSubmit={handleSubmit}>
-                    {interest && <p className="equipment-enquiry-context">{interest}<input type="hidden" name="interest" value={interest} /></p>}
-                    <label className="form-honeypot" aria-hidden="true">Leave this field empty<input name="website" tabIndex="-1" autoComplete="off" /></label>
-                    <div className="contact-form-row"><label>Full name<input name="name" required placeholder="Your name" /></label><label>Company<input name="company" placeholder="Company name" /></label></div>
-                    <div className="contact-form-row"><label>Email<input name="email" required type="email" placeholder="you@company.com" /></label><label>Phone<input name="phone" required type="tel" placeholder="+92 ..." /></label></div>
-                    <label>Enquiry type<select name="type" defaultValue={enquiryType}><option value="equipment">Equipment / excavator</option><option value="parts">Parts request</option><option value="service">Service support</option><option value="project">Project consultation</option><option value="warranty">Warranty enquiry</option><option value="resource">Resource request</option><option value="other">Other</option></select></label>
-                    <label>Project / requirement details<textarea name="message" required rows="5" defaultValue={interest ? `${interest}: ` : ''} placeholder="Tell us the machine, application, location and timeline..."></textarea></label>
-                    <button className="btn btn-primary contact-submit" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Sending...' : 'Send enquiry'} <Send size={15} /></button>
-                    <small className="contact-form-note">Your enquiry will be sent to Iron Crest by email. Please do not include sensitive personal information.</small>
-                    {submissionNotice && <p className={`contact-form-note ${submissionNotice.startsWith('Thank you') ? 'contact-form-success' : 'contact-form-unavailable'}`} role={submissionNotice.startsWith('Thank you') ? 'status' : 'alert'}>{submissionNotice}</p>}
-                  </form>
-            </div>
+            </aside>
           </div>
-        </section>
-
-        <section className="contact-bottom">
-          <div className="container contact-bottom-grid">
-            <div className="contact-map-card"><div className="contact-map-grid" /><div className="contact-map-pin"><MapPin /><span>IRON CREST<br /><b>Lahore, Pakistan</b></span></div></div>
-            <div className="contact-next"><span className="page-kicker">NOT SURE WHERE TO START?</span><h2>Begin with the <em>catalog.</em></h2><p>Explore the multi-brand excavator directory first, then return here with the model or application you have in mind.</p><a href="/excavators" className="btn btn-primary">Browse excavators <ArrowRight size={15} /></a></div>
-          </div>
-        </section>
-      </main>
+        </div>
+      </Content>
       {!embedded && <Footer />}
     </div>
   );

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight, BookOpen, CalendarDays, CheckCircle2, ChevronRight,
   Download, FileText, HelpCircle, Search, ShieldCheck, Wrench,
@@ -24,14 +24,29 @@ export default function ResourcesPage({ embedded = false }) {
   const [filter, setFilter] = useState('All');
   const [query, setQuery] = useState('');
   const [openFaq, setOpenFaq] = useState(null);
+  const faqSection = useRef(null);
+
+  useEffect(() => {
+    if (!embedded && window.location.hash === '#resource-faqs') {
+      faqSection.current?.scrollIntoView({ behavior: 'instant' });
+    }
+  }, [embedded]);
   const filters = ['All', 'Guide', 'Maintenance', 'Catalog', 'Project'];
   const filtered = useMemo(() => resources.filter(item => (filter === 'All' || item.category === filter) && (!query || `${item.title} ${item.text}`.toLowerCase().includes(query.toLowerCase()))), [filter, query]);
+  const Content = embedded ? 'section' : 'main';
 
   return (
     <div className="inner-page resources-page" id={embedded ? "resources" : undefined}>
       {!embedded && <Header active="contact us" />}
-      <main>
-        <section className="res-hero">
+      <Content aria-labelledby={embedded ? 'project-brief-resources-title' : undefined}>
+        {embedded ? (
+          <header className="project-brief-chapter">
+            <div className="container">
+              <h2 id="project-brief-resources-title">Resource Room</h2>
+              <p>Equipment guides, planning tools, and answers to common questions.</p>
+            </div>
+          </header>
+        ) : <section className="res-hero">
           <div className="container res-hero-inner">
             <div className="page-breadcrumb"><a href="/">Home</a><ChevronRight size={13} /><b>Resources</b></div>
             <div className="res-hero-copy">
@@ -40,7 +55,7 @@ export default function ResourcesPage({ embedded = false }) {
               <p>Guides, catalog references and practical planning tools designed to help you move from equipment questions to confident next steps.</p>
             </div>
           </div>
-        </section>
+        </section>}
 
         <section className="res-library">
           <div className="container">
@@ -69,7 +84,7 @@ export default function ResourcesPage({ embedded = false }) {
           </div>
         </section>
 
-        <section className="res-faq">
+        <section className="res-faq" id="resource-faqs" ref={faqSection}>
           <div className="container res-faq-layout">
             <div><span className="page-kicker">QUICK ANSWERS</span><h2>Before you <em>enquire.</em></h2><p>Common questions to help you prepare the right information for an equipment conversation.</p><a href="/contact-us" className="btn btn-outline">Ask another question <ArrowRight size={15} /></a></div>
             <div className="faq-list">
@@ -85,7 +100,7 @@ export default function ResourcesPage({ embedded = false }) {
             <a href="/contact-us">Request verified information <ArrowRight size={14} /></a>
           </div>
         </section>
-      </main>
+      </Content>
       {!embedded && <Footer />}
     </div>
   );

@@ -1,0 +1,167 @@
+.project-brief-page > .site-header { position: sticky; top: 0; z-index: 50; }
+.project-brief-page :is(#contact-information, #equipment-enquiry, #resources, #about) {
+  scroll-margin-top: 100px;
+}
+
+.project-brief-nav {
+  background: #fff;
+  border-block-end: 1px solid #dce3e7;
+}
+.project-brief-nav .container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 20px;
+  min-height: 45px;
+}
+.project-brief-nav a {
+  padding: 7px 0;
+  color: #263945;
+  font-size: 14px;
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+.project-brief-nav a:hover { color: #745300; text-decoration: underline; }
+
+.project-brief {
+  --brief-ink: #172631;
+  --brief-muted: #455a67;
+  --brief-line: #d7e1e6;
+}
+.project-brief__content { padding-block: clamp(22px, 4vw, 54px); }
+.project-brief__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  min-height: clamp(290px, 31vw, 395px);
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid #dfe2dc;
+  border-radius: 8px;
+  background: #eeeee8;
+}
+.project-brief__hero > img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  object-position: 54% center;
+}
+.project-brief__hero-copy {
+  min-width: 0;
+  align-self: center;
+  padding: clamp(19px, 3.6vw, 48px);
+}
+.project-brief__hero h1 {
+  margin: 0 0 12px;
+  color: var(--brief-ink);
+  font-size: clamp(32px, 4.7vw, 65px);
+  line-height: 1.02;
+  letter-spacing: -.052em;
+}
+.project-brief__hero p {
+  max-width: 38ch;
+  margin: 0 0 17px;
+  color: var(--brief-muted);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.project-brief__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(12px, 2.4vw, 28px);
+  margin-top: clamp(14px, 2.5vw, 30px);
+}
+.project-brief__panel {
+  min-width: 0;
+  padding: clamp(16px, 2.6vw, 30px);
+  border: 1px solid var(--brief-line);
+  border-radius: 7px;
+  background: #fff;
+}
+.project-brief__panel h2 {
+  margin: 0 0 15px;
+  color: var(--brief-ink);
+  font-size: clamp(23px, 3vw, 33px);
+  line-height: 1.15;
+  text-transform: none;
+  letter-spacing: -.035em;
+}
+.project-brief__form,
+.project-brief__fields { display: grid; gap: 12px; }
+.project-brief__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.project-brief__form label { display: grid; gap: 5px; min-width: 0; color: var(--brief-ink); font-size: 14px; font-weight: 650; }
+.project-brief__form :is(input, select, textarea) {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #aab9c2;
+  border-radius: 5px;
+  background: #fcfdfe;
+  color: #182b37;
+  font-size: 16px;
+}
+.project-brief__form textarea { min-height: 110px; resize: vertical; }
+.project-brief__form small { color: var(--brief-muted); font-size: 13px; }
+.project-brief__send { justify-self: start; }
+.project-brief__send:disabled { opacity: .68; cursor: wait; }
+.project-brief__notice { margin: 0; padding: 9px 10px; border-radius: 4px; background: #fff0dd; color: #743c0e; }
+.project-brief__notice.is-success { background: #e6f2e8; color: #22613a; }
+
+.project-brief__direct { background: #fff4d9; border-color: #e7d4a0; }
+.project-brief__direct dl { display: grid; gap: 12px; margin: 0; }
+.project-brief__direct dl div { padding-top: 10px; border-top: 1px solid #e1cd97; }
+.project-brief__direct dt { display: flex; align-items: center; gap: 6px; color: #604b1a; font-size: 13px; }
+.project-brief__direct dd { margin: 3px 0 0; color: var(--brief-ink); font-weight: 750; overflow-wrap: anywhere; }
+.project-brief__direct dd a { text-decoration: underline; text-underline-offset: 3px; }
+.project-brief__catalog { margin-top: 23px; padding-top: 14px; border-top: 1px solid #e1cd97; }
+.project-brief__catalog h3 { margin: 0; color: var(--brief-ink); font-size: 18px; line-height: 1.2; }
+.project-brief__catalog p { margin: 6px 0 8px; color: #4e462e; }
+.project-brief__catalog a { display: inline-flex; align-items: center; gap: 6px; color: #583e00; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; }
+
+.project-brief-page .project-brief-chapter {
+  padding-block: clamp(26px, 4.5vw, 50px);
+  border-block: 1px solid #dae1e5;
+  background: #fff;
+}
+.project-brief-page .project-brief-chapter h2 {
+  margin: 0 0 7px;
+  color: #172631;
+  font-size: clamp(28px, 4.8vw, 50px);
+  line-height: 1.04;
+  text-transform: none;
+  letter-spacing: -.045em;
+}
+.project-brief-page .project-brief-chapter p { margin: 0; color: #455a67; font-size: 15px; }
+.project-brief-page :is(.res-library, .res-faq, .about-intro, .about-values, .about-story, .about-commitment) {
+  padding-block: clamp(24px, 4.6vw, 54px);
+}
+.project-brief-page :is(.res-library, .about-values, .about-commitment) { background: #eef2f4; }
+.project-brief-page :is(.res-faq, .about-intro, .about-story) { background: #fff; }
+.project-brief-page :is(.res-download-band, .about-difference) { background: #172b37; color: #f5f8fa; }
+.project-brief-page :is(.res-download-band, .about-difference) h2 { color: #f5f8fa !important; line-height: 1.1; }
+.project-brief-page :is(.res-download-band, .about-difference) h2 em { color: #ffcf46 !important; }
+.project-brief-page :is(.res-download-band, .about-difference) :is(p, .res-download-note) { color: #dee8ed; font-size: 14px; }
+.project-brief-page :is(.res-library, .res-faq, .about-intro, .about-values, .about-story, .about-commitment) h2 {
+  font-size: clamp(24px, 3.75vw, 42px);
+  line-height: 1.08;
+}
+.project-brief-page :is(.res-library, .res-faq, .about-intro, .about-values, .about-story, .about-commitment) h2 em { color: #775500 !important; }
+.project-brief-page .res-card,
+.project-brief-page .about-values-grid article { border-radius: 6px; overflow: hidden; }
+.project-brief-page .res-card h3,
+.project-brief-page .about-values-grid h3 { line-height: 1.15; overflow-wrap: anywhere; }
+.project-brief-page .res-card p,
+.project-brief-page .about-values-grid p,
+.project-brief-page .about-story-steps p { color: #455a67; font-size: 14px; }
+.project-brief-page .about-story-image { border-radius: 6px; }
+
+@media (max-width: 720px) {
+  .project-brief__hero,
+  .project-brief__layout { grid-template-columns: minmax(0, 1fr); }
+  .project-brief__hero > img { height: auto; aspect-ratio: 16 / 9; }
+}
+@media (max-width: 430px) {
+  .project-brief__fields { grid-template-columns: minmax(0, 1fr); }
+}

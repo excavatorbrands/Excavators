@@ -5,7 +5,7 @@ import './legal.css';
 
 const sections = [
   {
-    title: 'Introduction',
+    title: 'Scope of These Website Terms',
     paragraphs: [
       'These Terms & Conditions (“Terms”) apply to your access to and use of the Iron Crest Excavator Solutions website. By using the website, you agree to these Terms. If you do not agree, please do not use the website.',
       'These Terms govern website use only. Any sale, lease, supply, service or other transaction is subject to its own written quotation, order confirmation, purchase contract and applicable equipment warranty, as relevant.',
@@ -110,7 +110,7 @@ const sections = [
     ],
   },
   {
-    title: 'Contact Information',
+    title: 'Questions About These Terms',
     paragraphs: [
       'Questions about these Terms may be sent to Iron Crest Excavator Solutions at sales@ironcrest.com or +92 300 1234567. A verified registered entity name and postal address have not yet been provided; add them here if required by applicable law before publication.',
     ],
@@ -128,7 +128,7 @@ export default function TermsAndConditionsPage() {
             <div className="terms-hero-content">
               <div className="terms-hero-copy">
                 <span className="page-kicker">WEBSITE TERMS OF USE</span>
-                <h1>Clear terms.<br /><em>Confident decisions.</em></h1>
+                <h1>Terms &amp; <br /><em>Conditions</em></h1>
                 <p>The rules that apply when using the Iron Crest website — with a clear distinction between online information and transaction documents.</p>
               </div>
               <div className="terms-document-stamp"><Scale size={23} /><span>LEGAL<br />DOCUMENT</span><b>IC / T&amp;C</b></div>
