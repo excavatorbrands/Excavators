@@ -1,5 +1,5 @@
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AlertCircle, ArrowRight, ArrowUpRight, BadgeCheck, Check,
   CircleDollarSign, Download,
@@ -258,15 +258,20 @@ function ExcavatorDrawer({
   onRemoveModel,
   onOpenCatalog,
   onOpenComparison,
+  onFinishComparison,
   replaceSlot,
   notice,
 }) {
   const [drawerSearch, setDrawerSearch] = useState('');
   const [drawerBrand, setDrawerBrand] = useState('all');
+  const [reviewedSelection, setReviewedSelection] = useState(null);
+  const specifications = useRef(null);
+  const selectionKey = selectedModels.map(({ id }) => id).join(',');
 
   useEffect(() => {
     setDrawerSearch('');
     setDrawerBrand('all');
+    setReviewedSelection(null);
   }, [mode]);
 
   useEffect(() => {
@@ -306,6 +311,17 @@ function ExcavatorDrawer({
   if (!mode) return null;
 
   const isCatalog = mode === 'catalog';
+
+  function handleDone() {
+    if (!specifications.current || reviewedSelection === selectionKey) {
+      onFinishComparison();
+      return;
+    }
+
+    setReviewedSelection(selectionKey);
+    specifications.current.focus({ preventScroll: true });
+    specifications.current.scrollIntoView({ block: 'start' });
+  }
 
   return (
     <div className="ic-drawer-layer">
@@ -497,7 +513,7 @@ function ExcavatorDrawer({
 
               <button
                 type="button"
-                onClick={onOpenCatalog}
+                onClick={() => onOpenCatalog()}
                 disabled={selectedModels.length >= 3}
               >
                 <span>+</span> Add Excavator
@@ -542,7 +558,7 @@ function ExcavatorDrawer({
                         <button
                           type="button"
                           className="ic-comparison-add-slot"
-                          onClick={() => onOpenCatalog(slot)}
+                          onClick={() => onOpenCatalog()}
                         >
                           <span>0{slot + 1}</span>
                           <b>+</b>
@@ -559,8 +575,7 @@ function ExcavatorDrawer({
                 <div className="ic-spec-comparison">
                   <div className="ic-spec-heading">
                     <span>TECHNICAL OVERVIEW</span>
-                    <h3>Model Specifications</h3>
-                    <p>Illustrative entries · Verify manufacturer data</p>
+                    <h3 ref={specifications} tabIndex={-1}>Model Specifications</h3>
                   </div>
 
                   <table>
@@ -622,24 +637,19 @@ function ExcavatorDrawer({
                   <h3>Your comparison starts here</h3>
                   <p>Add two or three machines to review their specifications together.</p>
 
-                  <button type="button" onClick={onOpenCatalog}>
+                  <button type="button" onClick={() => onOpenCatalog()}>
                     Browse Excavator Catalog <ArrowRight size={15} />
                   </button>
                 </div>
               )}
 
-              <p className="ic-comparison-disclaimer">
-                Comparison values are illustrative dataset entries, not verified current
-                manufacturer specifications. Always request official technical data before
-                comparing or ordering machines.
-              </p>
             </div>
 
             <div className="ic-drawer-footer">
               <button
                 type="button"
                 className="ic-drawer-secondary"
-                onClick={onOpenCatalog}
+                onClick={() => onOpenCatalog()}
                 disabled={selectedModels.length >= 3}
               >
                 <span>+</span> Add another model
@@ -648,7 +658,7 @@ function ExcavatorDrawer({
               <button
                 type="button"
                 className="ic-drawer-primary"
-                onClick={onClose}
+                onClick={handleDone}
               >
                 Done <Check size={16} />
               </button>
@@ -738,6 +748,12 @@ export default function HomePage() {
   const closeDrawer = () => {
     setDrawerMode(null);
     setReplaceSlot(null);
+  };
+
+  const finishComparison = () => {
+    setCompareIds([]);
+    setCompareNotice('');
+    closeDrawer();
   };
 
   const selectCatalogModel = (model) => {
@@ -914,13 +930,12 @@ export default function HomePage() {
 
         {/* MODELS */}
         <section className="models-section section-dark" id="models">
-          <p className="container image-disclosure">Equipment images are AI-generated illustrations. Ask us for photos of the exact machine.</p>
+          <p className="container image-disclosure"></p>
           <div className="container">
             <SectionTitle
               eyebrow="Featured models"
               title="Our Most"
               accent="Popular Excavators"
-              description="Explore a multi-brand lineup selected for construction, quarrying and heavy-duty earthmoving."
               action={
                 <div className="model-count">
                   <span>{filteredModels.length.toString().padStart(2, '0')}</span>
@@ -1132,11 +1147,6 @@ export default function HomePage() {
             </div>
           )}
 
-          <p className="home-comparison-disclaimer">
-            Comparison values are illustrative dataset entries, not verified
-            current manufacturer specifications. Always request official technical
-            data before comparing or ordering machines.
-          </p>
         </section>
 
         {/* SOLUTIONS */}
@@ -1421,6 +1431,7 @@ export default function HomePage() {
         onRemoveModel={removeCompareModel}
         onOpenCatalog={openCatalog}
         onOpenComparison={openComparison}
+        onFinishComparison={finishComparison}
         replaceSlot={replaceSlot}
         notice={compareNotice}
       />
