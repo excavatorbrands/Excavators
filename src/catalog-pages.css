@@ -71,7 +71,6 @@
 .model-detail__type { margin: 0 0 14px; color: #43535d; font-size: clamp(15px,1.6vw,19px); }
 .model-detail__photo { margin: 0 0 20px; overflow: hidden; border-radius: 8px; background: #e2e7ea; }
 .model-detail__photo img { display: block; width: 100%; height: clamp(195px,49vw,590px); object-fit: contain; }
-.model-detail__photo figcaption { padding: 8px 12px; background: #17232c; color: #fff; font-size: 12px; }
 .model-detail__grid { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); gap: clamp(10px,2.6vw,26px); }
 .model-detail__panel { min-width: 0; padding: clamp(14px,2.5vw,27px); border: 1px solid #dce2e6; border-radius: 8px; background: #fff; }
 .model-detail__panel dl { margin: 13px 0; }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { ArrowRight, Check, ChevronLeft, ChevronRight, Gauge, Package, Truck } from 'lucide-react';
 import { modelPrice, modelUrl } from './catalogLinks.js';
 import './home-brand-showcase.css';
@@ -27,8 +27,7 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare }) {
       aria-labelledby={`showcase-${brand.id}`}
     >
       <figure className="brand-showcase__product-image">
-        <img src={model.image} alt="" loading="lazy" decoding="async" />
-        <figcaption>Illustrative equipment image</figcaption>
+        <img src={model.image} alt={`Illustration of the ${model.type.toLowerCase()} machine class`} loading="lazy" decoding="async" />
       </figure>
 
       <div className="brand-showcase__product">
@@ -36,7 +35,7 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare }) {
           <img className="brand-showcase__banner-image" src={`/images/brand-banners/${brand.id}.webp`} alt="" loading="lazy" decoding="async" />
           <div className="brand-showcase__identity">
             {brand.logo && <img className="brand-showcase__logo" src={brand.logo} alt="" loading="lazy" />}
-            <h3 id={`showcase-${brand.id}`}>{brand.name}</h3>
+            <h3 id={`showcase-${brand.id}`} tabIndex={-1}>{brand.name}</h3>
           </div>
         </div>
 
@@ -88,12 +87,25 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare }) {
 }
 
 export default function HomeBrandShowcases({ brands, models, showAll, compareIds, onCompare }) {
+  const [expanded, setExpanded] = useState(false);
+  const additionalBrandsId = useId();
+  const additionalBrands = useRef(null);
+  const toggle = useRef(null);
+  const focusAfterToggle = useRef(false);
   const groups = brands.map((brand) => ({
     brand,
     brandModels: models.filter((model) => model.brand === brand.id),
   })).filter(({ brandModels }) => brandModels.length > 0);
   const featured = showAll ? groups : groups.slice(0, 3);
   const remaining = groups.slice(featured.length);
+
+  useEffect(() => {
+    if (!focusAfterToggle.current) return;
+    focusAfterToggle.current = false;
+    const target = expanded ? additionalBrands.current?.querySelector('h3') : toggle.current;
+    target?.focus({ preventScroll: true });
+    target?.scrollIntoView({ block: 'nearest' });
+  }, [expanded]);
 
   const renderShowcase = ({ brand, brandModels }, index) => (
     <BrandShowcase
@@ -110,16 +122,27 @@ export default function HomeBrandShowcases({ brands, models, showAll, compareIds
     <div className="brand-showcase-list">
       {featured.map(renderShowcase)}
       {remaining.length > 0 && (
-        <details className="brand-showcase-more">
-          <summary>
-            <span className="brand-showcase-more__show">See more brands ({remaining.length})</span>
-            <span className="brand-showcase-more__hide">Show fewer brands</span>
-            <ArrowRight size={17} aria-hidden="true" />
-          </summary>
-          <div className="brand-showcase-list">
-            {remaining.map((group, index) => renderShowcase(group, featured.length + index))}
+        <>
+          <div id={additionalBrandsId} ref={additionalBrands} hidden={!expanded}>
+            <div className="brand-showcase-list">
+              {remaining.map((group, index) => renderShowcase(group, featured.length + index))}
+            </div>
           </div>
-        </details>
+          <button
+            type="button"
+            className="brand-showcase-more"
+            ref={toggle}
+            aria-controls={additionalBrandsId}
+            aria-expanded={expanded}
+            onClick={() => {
+              focusAfterToggle.current = true;
+              setExpanded((open) => !open);
+            }}
+          >
+            {expanded ? 'Show fewer brands' : `See more brands (${remaining.length})`}
+            <ArrowRight size={17} aria-hidden="true" />
+          </button>
+        </>
       )}
     </div>
   );

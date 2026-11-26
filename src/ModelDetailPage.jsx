@@ -28,7 +28,6 @@ export default function ModelDetailPage({ model, brand, models }) {
         <p className="model-detail__type">{model.type}</p>
         <figure className="model-detail__photo">
           <img src={model.image} alt={`Illustration of the ${model.type.toLowerCase()} machine class`} fetchPriority="high" />
-          <figcaption>Illustrative equipment image</figcaption>
         </figure>
 
         <div className="model-detail__grid">

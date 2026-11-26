@@ -861,7 +861,6 @@ export default function HomePage() {
             <div className="hero-machine-caption">
               <div className="hero-brand-details" aria-live={paused ? 'polite' : 'off'}>
                 <a className="hero-brand-link" href={brandUrl(activeHero)}>{activeHero.name} <ArrowRight size={16} /></a>
-                <small>Illustrative equipment image</small>
               </div>
               <div className="hero-slide-controls">
                 <div className="hero-slide-list" role="group" aria-label="Choose a manufacturer">
@@ -991,11 +990,6 @@ export default function HomePage() {
               </div>
             )}
 
-            <p className="spec-disclaimer">
-              * Model specifications are illustrative examples for this design
-              prototype and must be verified against current manufacturer data
-              before publication.
-            </p>
           </div>
         </section>
 
@@ -1281,7 +1275,7 @@ export default function HomePage() {
                   and service availability.
                 </p>
 
-                <button className="btn btn-outline" onClick={openQuote}>
+                <button type="button" className="btn btn-primary" onClick={openQuote}>
                   Talk to Service Team <ArrowRight size={15} />
                 </button>
               </div>
