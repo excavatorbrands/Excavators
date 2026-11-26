@@ -31,28 +31,14 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare }) {
       </figure>
 
       <div className="brand-showcase__product">
-        <div className="brand-showcase__banner">
-          <img className="brand-showcase__banner-image" src={`/images/brand-banners/${brand.id}.webp`} alt="" loading="lazy" decoding="async" />
-          <div className="brand-showcase__identity">
-            {brand.logo && <img className="brand-showcase__logo" src={brand.logo} alt="" loading="lazy" />}
-            <h3 id={`showcase-${brand.id}`} tabIndex={-1}>{brand.name}</h3>
-          </div>
-        </div>
-
         <div className="brand-showcase__body">
-          <div className="brand-showcase__toolbar">
-            <p className="brand-showcase__position">{index + 1} of {brandModels.length} models</p>
-            <div className="brand-showcase__step">
-              <button type="button" onClick={() => changeModel(-1)} disabled={!hasMultipleModels} aria-label={`Previous ${brand.name} model`}>
-                <ChevronLeft size={19} aria-hidden="true" />
-              </button>
-              <button type="button" onClick={() => changeModel(1)} disabled={!hasMultipleModels} aria-label={`Next ${brand.name} model`}>
-                <ChevronRight size={19} aria-hidden="true" />
-              </button>
-            </div>
-          </div>
+          {brand.logo && (
+            <img className="brand-showcase__logo" src={brand.logo} alt="" loading="lazy" decoding="async" />
+          )}
+          <h3 className="brand-showcase__brand" id={`showcase-${brand.id}`} tabIndex={-1}>{brand.name}</h3>
 
           <div aria-live="polite" aria-atomic="true">
+            <p className="brand-showcase__position">{index + 1} of {brandModels.length} models</p>
             <h4>{model.model}</h4>
             <p className="brand-showcase__type">{model.type} · {modelPrice(model)}</p>
           </div>
@@ -66,19 +52,29 @@ function BrandShowcase({ brand, brandModels, reverse, compareIds, onCompare }) {
             ))}
           </dl>
 
-          <div className="brand-showcase__actions">
-            <a className="btn btn-primary model-click-target" href={modelUrl(model)} aria-label={`View ${model.brandName} ${model.model} details`}>
-              View details <ArrowRight size={16} aria-hidden="true" />
-            </a>
-            <button
-              type="button"
-              className="brand-showcase__compare"
-              aria-pressed={inCompare}
-              onClick={() => onCompare(model)}
-            >
-              {inCompare && <Check size={15} aria-hidden="true" />}
-              {inCompare ? 'Added to compare' : 'Compare'}
-            </button>
+          <div className="brand-showcase__footer">
+            <div className="brand-showcase__actions">
+              <a className="btn btn-primary model-click-target" href={modelUrl(model)} aria-label={`View ${model.brandName} ${model.model} details`}>
+                View details <ArrowRight size={16} aria-hidden="true" />
+              </a>
+              <button
+                type="button"
+                className="brand-showcase__compare"
+                aria-pressed={inCompare}
+                onClick={() => onCompare(model)}
+              >
+                {inCompare && <Check size={15} aria-hidden="true" />}
+                {inCompare ? 'Added to compare' : 'Compare'}
+              </button>
+            </div>
+            <div className="brand-showcase__step">
+              <button type="button" onClick={() => changeModel(-1)} disabled={!hasMultipleModels} aria-label={`Previous ${brand.name} model`}>
+                <ChevronLeft size={19} aria-hidden="true" />
+              </button>
+              <button type="button" onClick={() => changeModel(1)} disabled={!hasMultipleModels} aria-label={`Next ${brand.name} model`}>
+                <ChevronRight size={19} aria-hidden="true" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
