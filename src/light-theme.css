@@ -614,3 +614,83 @@ input, select, textarea,
   top: 0;
   z-index: 50;
 }
+
+/* Homepage machine classes: one tall center card and two side stacks. */
+#categories .category-grid {
+  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 3fr);
+  grid-template-rows: repeat(2, clamp(140px, 14vw, 190px));
+  grid-template-areas:
+    "mini large mining"
+    "medium large special";
+  gap: clamp(8px, 1.1vw, 14px);
+}
+
+#categories .category-card {
+  min-width: 0;
+  min-height: 0;
+  border-radius: 7px;
+}
+
+#categories .category-card:nth-child(1) { grid-area: mini; }
+#categories .category-card:nth-child(2) { grid-area: medium; }
+#categories .category-card:nth-child(3) { grid-area: large; }
+#categories .category-card:nth-child(4) { grid-area: mining; }
+#categories .category-card:nth-child(5) { grid-area: special; }
+
+#categories .category-card:nth-child(3) img { object-position: 53% center; }
+#categories .category-shade {
+  background: linear-gradient(0deg, #08121bef 0%, #08121ba6 24%, transparent 68%);
+}
+
+#categories .category-copy {
+  left: clamp(10px, 1.25vw, 17px);
+  bottom: clamp(10px, 1.25vw, 17px);
+  right: 42px;
+  gap: 4px;
+}
+
+#categories .category-copy strong {
+  font-size: clamp(14px, 1.5vw, 19px);
+  line-height: 1.16;
+}
+
+#categories .category-copy small {
+  color: #eef3f5;
+  font-size: clamp(12px, 1.15vw, 15px);
+  line-height: 1.2;
+}
+
+#categories .category-card:nth-child(3) .category-copy strong {
+  font-size: clamp(19px, 2.15vw, 29px);
+}
+
+#categories .category-arrow {
+  right: 10px;
+  bottom: 11px;
+  width: 27px;
+  height: 27px;
+}
+
+@media (max-width: 640px) {
+  #categories .category-grid {
+    width: min(1280px, calc(100% - 32px));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(122px, 1fr) clamp(150px, 35vw, 218px) minmax(132px, 1fr);
+    grid-template-areas:
+      "mini medium"
+      "large large"
+      "mining special";
+  }
+
+  #categories .category-copy { right: 33px; }
+  #categories .category-arrow { right: 7px; bottom: 10px; width: 22px; height: 22px; }
+  #categories .category-arrow svg { width: 14px; height: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #categories .category-card img,
+  #categories .category-arrow { transition: none; }
+
+  #categories .category-card:hover img,
+  #categories .category-card:hover .category-arrow { transform: none; }
+}
